@@ -8,7 +8,6 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/go-martini/martini"
-	//"github.com/gorilla/websocket"
 )
 
 const (
@@ -29,14 +28,13 @@ func main() {
 	m := martini.Classic()
 	m.Use(auth)
 
-	go h.run()
-
 	fp, err := os.OpenFile(LOG_PATH, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
 	}
 	defer fp.Close()
 	mylog := log.New(fp, LOG_PREFIX, log.LstdFlags)
+	go h.run(mylog)
 	m.Map(mylog)
 	m.Get("/:token", serveWS)
 	var exit chan error = make(chan error)

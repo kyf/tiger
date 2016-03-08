@@ -1,26 +1,22 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
 const (
-	// Time allowed to write a message to the peer.
 	writeWait = 10 * time.Second
 
-	// Time allowed to read the next pong message from the peer.
 	pongWait = 60 * time.Second
 
-	// Send pings to peer with this period. Must be less than pongWait.
 	pingPeriod = (pongWait * 9) / 10
 
-	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	maxMessageSize = 1024 * 1
 )
 
 var upgrader = websocket.Upgrader{
@@ -28,17 +24,15 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-// connection is an middleman between the websocket connection and the hub.
 type connection struct {
-	// The websocket connection.
 	ws *websocket.Conn
 
-	// Buffered channel of outbound messages.
+	token string
+
 	send chan []byte
 }
 
-// readPump pumps messages from the websocket connection to the hub.
-func (c *connection) readPump() {
+func (c *connection) readPump(logger *log.Logger) {
 	defer func() {
 		h.unregister <- c
 		c.ws.Close()
@@ -50,21 +44,19 @@ func (c *connection) readPump() {
 		_, message, err := c.ws.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
-				log.Printf("error: %v", err)
+				logger.Printf("error: %v", err)
 			}
 			break
 		}
-		h.broadcast <- message
+		h.message <- message
 	}
 }
 
-// write writes a message with the given message type and payload.
 func (c *connection) write(mt int, payload []byte) error {
 	c.ws.SetWriteDeadline(time.Now().Add(writeWait))
 	return c.ws.WriteMessage(mt, payload)
 }
 
-// writePump pumps messages from the hub to the websocket connection.
 func (c *connection) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -78,7 +70,6 @@ func (c *connection) writePump() {
 				c.write(websocket.CloseMessage, []byte{})
 				return
 			}
-			fmt.Println("message is ", string(message))
 			if err := c.write(websocket.TextMessage, message); err != nil {
 				return
 			}
@@ -96,14 +87,17 @@ func auth(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 
 func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params martini.Params) {
 	token := params["token"]
-	logger.Printf("token is %v", token)
+	if strings.EqualFold("", token) {
+		logger.Printf("token is empty")
+		return
+	}
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		logger.Printf("initial websocket err:%v", err)
 		return
 	}
-	c := &connection{send: make(chan []byte, 256), ws: ws}
+	c := &connection{token: token, send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump()
-	c.readPump()
+	c.readPump(logger)
 }
