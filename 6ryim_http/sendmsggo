@@ -1,0 +1,76 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+
+	"github.com/kyf/postwx"
+)
+
+func init() {
+	handlers["/sendmsg"] = func(w http.ResponseWriter, r *http.Request, params url.Values, logger *log.Logger) {
+		msg := params.Get("msg")
+		var result string
+		if len(msg) == 0 {
+			result = "msg is empty!"
+			response(w, result)
+			return
+		}
+
+		go processMessage(msg)
+		result1 := make(map[string]string)
+		result1["response"] = "processMessage"
+		response(w, result1)
+	}
+
+}
+
+func processMessage(msg string) {
+	var message Message
+	err := json.Unmarshal([]byte(msg), &message)
+	if err != nil {
+		fmt.Println("[processMessage]json.Unmarshal err:", err)
+		return
+	}
+
+	if strings.EqualFold(message.Source, "1") &&
+		strings.EqualFold(message.ToType, "1") &&
+		(strings.EqualFold(message.MsgType, "3") || strings.EqualFold(message.MsgType, "4")) {
+
+		dir, err := uploadDir(C.uploadpath)
+		if err != nil {
+			fmt.Println("[processMessage]uploadDir err:", err)
+		}
+
+		fp := fmt.Sprintf("%s/%s", dir, fmt.Sprintf("%v", time.Now().UnixNano()))
+		fullpath, err := postwx.GetMedia(message.Message, fp)
+		if err != nil {
+			fmt.Println("postwx error is ", err)
+		}
+		message.Message = strings.Replace(string(fullpath), C.uploadpath, "", -1)
+		bmsg, _ := json.Marshal(message)
+		msg = string(bmsg)
+	}
+
+	uri := "http://127.0.0.1:2345/"
+	var param url.Values = make(url.Values)
+	param.Set("msg", msg)
+	res, err := http.PostForm(uri, param)
+	if err != nil {
+		fmt.Println("[processMessage]postform err is ", err)
+		return
+	}
+
+	data, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("[processMessage]readall err is ", err)
+		return
+	}
+	fmt.Printf("\n[processMessage%v][%s]response is %s \n\n", time.Now(), msg, string(data))
+}
