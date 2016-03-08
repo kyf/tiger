@@ -27,6 +27,7 @@ func (h *hub) run(logger *log.Logger) {
 		case c := <-h.register:
 			if ct, ok := h.online[c.token]; ok {
 				ct = append(ct, c)
+				h.online[c.token] = ct
 			} else {
 				li := make([]*connection, 0)
 				li = append(li, c)
@@ -46,6 +47,7 @@ func (h *hub) run(logger *log.Logger) {
 			to := msg.To
 
 			if li, ok := h.online[to]; ok {
+				logger.Printf("li is %v, length is %d", li, len(li))
 				for _, c := range li {
 					select {
 					case c.send <- m:
