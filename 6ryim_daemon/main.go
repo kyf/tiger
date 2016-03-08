@@ -13,6 +13,14 @@ import (
 const (
 	LOG_PATH   string = "/var/log/6ryim_daemon/6ryim_daemon.log"
 	LOG_PREFIX string = "[6ryim_daemon]"
+
+	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
+
+	TERMINAL_ADMIN     int = 1
+	TERMINAL_IOS       int = 2
+	TERMINAL_ANDROID   int = 2
+	TERMINAL_WX        int = 2
+	TERMINAL_360STREAM int = 2
 )
 
 var (
@@ -43,6 +51,6 @@ func main() {
 	}()
 
 	e := <-exit
-	mylog.Printf("6ryim_daemon exit:err is %v", e)
+	mylog.Printf("service exit:err is %v", e)
 	os.Exit(1)
 }

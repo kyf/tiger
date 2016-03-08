@@ -3,8 +3,11 @@ package main
 import (
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
+
+	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -57,7 +60,7 @@ func (c *connection) write(mt int, payload []byte) error {
 	return c.ws.WriteMessage(mt, payload)
 }
 
-func (c *connection) writePump() {
+func (c *connection) writePump(logger *log.Logger) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -81,6 +84,16 @@ func (c *connection) writePump() {
 	}
 }
 
+func storeMessage(m []byte) error {
+	data := make(url.Values)
+	data.Set("msg", string(m))
+	_, err := http.PostForm(fmt.Sprintf("%sstore", HTTP_SERVICE_URL), data)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func auth(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 	r.ParseForm()
 }
@@ -98,6 +111,6 @@ func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params 
 	}
 	c := &connection{token: token, send: make(chan []byte, 256), ws: ws}
 	h.register <- c
-	go c.writePump()
+	go c.writePump(logger)
 	c.readPump(logger)
 }

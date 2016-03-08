@@ -45,9 +45,19 @@ func (h *hub) run(logger *log.Logger) {
 				break
 			}
 			to := msg.To
+			if status := handleMsg(msg); status {
+				break
+			}
 
 			if li, ok := h.online[to]; ok {
-				logger.Printf("li is %v, length is %d", li, len(li))
+				go func() {
+					err := storeMessage(m)
+					if err != nil {
+						logger.Println("storeMessage err:%v", err)
+					}
+
+				}()
+
 				for _, c := range li {
 					select {
 					case c.send <- m:

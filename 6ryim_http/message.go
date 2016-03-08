@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/go-mgo/mgo/bson"
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
@@ -87,9 +89,10 @@ func getData(params url.Values) ([]im_type.BsonMessage, error) {
 }
 
 func init() {
-	handlers["/message"] = func(w http.ResponseWriter, r *http.Request, params url.Values) {
+	handlers["/message"] = func(w http.ResponseWriter, logger *log.Logger, r *http.Request, params url.Values) {
 		data, err := getData(params)
 		if err != nil {
+			logger.Printf("message.getData err:%v", err)
 			w.Write([]byte(fmt.Sprintf("%v", err)))
 		} else {
 			js, err := json.Marshal(data)
@@ -99,5 +102,49 @@ func init() {
 				w.Write([]byte(fmt.Sprintf("%v", err)))
 			}
 		}
+	}
+
+	handlers["/store"] = func(params url.Values, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+		m := params.Get("msg")
+
+		if strings.EqualFold("", m) {
+			response(w, "msg is empty")
+			return
+		}
+
+		var msg im_type.Message
+		err := json.Unmarshal([]byte(m), &msg)
+		if err != nil {
+			logger.Printf("msg [%s] json.Unmarshal err:%v", m, err)
+			response(w, "msg Invalid")
+			return
+		}
+
+		mongocli := NewMongoClient()
+		mongocli.Connect()
+		defer mongocli.Close()
+
+		var bmsg *im_type.BsonMessage = &im_type.BsonMessage{
+			bson.NewObjectId(),
+			msg.From,
+			msg.To,
+			msg.Message,
+			msg.OrderId,
+			msg.FromType,
+			msg.ToType,
+			msg.MsgType,
+			msg.CreateTime,
+			msg.IsSystem,
+			msg.SystemType,
+			msg.Source,
+		}
+
+		err = mongocli.Add("message", bmsg)
+		if err != nil {
+			logger.Printf("store message err:%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		response(w, make(map[string]string))
 	}
 }
