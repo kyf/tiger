@@ -10,6 +10,11 @@ func handleMsg(msg Message, logger *log.Logger) bool {
 	}
 
 	var err error = nil
+	err = storeOffline(msg)
+	if err != nil {
+		logger.Printf("storeOffline err:%v", err)
+	}
+
 	if msg.ToType == TERMINAL_ADMIN {
 		err = msg.sendAdminTpl()
 	} else {

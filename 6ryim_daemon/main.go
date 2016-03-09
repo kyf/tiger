@@ -16,13 +16,29 @@ const (
 
 	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
 
-	TERMINAL_ADMIN int = 1
-	TERMINAL_USER  int = 2
+	TERMINAL_ADMIN string = "1"
+	TERMINAL_USER  string = "2"
 
-	MSG_SOURCE_WX        int = 1
-	MSG_SOURCE_IOS       int = 2
-	MSG_SOURCE_ANDROID   int = 3
-	MSG_SOURCE_360STREAM int = 4
+	MSG_SOURCE_WX        string = "1"
+	MSG_SOURCE_IOS       string = "2"
+	MSG_SOURCE_ANDROID   string = "3"
+	MSG_SOURCE_360STREAM string = "4"
+
+	MSG_TYPE_TEXT  string = "2"
+	MSG_TYPE_IMAGE string = "3"
+	MSG_TYPE_AUDIO string = "4"
+
+	MSG_SYSTEM_NAME string = "system"
+	MSG_SYSTEM      string = "1"
+	MSG_USER        string = "0"
+
+	MSG_SYSTEM_TYPE_ORDER       string = "1"
+	MSG_SYSTEM_TYPE_FETCH       string = "2"
+	MSG_SYSTEM_TYPE_TRIP_SEND   string = "3"
+	MSG_SYSTEM_TYPE_TRIP_SELECT string = "4"
+	MSG_SYSTEM_TYPE_CANCEL      string = "5"
+	MSG_SYSTEM_TYPE_ACTIVITY    string = "6"
+	MSG_SYSTEM_TYPE_ERROR       string = "7"
 )
 
 var (

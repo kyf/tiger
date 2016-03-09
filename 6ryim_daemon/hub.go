@@ -55,13 +55,14 @@ func (h *hub) run(logger *log.Logger) {
 				break
 			}
 			to := msg.To
+			msg.CreateTime = getFormatNow("num")
 			if status := handleMsg(msg, logger); status {
 				break
 			}
 
 			if li, ok := h.online[to]; ok {
 				go func() {
-					err := storeMessage(m)
+					err := storeMessage(msg)
 					if err != nil {
 						logger.Println("storeMessage err:%v", err)
 					}

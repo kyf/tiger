@@ -4,6 +4,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/gorilla/websocket"
 
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -84,10 +85,14 @@ func (c *connection) writePump(logger *log.Logger) {
 	}
 }
 
-func storeMessage(m []byte) error {
+func storeMessage(msg Message) error {
+	m, err := json.Marshal(msg)
+	if err != nil {
+		return err
+	}
 	data := make(url.Values)
 	data.Set("msg", string(m))
-	_, err := http.PostForm(fmt.Sprintf("%sstore", HTTP_SERVICE_URL), data)
+	_, err = http.PostForm(fmt.Sprintf("%sstore", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err
 	}
