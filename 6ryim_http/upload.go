@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/kyf/postwx"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/kyf/postwx"
 )
 
 func uploadDir(prepath string) (string, error) {
@@ -22,7 +25,7 @@ func uploadDir(prepath string) (string, error) {
 }
 
 func init() {
-	handlers["/upload"] = func(w http.ResponseWriter, r *http.Request) {
+	handlers["/upload"] = func(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 		var result string
 
 		err := r.ParseMultipartForm(C.maxImageSize)
@@ -42,6 +45,7 @@ func init() {
 				file := files[0]
 				f, err := file.Open()
 				if err != nil {
+					logger.Printf("upload file err:%v", err)
 					result = "file error"
 					response(w, result)
 					return
@@ -49,6 +53,7 @@ func init() {
 
 				d, err := ioutil.ReadAll(f)
 				if err != nil {
+					logger.Printf("upload file err:%v", err)
 					result = "read file error"
 					response(w, result)
 					return
@@ -63,6 +68,7 @@ func init() {
 
 				dir, err := uploadDir(C.uploadpath)
 				if err != nil {
+					logger.Printf("uploadDir err:%v", err)
 					result = "upload dir error"
 					response(w, result)
 					return
@@ -85,6 +91,7 @@ func init() {
 					mediaType := "image"
 					media_id, err := postwx.UploadMedia(fp, mediaType)
 					if err == nil {
+						logger.Printf("postwx.UploadMedia err:%v", err)
 						result1["media_id"] = media_id
 					}
 				}
@@ -97,5 +104,17 @@ func init() {
 			response(w, result)
 			return
 		}
+	}
+
+	handlers["/uploadwx"] = func(w http.ResponseWriter, r *http.Request, logger *log.Logger, params url.Values) {
+		filepath := params.Get("filepath")
+		mediaType := params.Get("mediatype")
+		media_id, err := postwx.UploadMedia(filepath, mediaType)
+		if err != nil {
+			logger.Printf("postwx.UploadMedia err:%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		response(w, map[string]string{media_id: media_id})
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/garyburd/redigo/redis"
 	"github.com/go-mgo/mgo/bson"
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
 )
@@ -146,5 +147,87 @@ func init() {
 			return
 		}
 		response(w, make(map[string]string))
+	}
+
+	handlers["/offline/store"] = func(params url.Values, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+		msg := params.Get("msg")
+		to := params.Get("to")
+
+		if strings.EqualFold("", msg) {
+			response(w, "msg is empty")
+			return
+		}
+
+		if strings.EqualFold("", to) {
+			response(w, "to is empty")
+			return
+		}
+
+		redis_cli, err := GetRedis()
+		if err != nil {
+			logger.Printf("redis connection error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		key := fmt.Sprintf("%s%s", OFFLINE_MSG_PREFIX, to)
+		_, err = redis_cli.Do("rpush", key, msg)
+		if err != nil {
+			logger.Printf("redis store offline message  error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+
+		response(w, make(map[string]string))
+	}
+
+	handlers["/offline/fetch"] = func(params url.Values, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+		to := params.Get("to")
+
+		if strings.EqualFold("", to) {
+			response(w, "to is empty")
+			return
+		}
+
+		redis_cli, err := GetRedis()
+		if err != nil {
+			logger.Printf("redis connection error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		key := fmt.Sprintf("%s%s", OFFLINE_MSG_PREFIX, to)
+		v, err := redis.Strings(redis_cli.Do("lrange", key, 0, -1))
+		if err != nil {
+			logger.Printf("redis fetch offline message  error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		redis_cli.Do("del", key)
+
+		response(w, map[string][]string{"data": v})
+	}
+
+	handlers["/offline/count"] = func(params url.Values, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+		to := params.Get("to")
+
+		if strings.EqualFold("", to) {
+			response(w, "to is empty")
+			return
+		}
+
+		redis_cli, err := GetRedis()
+		if err != nil {
+			logger.Printf("redis connection error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		key := fmt.Sprintf("%s%s", OFFLINE_MSG_PREFIX, to)
+		v, err := redis.Int(redis_cli.Do("llen", key))
+		if err != nil {
+			logger.Printf("redis count offline message  error :%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+
+		response(w, map[string]int{"count": v})
 	}
 }

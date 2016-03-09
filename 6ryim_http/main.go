@@ -29,7 +29,7 @@ func init() {
 }
 
 func response(w http.ResponseWriter, result interface{}) {
-	data := make(map[string]string)
+	data := make(map[string]interface{})
 	switch r := result.(type) {
 	case string:
 		data["status"] = "error"
@@ -40,6 +40,10 @@ func response(w http.ResponseWriter, result interface{}) {
 		for k, v := range r {
 			data[k] = v
 		}
+	default:
+		data["status"] = "ok"
+		data["msg"] = "success"
+		data["data"] = result
 	}
 	re, _ := json.Marshal(data)
 	w.Write(re)
