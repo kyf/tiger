@@ -21,6 +21,16 @@ var h = hub{
 	online:     make(map[string][]*connection),
 }
 
+func (h *hub) isOnline(to string) bool {
+	var result bool = false
+	if li, ok := h.online[to]; ok {
+		if len(li) > 0 {
+			result = true
+		}
+	}
+	return result
+}
+
 func (h *hub) run(logger *log.Logger) {
 	for {
 		select {
@@ -45,7 +55,7 @@ func (h *hub) run(logger *log.Logger) {
 				break
 			}
 			to := msg.To
-			if status := handleMsg(msg); status {
+			if status := handleMsg(msg, logger); status {
 				break
 			}
 

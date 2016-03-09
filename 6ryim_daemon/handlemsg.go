@@ -1,18 +1,35 @@
 package main
 
 import (
-	"net/http"
+	"log"
 )
 
-func handleMsg(msg Message) {
-	switch msg.ToType {
-	case TERMINAL_ADMIN:
-	case TERMINAL_IOS:
-	case TERMINAL_ANDROID:
-	case TERMINAL_WX:
-	case TERMINAL_360STREAM:
-	default:
+func handleMsg(msg Message, logger *log.Logger) bool {
+	if h.isOnline(msg.To) {
 		return false
+	}
+
+	var err error = nil
+	if msg.ToType == TERMINAL_ADMIN {
+		err = msg.sendAdminTpl()
+	} else {
+
+		switch msg.Source {
+		case MSG_SOURCE_WX:
+			err = msg.sendUserWX()
+		case MSG_SOURCE_IOS:
+			err = msg.sendUserIOS()
+		case MSG_SOURCE_ANDROID:
+			err = msg.sendUserAndroid()
+		case MSG_SOURCE_360STREAM:
+			err = msg.sendUser360Stream()
+		default:
+			return false
+		}
+	}
+
+	if err != nil {
+		logger.Printf("handleMsg err:%v", err)
 	}
 	return true
 }

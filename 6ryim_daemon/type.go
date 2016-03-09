@@ -17,3 +17,23 @@ func newMsg(m []byte) (*Message, error) {
 
 	return &result, nil
 }
+
+func (m *Message) sendAdminTpl() error {
+
+}
+
+func (m *Message) sendUserWX() error {
+
+}
+
+func (m *Message) sendUserIOS() error {
+
+}
+
+func (m *Message) sendUserAndroid() error {
+
+}
+
+func (m *Message) sendUser360Stream() error {
+	return nil
+}

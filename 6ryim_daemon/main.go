@@ -16,11 +16,13 @@ const (
 
 	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
 
-	TERMINAL_ADMIN     int = 1
-	TERMINAL_IOS       int = 2
-	TERMINAL_ANDROID   int = 2
-	TERMINAL_WX        int = 2
-	TERMINAL_360STREAM int = 2
+	TERMINAL_ADMIN int = 1
+	TERMINAL_USER  int = 2
+
+	MSG_SOURCE_WX        int = 1
+	MSG_SOURCE_IOS       int = 2
+	MSG_SOURCE_ANDROID   int = 3
+	MSG_SOURCE_360STREAM int = 4
 )
 
 var (
