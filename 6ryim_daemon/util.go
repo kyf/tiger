@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -40,4 +42,10 @@ func response(w http.ResponseWriter, status bool, msg string, data ...interface{
 	}
 
 	w.Write(res)
+}
+
+func generalSign(accessid, timestamp, secretkey string) string {
+	origin := fmt.Sprintf("%s%s%s", timestamp, accessid, secretkey)
+	tmp := md5.Sum([]byte(origin))
+	return hex.EncodeToString(tmp[:])
 }

@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
 	"github.com/kyf/postwx"
@@ -149,7 +150,13 @@ func (m *Message) sendUserIOS() error {
 		return err
 	}
 
+	timestamp := fmt.Sprintf("%d", time.Now().Unix())
+	signature := generalSign(PUSH_SERVICE_ACCESSID, timestamp, PUSH_SERVICE_SECRETKEY)
+
 	data.Set("number", fmt.Sprintf("%d", number))
+	data.Set("accessid", PUSH_SERVICE_ACCESSID)
+	data.Set("signature", signature)
+	data.Set("timestamp", timestamp)
 	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", PUSH_SERVICE_URL), data)
 	if err != nil {
 		return err

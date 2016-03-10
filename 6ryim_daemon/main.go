@@ -17,6 +17,9 @@ const (
 	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
 	PUSH_SERVICE_URL string = "http://127.0.0.1:3031/"
 
+	PUSH_SERVICE_ACCESSID  string = "6renyou_20151222"
+	PUSH_SERVICE_SECRETKEY string = "123456789"
+
 	TERMINAL_ADMIN string = "1"
 	TERMINAL_USER  string = "2"
 
