@@ -2,8 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func storeOffline(msg Message) error {
@@ -13,16 +17,37 @@ func storeOffline(msg Message) error {
 	}
 	data := make(url.Values)
 	data.Set("msg", string(m))
-	res, err = http.PostForm(fmt.Sprintf("%soffline/store", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%soffline/store", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
+	var obj map[string]string
+	err = json.Unmarshal(body, &obj)
+	if err != nil {
+		return err
+	}
+
+	if status, ok := obj["status"]; ok {
+		if strings.EqualFold("ok", status) {
+			return nil
+		} else {
+			return errors.New(obj["msg"])
+		}
+	} else {
+		return errors.New("Server Invalid")
 	}
 }
 
 func fetchOffline(to string) ([]string, error) {
 	data := make(url.Values)
 	data.Set("to", to)
-	res, err = http.PostForm(fmt.Sprintf("%soffline/fetch", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%soffline/fetch", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +84,7 @@ func fetchOffline(to string) ([]string, error) {
 func countOffline(to string) (int, error) {
 	data := make(url.Values)
 	data.Set("to", to)
-	res, err = http.PostForm(fmt.Sprintf("%soffline/count", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%soffline/count", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return 0, err
 	}

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -19,4 +21,23 @@ func getFormatNow(tpl string) string {
 	second := now.Second()
 	date := fmt.Sprintf(tpls[tpl], year, month, day, hour, minute, second)
 	return date
+}
+
+func response(w http.ResponseWriter, status bool, msg string, data ...interface{}) {
+	result := map[string]interface{}{
+		"status": status,
+		"msg":    msg,
+	}
+
+	if len(data) > 0 {
+		result["data"] = data[0]
+	}
+
+	res, err := json.Marshal(result)
+	if err != nil {
+		w.Write([]byte("Server Invalid"))
+		return
+	}
+
+	w.Write(res)
 }

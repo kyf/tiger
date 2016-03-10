@@ -125,7 +125,7 @@ func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params 
 		logger.Printf("initial websocket err:%v", err)
 		return
 	}
-	c := &connection{token: devicetoken, send: make(chan []byte, 256), ws: ws}
+	c := &connection{token: string(devicetoken), send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump(logger)
 	c.readPump(logger)

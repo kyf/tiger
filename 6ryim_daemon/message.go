@@ -2,21 +2,19 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
+	"github.com/kyf/postwx"
 )
 
 const (
-	WX_TPL_ID    string            = "e5sFqp2BHA4OhbzOpzeqmi0ir6lT9sA3DanMOYOPhRI"
-	WX_TPL_URL   string            = "http://m.6renyou.com/chat/index"
-	WX_TPL_COLOR map[string]string = map[string]string{
-		"top":    "#FF0000",
-		"first":  "#000000",
-		"data":   "#3eb166",
-		"remark": "#939393",
-	}
+	WX_TPL_ID  string = "e5sFqp2BHA4OhbzOpzeqmi0ir6lT9sA3DanMOYOPhRI"
+	WX_TPL_URL string = "http://m.6renyou.com/chat/index"
 
 	WX_TPL string = `{
 		"touser":"%s",
@@ -51,6 +49,15 @@ const (
 	WX_TPL_SOURCE_IOS       string = "ios客户端"
 	WX_TPL_SOURCE_ANDROID   string = "android客户端"
 	WX_TPL_SOURCE_360STREAM string = "360stream客户端"
+)
+
+var (
+	WX_TPL_COLOR map[string]string = map[string]string{
+		"top":    "#FF0000",
+		"first":  "#000000",
+		"data":   "#3eb166",
+		"remark": "#939393",
+	}
 )
 
 type Message im_type.Message
@@ -96,7 +103,7 @@ func (m *Message) sendAdminTpl() error {
 func (m *Message) sendUserWX() error {
 	var posterr error = nil
 
-	switch msg.MsgType {
+	switch m.MsgType {
 	case MSG_TYPE_TEXT:
 		_, posterr = postwx.PostText(m.To, m.Message)
 	case MSG_TYPE_IMAGE:
@@ -108,20 +115,20 @@ func (m *Message) sendUserWX() error {
 	if posterr != nil {
 		var returnmsg Message = Message{
 			From:       MSG_SYSTEM_NAME,
-			To:         msg.From,
-			Message:    fmt.Sprintf("%s:%v", msg.Message, posterr),
-			OrderId:    msg.OrderId,
-			FromType:   msg.FromType,
-			ToType:     msg.FromType,
-			MsgType:    msg.MsgType,
-			CreateTime: msg.CreateTime,
+			To:         m.From,
+			Message:    fmt.Sprintf("%s:%v", m.Message, posterr),
+			OrderId:    m.OrderId,
+			FromType:   m.FromType,
+			ToType:     m.FromType,
+			MsgType:    m.MsgType,
+			CreateTime: m.CreateTime,
 			IsSystem:   MSG_SYSTEM,
 			SystemType: MSG_SYSTEM_TYPE_ERROR,
 			Source:     MSG_SOURCE_WX,
 		}
 		var strreturnmsg []byte
 		strreturnmsg, _ = json.Marshal(returnmsg)
-		h.message <- string(strreturnmsg)
+		h.message <- strreturnmsg
 	}
 
 	return posterr
@@ -133,7 +140,7 @@ type PushResponse struct {
 }
 
 func (m *Message) sendUserIOS() error {
-	data := make(ur.Values)
+	data := make(url.Values)
 	data.Set("deviceid", m.To)
 	data.Set("content", m.Message)
 
@@ -142,7 +149,7 @@ func (m *Message) sendUserIOS() error {
 		return err
 	}
 
-	data.Set("number", number)
+	data.Set("number", fmt.Sprintf("%d", number))
 	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err
@@ -156,14 +163,14 @@ func (m *Message) sendUserIOS() error {
 	if err != nil {
 		return err
 	}
-	if !pr {
+	if !pr.Status {
 		return errors.New(pr.Message)
 	}
 	return nil
 }
 
 func (m *Message) sendUserAndroid() error {
-	data := make(ur.Values)
+	data := make(url.Values)
 	data.Set("deviceid", m.To)
 	data.Set("content", m.Message)
 	res, err := http.PostForm(fmt.Sprintf("%spush/android/single", HTTP_SERVICE_URL), data)
@@ -179,7 +186,7 @@ func (m *Message) sendUserAndroid() error {
 	if err != nil {
 		return err
 	}
-	if !pr {
+	if !pr.Status {
 		return errors.New(pr.Message)
 	}
 	return nil
