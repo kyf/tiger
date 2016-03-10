@@ -67,7 +67,8 @@ func main() {
 
 	fp, err := os.OpenFile(LOG_PATH, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		panic(fp)
+		fmt.Printf("OpenFile failure, err is %v", err)
+		os.Exit(1)
 	}
 	defer fp.Close()
 
