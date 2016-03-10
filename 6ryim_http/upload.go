@@ -91,8 +91,9 @@ func init() {
 					mediaType := "image"
 					media_id, err := postwx.UploadMedia(fp, mediaType)
 					if err == nil {
-						logger.Printf("postwx.UploadMedia err:%v", err)
 						result1["media_id"] = media_id
+					} else {
+						logger.Printf("postwx.UploadMedia err:%v", err)
 					}
 				}
 
