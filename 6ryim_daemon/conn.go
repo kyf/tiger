@@ -104,8 +104,9 @@ func storeMessage(msg Message) error {
 	return nil
 }
 
-func auth(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+func auth(context martini.Context, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 	r.ParseForm()
+	context.Map(r.Form)
 }
 
 func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params martini.Params) {
