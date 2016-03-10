@@ -180,6 +180,14 @@ func (m *Message) sendUserAndroid() error {
 	data := make(url.Values)
 	data.Set("deviceid", m.To)
 	data.Set("content", m.Message)
+
+	timestamp := fmt.Sprintf("%d", time.Now().Unix())
+	signature := generalSign(PUSH_SERVICE_ACCESSID, timestamp, PUSH_SERVICE_SECRETKEY)
+
+	data.Set("accessid", PUSH_SERVICE_ACCESSID)
+	data.Set("signature", signature)
+	data.Set("timestamp", timestamp)
+
 	res, err := http.PostForm(fmt.Sprintf("%spush/android/single", PUSH_SERVICE_URL), data)
 	if err != nil {
 		return err
