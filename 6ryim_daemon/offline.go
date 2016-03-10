@@ -17,6 +17,7 @@ func storeOffline(msg Message) error {
 	}
 	data := make(url.Values)
 	data.Set("msg", string(m))
+	data.Set("to", msg.To)
 	res, err := http.PostForm(fmt.Sprintf("%soffline/store", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err

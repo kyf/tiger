@@ -15,6 +15,7 @@ const (
 	LOG_PREFIX string = "[6ryim_daemon]"
 
 	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
+	PUSH_SERVICE_URL string = "http://127.0.0.1:3031/"
 
 	TERMINAL_ADMIN string = "1"
 	TERMINAL_USER  string = "2"

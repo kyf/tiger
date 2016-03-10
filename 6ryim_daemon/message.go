@@ -150,7 +150,7 @@ func (m *Message) sendUserIOS() error {
 	}
 
 	data.Set("number", fmt.Sprintf("%d", number))
-	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", PUSH_SERVICE_URL), data)
 	if err != nil {
 		return err
 	}
@@ -173,7 +173,7 @@ func (m *Message) sendUserAndroid() error {
 	data := make(url.Values)
 	data.Set("deviceid", m.To)
 	data.Set("content", m.Message)
-	res, err := http.PostForm(fmt.Sprintf("%spush/android/single", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%spush/android/single", PUSH_SERVICE_URL), data)
 	if err != nil {
 		return err
 	}
