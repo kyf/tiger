@@ -15,6 +15,8 @@ import (
 const (
 	LOG_PREFIX string = "[6ryim_http]"
 	LOG_PATH   string = "/var/log/6ryim_http/6ryim_http.log"
+
+	WS_SERVICE_URL string = "http://127.0.0.1:8060/"
 )
 
 var (

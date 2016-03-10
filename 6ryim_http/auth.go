@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 func init() {

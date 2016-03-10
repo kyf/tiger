@@ -7,10 +7,8 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
-	"time"
 
-	"github.com/kyf/postwx"
+	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
 )
 
 func init() {
@@ -32,45 +30,25 @@ func init() {
 }
 
 func processMessage(msg string, logger *log.Logger) {
-	var message Message
+	var message im_type.Message
 	err := json.Unmarshal([]byte(msg), &message)
 	if err != nil {
 		logger.Printf("processMessage json.Unmarshal err:%v", err)
 		return
 	}
 
-	if strings.EqualFold(message.Source, "1") &&
-		strings.EqualFold(message.ToType, "1") &&
-		(strings.EqualFold(message.MsgType, "3") || strings.EqualFold(message.MsgType, "4")) {
-
-		dir, err := uploadDir(C.uploadpath)
-		if err != nil {
-			fmt.Println("[processMessage]uploadDir err:", err)
-		}
-
-		fp := fmt.Sprintf("%s/%s", dir, fmt.Sprintf("%v", time.Now().UnixNano()))
-		fullpath, err := postwx.GetMedia(message.Message, fp)
-		if err != nil {
-			fmt.Println("postwx error is ", err)
-		}
-		message.Message = strings.Replace(string(fullpath), C.uploadpath, "", -1)
-		bmsg, _ := json.Marshal(message)
-		msg = string(bmsg)
-	}
-
-	uri := "http://127.0.0.1:2345/"
 	var param url.Values = make(url.Values)
 	param.Set("msg", msg)
-	res, err := http.PostForm(uri, param)
+	res, err := http.PostForm(fmt.Sprintf("%smessage/receive", WS_SERVICE_URL), param)
 	if err != nil {
-		fmt.Println("[processMessage]postform err is ", err)
+		logger.Printf("processMessage.postform err:%v", err)
 		return
 	}
 
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println("[processMessage]readall err is ", err)
+		logger.Printf("processMessage readall err:%v", err)
 		return
 	}
-	fmt.Printf("\n[processMessage%v][%s]response is %s \n\n", time.Now(), msg, string(data))
+	logger.Printf("[processMessage]response is %s", string(data))
 }
