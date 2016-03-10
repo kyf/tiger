@@ -57,4 +57,34 @@ func init() {
 		}
 		response(w, result)
 	}
+
+	handlers["/getDevicetokenByToken"] = func(w http.ResponseWriter, r *http.Request, params url.Values, logger *log.Logger) {
+		token := params.Get("token")
+
+		var result interface{}
+		if len(token) == 0 {
+			result = "please pass the token"
+			response(w, result)
+			return
+		}
+
+		redis_cli, err := GetRedis()
+		if err != nil {
+			logger.Printf("GetRedis err:%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+		key := fmt.Sprintf("%s%s", SESSION_PREFIX, token)
+		v, err := redis.String(redis_cli.Do("hget", key, "clientid"))
+		if err != nil {
+			logger.Printf("getDevicetokenByToken err:%v", err)
+			response(w, "Server Invalid")
+			return
+		}
+
+		result = map[string]string{
+			"devicetoken": v,
+		}
+		response(w, result)
+	}
 }

@@ -23,7 +23,7 @@ func init() {
 			return
 		}
 
-		go processMessage(msg)
+		go processMessage(msg, logger)
 		result1 := make(map[string]string)
 		result1["response"] = "processMessage"
 		response(w, result1)
@@ -31,11 +31,11 @@ func init() {
 
 }
 
-func processMessage(msg string) {
+func processMessage(msg string, logger *log.Logger) {
 	var message Message
 	err := json.Unmarshal([]byte(msg), &message)
 	if err != nil {
-		fmt.Println("[processMessage]json.Unmarshal err:", err)
+		logger.Printf("processMessage json.Unmarshal err:%v", err)
 		return
 	}
 
