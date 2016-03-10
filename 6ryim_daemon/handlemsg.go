@@ -5,6 +5,18 @@ import (
 )
 
 func handleMsg(msg Message, logger *log.Logger) bool {
+	//getMedia from weixin resource
+	if strings.EqualFold(msg.ToType, TERMINAL_ADMIN) {
+		if strings.EqualFold(msg.Source, MSG_SOURCE_WX) {
+			switch msg.MsgType {
+			case MSG_TYPE_IMAGE:
+				fallthrough
+			case MSG_TYPE_AUDIO:
+
+			}
+		}
+	}
+
 	if h.isOnline(msg.To) {
 		return false
 	}
@@ -15,7 +27,7 @@ func handleMsg(msg Message, logger *log.Logger) bool {
 		logger.Printf("storeOffline err:%v", err)
 	}
 
-	if msg.ToType == TERMINAL_ADMIN {
+	if strings.EqualFold(msg.ToType, TERMINAL_ADMIN) {
 		err = msg.sendAdminTpl()
 	} else {
 
@@ -37,4 +49,8 @@ func handleMsg(msg Message, logger *log.Logger) bool {
 		logger.Printf("handleMsg err:%v", err)
 	}
 	return true
+}
+
+func serveMsgReceive() {
+
 }

@@ -136,6 +136,13 @@ func (m *Message) sendUserIOS() error {
 	data := make(ur.Values)
 	data.Set("deviceid", m.To)
 	data.Set("content", m.Message)
+
+	number, err := countOffline(m.To)
+	if err != nil {
+		return err
+	}
+
+	data.Set("number", number)
 	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err

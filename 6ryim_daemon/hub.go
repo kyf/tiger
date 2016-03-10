@@ -35,13 +35,26 @@ func (h *hub) run(logger *log.Logger) {
 	for {
 		select {
 		case c := <-h.register:
+			mli, err := fetchOffline(c.token)
 			if ct, ok := h.online[c.token]; ok {
 				ct = append(ct, c)
 				h.online[c.token] = ct
+				if err == nil {
+					for _, it := range mli {
+						c.send <- it
+					}
+				}
 			} else {
 				li := make([]*connection, 0)
 				li = append(li, c)
 				h.online[c.token] = li
+				if err == nil {
+					for _, it := range mli {
+						for _, itc := range li {
+							c.send <- m
+						}
+					}
+				}
 			}
 		case c := <-h.unregister:
 			if _, ok := h.online[c.token]; ok {

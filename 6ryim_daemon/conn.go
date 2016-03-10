@@ -109,12 +109,23 @@ func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params 
 		logger.Printf("token is empty")
 		return
 	}
+	devicetoken, err := getDevicetokenByToken(token)
+	if err != nil {
+		logger.Printf("getDevicetokenByToken err:%v", err)
+		return
+	}
+
+	if devicetoken == nil {
+		logger.Printf("token %s is invalid", token)
+		return
+	}
+
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		logger.Printf("initial websocket err:%v", err)
 		return
 	}
-	c := &connection{token: token, send: make(chan []byte, 256), ws: ws}
+	c := &connection{token: devicetoken, send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump(logger)
 	c.readPump(logger)
