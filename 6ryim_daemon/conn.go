@@ -23,9 +23,14 @@ const (
 	maxMessageSize = 1024 * 1
 )
 
+func checkOrigin(r *http.Request) bool {
+	return true
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin:     checkOrigin,
 }
 
 type connection struct {
