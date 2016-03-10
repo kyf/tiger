@@ -45,7 +45,7 @@ func (h *hub) run(logger *log.Logger) {
 			}
 
 			mli, err := fetchOffline(c.token)
-			if err != nil {
+			if err == nil {
 				for _, mit := range mli {
 					c.send <- []byte(mit)
 				}
