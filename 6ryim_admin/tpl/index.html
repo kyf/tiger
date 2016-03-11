@@ -21,24 +21,24 @@
 			<h1 class="logo"><a href="/" title="IM管理平台"></a></h1>
 			<div class="account">
 				<div class="account_meta account_info account_meta_primary" style="display:none;">
-					<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="nickname">6renyou</a>
+					<a href="javascript:jumpfn('');" class="nickname">6renyou</a>
 					<span class="type_wrp">
-						<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="type icon_subscribe_label">type</a>
+						<a href="javascript:jumpfn('');" class="type icon_subscribe_label">type</a>
 
-						<a href="/merchant/store?action=detail&t=wxverify/detail&info=verify&lang=zh_CN&token=687206959" class="type icon_verify_label fail">unauth</a>
+						<a href="javascript:jumpfn('');" class="type icon_verify_label fail">unauth</a>
 
 					</span>
-					<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN">
+					<a href="javascript:jumpfn('');">
 						<img src="" class="avatar">
 					</a>
 				</div>
 				<div id="accountArea" class="account_meta account_inbox account_meta_primary" style="display:none">
-					<a href="/cgi-bin/frame?t=notification/index_frame&lang=zh_CN&token=687206959" class="account_inbox_switch">
+					<a href="javascript:jumpfn('');" class="account_inbox_switch">
 						<i class="icon_inbox">通知</i>&nbsp;
 					</a>
 				</div>
 				<div class="account_meta account_logout account_meta_primary" style="display:none">
-					<a id="logout" href="/cgi-bin/logout?t=wxm-logout&lang=zh_CN&token=687206959">退出</a>
+					<a id="logout" href="javascript:jumpfn('');">退出</a>
 				</div>
 			</div>
 		</div>
@@ -58,10 +58,12 @@
 					</i>运维
 					</dt> 
 
-					<dd class="menu_item selected"><a data-id="10005" href="" >在线连接        </a></dd>
-					<dd class="menu_item "><a data-id="10007" href="" >日志        </a></dd>
+					<dd class="menu_item selected"><a data-id="10005" href="javascript:jumpfn('');" >在线连接        </a></dd>
+					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >日志        </a></dd>
+					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >操作        </a></dd>
+					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >通知        </a></dd>
 				</dl>
-				<dl class="menu ">
+				<dl class="menu">
 					<dt class="menu_title">
 					<i class="icon_menu" style="background:url(
 						/images/icon_menu_management.png
@@ -69,10 +71,10 @@
 					</i>测试
 					</dt> 
 
-					<dd class="menu_item "><a data-id="10012" href="/cgi-bin/message?t=message/list&count=20&day=7&token=687206959&lang=zh_CN" >ios推送        </a></dd>
-					<dd class="menu_item "><a data-id="10013" href="/cgi-bin/contactmanage?t=user/index&pageidx=0&type=0&token=687206959&lang=zh_CN" >android推送        </a></dd>
-					<dd class="menu_item "><a data-id="10013" href="/cgi-bin/contactmanage?t=user/index&pageidx=0&type=0&token=687206959&lang=zh_CN" >微信推送        </a></dd>
-					<dd class="menu_item "><a data-id="10014" href="/cgi-bin/appmsg?begin=0&count=10&t=media/appmsg_list&type=11&action=list&token=687206959&lang=zh_CN" >websocket测试        </a></dd>
+					<dd class="menu_item "><a data-id="10012" href="javascript:jumpfn('');" >ios推送        </a></dd>
+					<dd class="menu_item "><a data-id="10013" href="javascript:jumpfn('');" >android推送        </a></dd>
+					<dd class="menu_item "><a data-id="10013" href="javascript:jumpfn('');" >微信推送        </a></dd>
+					<dd class="menu_item "><a data-id="10014" href="javascript:jumpfn('');" >websocket测试        </a></dd>
 				</dl>
 				<dl class="menu ">
 					<dt class="menu_title">
@@ -82,38 +84,66 @@
 					</i>统计
 					</dt> 
 
-					<dd class="menu_item "><a data-id="10026" href="/promotion/advertiser_index?&token=687206959&lang=zh_CN" >消息曲线图        </a></dd>
-					<dd class="menu_item "><a data-id="10027" href="/merchant/ad_host_index?t=ad_system/host_index&token=687206959&lang=zh_CN" >op消息统计        </a></dd>
-					<dd class="menu_item "><a data-id="10026" href="/promotion/advertiser_index?&token=687206959&lang=zh_CN" >下单统计        </a></dd>
+					<dd class="menu_item "><a data-id="10026" href="javascript:jumpfn('');" >消息曲线图        </a></dd>
+					<dd class="menu_item "><a data-id="10027" href="javascript:jumpfn('');" >op消息统计        </a></dd>
+					<dd class="menu_item "><a data-id="10026" href="javascript:jumpfn('');" >下单统计        </a></dd>
 				</dl>
 			</div>
 
 		</div>
 
-		<div class="col_main">
+		<div class="col_main" id="OnlinePanel">
 			<div class="main_hd">
-				<h2>群发功能</h2>
-				<div id="topTab" class="title_tab"><ul data-index="0" class="tab_navs title_tab">
-						<li data-id="send" class="tab_nav first js_top" data-index="0">
-							<a href="/cgi-bin/masssendpage?t=mass/send&amp;token=1658052475&amp;lang=zh_CN">新建群发消息</a>
-						</li>
-						<li data-id="list" class="tab_nav  js_top selected" data-index="1">
-							<a href="/cgi-bin/masssendpage?t=mass/list&amp;action=history&amp;begin=0&amp;count=10&amp;token=1658052475&amp;lang=zh_CN">已发送</a>
+				<h2>在线连接</h2>
+				<div class="title_tab" id="topTab"><ul class="tab_navs title_tab" data-index="0">
+						<li data-index="1" style="float:right;margin-right:40px;" class="tab_nav  js_top selected" data-id="list">
+						<a href="#">当前在线连接数:<span id="TotalConnLabel" style="color:red;margin-left:10px;">0</span></a>
 						</li>
 					</ul>
 				</div>
+			</div>
+			<div class="main_hd">
+				
+			</div>
+		</div>
 
+		<div class="col_main" id="MsgCountPanel"  style="display:none;">
+			<div class="main_hd">
+				<h2>消息曲线图</h2>
 				<div class="extra_info mini_tips icon_after">
-					<a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA131025QniAfu.html">群发消息规则说明<i class="icon_mini_tips document_link"></i></a>
+					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
 				</div>
 			</div>
-
 			<div class="main_hd">
 
 			</div>
-
-
 		</div>
+
+		<div class="col_main" id="OpMsgPanel"  style="display:none;">
+			<div class="main_hd">
+				<h2>OP消息统计</h2>
+				<div class="extra_info mini_tips icon_after">
+					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
+				</div>
+			</div>
+			<div class="main_hd">
+
+			</div>
+		</div>
+
+		<div class="col_main" id="OrderCountPanel" style="display:none;">
+			<div class="main_hd">
+				<h2>下单统计</h2>
+				<div class="extra_info mini_tips icon_after">
+					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
+				</div>
+			</div>
+			<div class="main_hd">
+
+			</div>
+		</div>
+
+
 	</div>
 
 </div>
@@ -121,5 +151,14 @@
 </body>
 </html>
 
-
+<script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="/js/page/online.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+				$('.menu_item').click(function(){
+						$('.menu_item').removeClass('selected');
+						$(this).addClass('selected');
+					});
+			});
+</script>
 
