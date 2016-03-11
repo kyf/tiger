@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 )
 
 type hub struct {
@@ -31,6 +32,17 @@ func (h *hub) isOnline(to string) bool {
 	return result
 }
 
+func listOnline(w http.ResponseWriter) {
+	result := make([]string, 0)
+	for _, it := range h.online {
+		if len(it) > 0 {
+			result = append(result, it[0].tk)
+		}
+	}
+
+	response(w, true, "success", result)
+}
+
 func (h *hub) run(logger *log.Logger) {
 	for {
 		select {
@@ -53,7 +65,17 @@ func (h *hub) run(logger *log.Logger) {
 
 		case c := <-h.unregister:
 			if _, ok := h.online[c.token]; ok {
-				delete(h.online, c.token)
+				var tmp []*connection = make([]*connection, 0)
+				for _, it := range h.online[c.token] {
+					if it != c {
+						tmp = append(tmp, it)
+					}
+				}
+				if len(tmp) == 0 {
+					delete(h.online, c.token)
+				} else {
+					h.online[c.token] = tmp
+				}
 				close(c.send)
 			}
 		case m := <-h.message:

@@ -69,6 +69,7 @@ func main() {
 	m.Map(mylog)
 	m.Get("/:token", serveWS)
 	m.Post("/message/receive", serveMsgReceive)
+	m.Get("/online/list", listOnline)
 	var exit chan error = make(chan error)
 	go func() {
 		exit <- endless.ListenAndServe(fmt.Sprintf(":%s", Addr), m)
