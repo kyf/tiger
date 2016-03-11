@@ -35,8 +35,7 @@ func main() {
 	mylogger := log.New(fp, LOG_PREFIX, log.LstdFlags)
 	m.Map(mylogger)
 
-	m.Use(martini.Static("./static/js"))
-	m.Use(martini.Static("./static/css"))
+	m.Use(martini.Static("./static"))
 	m.Use(martini.Static("./tpl"))
 
 	var exit chan error

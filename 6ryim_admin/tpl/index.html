@@ -1,373 +1,373 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 
 <meta charset="utf-8">
 
 <title>IM管理平台</title> 
-<link href="https://res.wx.qq.com/mpres/htmledition/images/favicon218877.ico" rel="Shortcut Icon">
-<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/mpres/htmledition/style/base/layout_head2880f5.css"/>
-<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/mpres/htmledition/style/base/base2c31e8.css"/>
-<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/mpres/htmledition/style/base/lib2968da.css"/>
-<link rel="stylesheet" href="https://res.wx.qq.com/mpres/htmledition/style/page/page_index296095.css">
+<link href="http://www.6renyou.com/favicon.ico" rel="Shortcut Icon">
+<link rel="stylesheet" type="text/css" href="/css/layout_head2880f5.css"/>
+<link rel="stylesheet" type="text/css" href="/css/base2c31e8.css"/>
+<link rel="stylesheet" type="text/css" href="/css/lib2968da.css"/>
+<link rel="stylesheet" type="text/css" href="/css/page_index296095.css">
 
-    </head>
-    <body class="zh_CN">
-        <div class="head" id="header">
-<div class="head_box">
-    <div class="inner wrp">
-        <h1 class="logo"><a href="/" title="IM管理平台"></a></h1>
-                                <div class="account">
-                        <div class="account_meta account_info account_meta_primary">
-                                <a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="nickname">乐8</a>
-                                <span class="type_wrp">
-                                        <a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="type icon_subscribe_label">订阅号</a>
-                                        
-                                        <a href="/merchant/store?action=detail&t=wxverify/detail&info=verify&lang=zh_CN&token=687206959" class="type icon_verify_label fail">未认证</a>
-                                        
-                </span>
-                                <a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN"><img src="/misc/getheadimg?fakeid=3011669163&token=687206959&lang=zh_CN" class="avatar"></a>
-                            </div>
-            <div id="accountArea" class="account_meta account_inbox account_meta_primary">
-                                <a href="/cgi-bin/frame?t=notification/index_frame&lang=zh_CN&token=687206959" class="account_inbox_switch">
-                                        <i class="icon_inbox">通知</i>&nbsp;
-                                    </a>
-                            </div>
-                <div class="account_meta account_logout account_meta_primary"><a id="logout" href="/cgi-bin/logout?t=wxm-logout&lang=zh_CN&token=687206959">退出</a></div>
-                                </div>
-                    </div>
+</head>
+<body class="zh_CN">
+<div class="head" id="header">
+	<div class="head_box">
+		<div class="inner wrp">
+			<h1 class="logo"><a href="/" title="IM管理平台"></a></h1>
+			<div class="account">
+				<div class="account_meta account_info account_meta_primary" style="display:none;">
+					<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="nickname">乐8</a>
+					<span class="type_wrp">
+						<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" class="type icon_subscribe_label">订阅号</a>
+
+						<a href="/merchant/store?action=detail&t=wxverify/detail&info=verify&lang=zh_CN&token=687206959" class="type icon_verify_label fail">未认证</a>
+
+					</span>
+					<a href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN">
+						<img src="" class="avatar">
+					</a>
+				</div>
+				<div id="accountArea" class="account_meta account_inbox account_meta_primary" style="display:none">
+					<a href="/cgi-bin/frame?t=notification/index_frame&lang=zh_CN&token=687206959" class="account_inbox_switch">
+						<i class="icon_inbox">通知</i>&nbsp;
+					</a>
+				</div>
+				<div class="account_meta account_logout account_meta_primary"><a id="logout" href="/cgi-bin/logout?t=wxm-logout&lang=zh_CN&token=687206959">退出</a></div>
+			</div>
+		</div>
+	</div>
+
 </div>
+<div id="body" class="body page_index">
+	<div id="js_container_box" class="container_box cell_layout side_l">
 
-        </div>
-        <div id="body" class="body page_index">
-            <div id="js_container_box" class="container_box cell_layout side_l">
-                
-                                <div class="col_side">
-                    <div class="menu_box" id="menuBar">
-<dl class="menu no_extra">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_function.png
-        ) no-repeat;">
-    </i>功能
-                </dt> 
+		<div class="col_side">
+			<div class="menu_box" id="menuBar">
+				<dl class="menu no_extra">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(
+						/images/icon_menu_function.png
+						) no-repeat;">
+					</i>功能
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10005" href="/cgi-bin/masssendpage?t=mass/send&token=687206959&lang=zh_CN" >群发功能        </a></dd>
+					<dd class="menu_item "><a data-id="10005" href="/cgi-bin/masssendpage?t=mass/send&token=687206959&lang=zh_CN" >群发功能        </a></dd>
 					<dd class="menu_item "><a data-id="10006" href="/advanced/autoreply?t=ivr/reply&action=beadded&token=687206959&lang=zh_CN" >自动回复        </a></dd>
 					<dd class="menu_item "><a data-id="10007" href="/advanced/selfmenu?action=index&t=advanced/menu-setting&token=687206959&lang=zh_CN" >自定义菜单        </a></dd>
 					<dd class="menu_item "><a data-id="10038" href="/cgi-bin/newoperatevote?action=list&token=687206959&lang=zh_CN" >投票管理        </a></dd>
-				    <dd class='menu_plugins'><a class='btn_plugins_add'  data-id='10025' href="/cgi-bin/plugincenter?t=service/plugins&act=all&token=687206959&lang=zh_CN">添加功能插件</a></dd>
-		</dl>
-<dl class="menu ">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_management.png
-        ) no-repeat;">
-    </i>管理
-                </dt> 
+					<dd class='menu_plugins'><a class='btn_plugins_add'  data-id='10025' href="/cgi-bin/plugincenter?t=service/plugins&act=all&token=687206959&lang=zh_CN">添加功能插件</a></dd>
+				</dl>
+				<dl class="menu ">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(
+						/images/icon_menu_management.png
+						) no-repeat;">
+					</i>管理
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10012" href="/cgi-bin/message?t=message/list&count=20&day=7&token=687206959&lang=zh_CN" >消息管理        </a></dd>
+					<dd class="menu_item "><a data-id="10012" href="/cgi-bin/message?t=message/list&count=20&day=7&token=687206959&lang=zh_CN" >消息管理        </a></dd>
 					<dd class="menu_item "><a data-id="10013" href="/cgi-bin/contactmanage?t=user/index&pageidx=0&type=0&token=687206959&lang=zh_CN" >用户管理        </a></dd>
 					<dd class="menu_item "><a data-id="10014" href="/cgi-bin/appmsg?begin=0&count=10&t=media/appmsg_list&type=11&action=list&token=687206959&lang=zh_CN" >素材管理        </a></dd>
-		</dl>
-<dl class="menu ">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_ad.png
-        ) no-repeat;">
-    </i>推广
-                </dt> 
+				</dl>
+				<dl class="menu ">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(
+						/images/icon_menu_ad.png
+						) no-repeat;">
+					</i>推广
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10026" href="/promotion/advertiser_index?&token=687206959&lang=zh_CN" >广告主        </a></dd>
+					<dd class="menu_item "><a data-id="10026" href="/promotion/advertiser_index?&token=687206959&lang=zh_CN" >广告主        </a></dd>
 					<dd class="menu_item "><a data-id="10027" href="/merchant/ad_host_index?t=ad_system/host_index&token=687206959&lang=zh_CN" >流量主        </a></dd>
-		</dl>
-<dl class="menu ">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_statistics.png
-        ) no-repeat;">
-    </i>统计
-                </dt> 
+				</dl>
+				<dl class="menu ">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(
+						/images/icon_menu_statistics.png
+						) no-repeat;">
+					</i>统计
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10015" href="/misc/useranalysis?&token=687206959&lang=zh_CN" >用户分析        </a></dd>
+					<dd class="menu_item "><a data-id="10015" href="/misc/useranalysis?&token=687206959&lang=zh_CN" >用户分析        </a></dd>
 					<dd class="menu_item "><a data-id="10016" href="/misc/appmsganalysis?action=all&order_direction=2&token=687206959&lang=zh_CN" >图文分析        </a></dd>
 					<dd class="menu_item "><a data-id="10047" href="/misc/menuanalysis?&token=687206959&lang=zh_CN" >菜单分析        </a></dd>
 					<dd class="menu_item "><a data-id="10017" href="/misc/messageanalysis?type=daily&t=statistics/msg&token=687206959&lang=zh_CN" >消息分析        </a></dd>
 					<dd class="menu_item "><a data-id="10018" href="/misc/interfaceanalysis?type=daily&token=687206959&lang=zh_CN" >接口分析        </a></dd>
-		</dl>
-<dl class="menu ">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_setup.png
-        ) no-repeat;">
-    </i>设置
-                </dt> 
+				</dl>
+				<dl class="menu ">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(
+						/images/icon_menu_setup.png
+						) no-repeat;">
+					</i>设置
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10019" href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" >公众号设置        </a></dd>
+					<dd class="menu_item "><a data-id="10019" href="/cgi-bin/settingpage?t=setting/index&action=index&token=687206959&lang=zh_CN" >公众号设置        </a></dd>
 					<dd class="menu_item "><a data-id="10020" href="/merchant/store?action=detail&t=wxverify/detail&info=verify&token=687206959&lang=zh_CN" >微信认证        </a></dd>
 					<dd class="menu_item "><a data-id="10022" href="/cgi-bin/safecenterstatus?action=view&t=setting/safe-index&token=687206959&lang=zh_CN" >安全中心        </a></dd>
 					<dd class="menu_item "><a data-id="10045" href="/cgi-bin/illegalrecord?count=10&token=687206959&lang=zh_CN" >违规记录        </a></dd>
-		</dl>
-<dl class="menu ">
-    <dt class="menu_title">
-        <i class="icon_menu" style="background:url(
-        https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_developer.png
-        ) no-repeat;">
-    </i>开发
-                </dt> 
+				</dl>
+				<dl class="menu ">
+					<dt class="menu_title">
+					<i class="icon_menu" style="background:url(/images/icon_menu_developer.png) no-repeat;">
+					</i>开发
+					</dt> 
 
-				<dd class="menu_item "><a data-id="10048" href="/advanced/advanced?action=dev&t=advanced/dev&token=687206959&lang=zh_CN" >基本配置        </a></dd>
+					<dd class="menu_item "><a data-id="10048" href="/advanced/advanced?action=dev&t=advanced/dev&token=687206959&lang=zh_CN" >基本配置        </a></dd>
 					<dd class="menu_item "><a data-id="10049" href="/cgi-bin/frame?t=advanced/dev_tools_frame&nav=10049&token=687206959&lang=zh_CN" >开发者工具        </a></dd>
 					<dd class="menu_item "><a data-id="10050" href="/advanced/diagram?action=index&token=687206959&lang=zh_CN" >运维中心        </a></dd>
 					<dd class="menu_item "><a data-id="10051" href="/advanced/advanced?action=table&token=687206959&lang=zh_CN" >接口权限        </a></dd>
-		</dl>
-</div>
+				</dl>
+			</div>
 
-<script type="text/javascript">
-    var _new_comment_num=""||0;
-</script>
-                </div>
-                                
-                <div class="col_main">
-                    
+			<script type="text/javascript">
+var _new_comment_num=""||0;
+			</script>
+		</div>
 
-<div class="index_show_area">
-    <div class="index_tap added">
-        <ul class="inner">
-            <li class="grid_item size1of2 index_tap_item added_message">
-            <a href="/cgi-bin/message?t=message/list&count=20&day=7&token=687206959&lang=zh_CN">
-                <span class="tap_inner">
-                    <i class="icon_index_tap"></i>
-                    <em class="number">0</em>
-                    <strong class="title">新消息</strong>
-                </span>
-            </a>
-            </li>
-            <li class="grid_item size1of2 no_extra index_tap_item added_fans">
-                        <a href="/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&groupid=0&token=687206959&lang=zh_CN">
-                            <span class="tap_inner no_extra">
-                    <i class="icon_index_tap"></i>
-                                        <em class="number">0</em>
-                    <strong class="title">新增人数</strong>
-                                    </span>
-            </a>
-            </li>
-        </ul>
-    </div>&nbsp;
-    <div class="index_tap total">
-        <ul class="inner">
-            <li class="index_tap_item total_fans extra">
-            <a href="/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&groupid=0&token=687206959&lang=zh_CN">
-                <span class="tap_inner">
-                    <i class="icon_index_tap"></i>
-                    <em class="number">3</em>
-                    <strong class="title">总用户数</strong>
-                </span>
-            </a>
-            </li>
-        </ul> 
-    </div>
-</div>
-
-<div class="mp_news_area notices_box">
-    
-    <div class="title_bar">
-        <h3>系统公告</h3>
-    </div>
-    <ul class="mp_news_list">
-                               
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1456837226&version=1&lang=zh_CN" target="_blank">
-                <strong>公众号授权流程改版，可以自定义选择权限授权给第三方平台                                        <i class="icon_common new"></i>
-                                    </strong>
-                <span class="read_more">2016-03-01</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1453212248&version=6&lang=zh_CN" target="_blank">
-                <strong>微信网页设计样式库发布                                        <i class="icon_common new"></i>
-                                    </strong>
-                <span class="read_more">2016-01-20</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1453210197&version=4&lang=zh_CN" target="_blank">
-                <strong>IM管理平台关于整顿滥用客服接口和模板消息接口行为的公告                                    </strong>
-                <span class="read_more">2016-01-19</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1452678137&version=2&lang=zh_CN" target="_blank">
-                <strong>IM管理平台新增接口实时调用量清零功能                                    </strong>
-                <span class="read_more">2016-01-13</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1452002101&version=9&lang=zh_CN" target="_blank">
-                <strong>公众平台发布微信web开发者工具                                    </strong>
-                <span class="read_more">2016-01-11</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1451482848&version=3&lang=zh_CN" target="_blank">
-                <strong>IM管理平台关于整顿侵犯影视作品知识产权行为的公告                                    </strong>
-                <span class="read_more">2015-12-30</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1451394321&version=1&lang=zh_CN" target="_blank">
-                <strong>IM管理平台关于公众号第三方平台安全风险管理的公告                                    </strong>
-                <span class="read_more">2015-12-29</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1450268542&version=7&lang=zh_CN" target="_blank">
-                <strong>IM管理平台面向开发者新增个性化菜单接口                                    </strong>
-                <span class="read_more">2015-12-16</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1449636367&version=21&lang=zh_CN" target="_blank">
-                <strong>IM管理平台功能升级                                    </strong>
-                <span class="read_more">2015-12-10</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1449037396&version=1&lang=zh_CN" target="_blank">
-                <strong>公众平台临时带参数二维码的有效期增加为30天                                    </strong>
-                <span class="read_more">2015-12-02</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1447989443&version=1&lang=zh_CN" target="_blank">
-                <strong>公众平台文章编辑器改版                                    </strong>
-                <span class="read_more">2015-11-20</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1447842930&version=8&lang=zh_CN" target="_blank">
-                <strong>微信发布优惠券新玩法                                    </strong>
-                <span class="read_more">2015-11-18</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1444378622&version=4&lang=zh_CN" target="_blank">
-                <strong>IM管理平台推出针对开发者的微信认证事件推送                                    </strong>
-                <span class="read_more">2015-10-10</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1441697589&version=18&lang=zh_CN" target="_blank">
-                <strong>微信卡券新功能开放公告                                    </strong>
-                <span class="read_more">2015-09-08</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1439368008&version=22&lang=zh_CN" target="_blank">
-                <strong>公众平台新增城市服务功能                                    </strong>
-                <span class="read_more">2015-08-19</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1438332908&version=6&lang=zh_CN" target="_blank">
-                <strong>公众平台新增图文内容中图片上传接口，并过滤外链图片                                    </strong>
-                <span class="read_more">2015-07-31</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1437657670&version=2&lang=zh_CN" target="_blank">
-                <strong>公众平台支持原创文章选择转载类型                                    </strong>
-                <span class="read_more">2015-07-24</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1437461442&version=7&lang=zh_CN" target="_blank">
-                <strong>IM管理平台手机版公测                                    </strong>
-                <span class="read_more">2015-07-21</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1436453021&version=6&lang=zh_CN" target="_blank">
-                <strong>公众号文章新增语音功能                                    </strong>
-                <span class="read_more">2015-07-10</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1436354276&version=11&lang=zh_CN" target="_blank">
-                <strong>IM管理平台运营管理报告                                    </strong>
-                <span class="read_more">2015-07-09</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1436333625&version=2&lang=zh_CN" target="_blank">
-                <strong>IM管理平台推出运营中心                                    </strong>
-                <span class="read_more">2015-07-08</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1435761199&version=3&lang=zh_CN" target="_blank">
-                <strong>IM管理平台关于禁止发布签类测试信息的公告                                    </strong>
-                <span class="read_more">2015-07-01</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1435633820&version=12&lang=zh_CN" target="_blank">
-                <strong>公众平台基础功能优化                                    </strong>
-                <span class="read_more">2015-06-30</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1435557582&version=4&lang=zh_CN" target="_blank">
-                <strong>IM管理平台增加批量获取用户基本信息接口                                    </strong>
-                <span class="read_more">2015-06-29</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1433499635&version=10&lang=zh_CN" target="_blank">
-                <strong>IM管理号文章也可以添加音乐                                    </strong>
-                <span class="read_more">2015-06-05</span>
-            </a>
-                    </li>
-                <li class="mp_news_item">
-            <a href="/cgi-bin/announce?action=getannouncement&key=1432021564&version=2&lang=zh_CN" target="_blank">
-                <strong>公众平台向认证的政府与媒体类订阅号开放网页授权接口                                    </strong>
-                <span class="read_more">2015-05-19</span>
-            </a>
-                    </li>
-                       
-    </ul>
-    
-</div>
-
-<div class="pagination_wrp pageNavigator"></div>
+		<div class="col_main">
 
 
-                </div>
-            </div>
-            
-                                    <div class="faq">
-                <ul class="links">
-                                        <li class="links_item"><a href="http://kf.qq.com/faq/120911VrYVrA1509086vyumm.html" target="_blank">客服中心</a></li>
-                    <li class="links_item"><a href="/acct/infringement?action=getmanual&t=infringement/manual&type=1&lang=zh_CN&token=687206959" target="_blank">侵权投诉</a></li>
-                </ul>
-                <p class="tail">反馈官号weixingongzhong</p>
-            </div>
-                                    
-        </div>
-        <div class="foot" id="footer">
-	<ul class="links ft">
-					<li class="links_item no_extra"><a href="http://www.tencent.com/zh-cn/index.shtml" target="_blank">关于腾讯</a></li>
-			<li class="links_item"><a href="/cgi-bin/readtemplate?t=home/agreement_tmpl&type=info&lang=zh_CN&token=687206959" target="_blank">服务协议</a></li>
-			<li class="links_item"><a href="/cgi-bin/readtemplate?t=business/faq_operation_tmpl&type=info&lang=zh_CN&token=687206959" target="_blank">运营规范</a></li>
-			<li class="links_item"><a href="/cgi-bin/opshowpage?action=dispelinfo&lang=zh_CN&begin=1&count=9" target="_blank">辟谣中心</a></li>
+			<div class="index_show_area">
+				<div class="index_tap added">
+					<ul class="inner">
+						<li class="grid_item size1of2 index_tap_item added_message">
+						<a href="/cgi-bin/message?t=message/list&count=20&day=7&token=687206959&lang=zh_CN">
+							<span class="tap_inner">
+								<i class="icon_index_tap"></i>
+								<em class="number">0</em>
+								<strong class="title">新消息</strong>
+							</span>
+						</a>
+						</li>
+						<li class="grid_item size1of2 no_extra index_tap_item added_fans">
+						<a href="/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&groupid=0&token=687206959&lang=zh_CN">
+							<span class="tap_inner no_extra">
+								<i class="icon_index_tap"></i>
+								<em class="number">0</em>
+								<strong class="title">新增人数</strong>
+							</span>
+						</a>
+						</li>
+					</ul>
+				</div>&nbsp;
+				<div class="index_tap total">
+					<ul class="inner">
+						<li class="index_tap_item total_fans extra">
+						<a href="/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&groupid=0&token=687206959&lang=zh_CN">
+							<span class="tap_inner">
+								<i class="icon_index_tap"></i>
+								<em class="number">3</em>
+								<strong class="title">总用户数</strong>
+							</span>
+						</a>
+						</li>
+					</ul> 
+				</div>
+			</div>
+
+			<div class="mp_news_area notices_box">
+
+				<div class="title_bar">
+					<h3>系统公告</h3>
+				</div>
+				<ul class="mp_news_list">
+
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1456837226&version=1&lang=zh_CN" target="_blank">
+						<strong>公众号授权流程改版，可以自定义选择权限授权给第三方平台                                        <i class="icon_common new"></i>
+						</strong>
+						<span class="read_more">2016-03-01</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1453212248&version=6&lang=zh_CN" target="_blank">
+						<strong>微信网页设计样式库发布                                        <i class="icon_common new"></i>
+						</strong>
+						<span class="read_more">2016-01-20</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1453210197&version=4&lang=zh_CN" target="_blank">
+						<strong>IM管理平台关于整顿滥用客服接口和模板消息接口行为的公告                                    </strong>
+						<span class="read_more">2016-01-19</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1452678137&version=2&lang=zh_CN" target="_blank">
+						<strong>IM管理平台新增接口实时调用量清零功能                                    </strong>
+						<span class="read_more">2016-01-13</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1452002101&version=9&lang=zh_CN" target="_blank">
+						<strong>公众平台发布微信web开发者工具                                    </strong>
+						<span class="read_more">2016-01-11</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1451482848&version=3&lang=zh_CN" target="_blank">
+						<strong>IM管理平台关于整顿侵犯影视作品知识产权行为的公告                                    </strong>
+						<span class="read_more">2015-12-30</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1451394321&version=1&lang=zh_CN" target="_blank">
+						<strong>IM管理平台关于公众号第三方平台安全风险管理的公告                                    </strong>
+						<span class="read_more">2015-12-29</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1450268542&version=7&lang=zh_CN" target="_blank">
+						<strong>IM管理平台面向开发者新增个性化菜单接口                                    </strong>
+						<span class="read_more">2015-12-16</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1449636367&version=21&lang=zh_CN" target="_blank">
+						<strong>IM管理平台功能升级                                    </strong>
+						<span class="read_more">2015-12-10</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1449037396&version=1&lang=zh_CN" target="_blank">
+						<strong>公众平台临时带参数二维码的有效期增加为30天                                    </strong>
+						<span class="read_more">2015-12-02</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1447989443&version=1&lang=zh_CN" target="_blank">
+						<strong>公众平台文章编辑器改版                                    </strong>
+						<span class="read_more">2015-11-20</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1447842930&version=8&lang=zh_CN" target="_blank">
+						<strong>微信发布优惠券新玩法                                    </strong>
+						<span class="read_more">2015-11-18</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1444378622&version=4&lang=zh_CN" target="_blank">
+						<strong>IM管理平台推出针对开发者的微信认证事件推送                                    </strong>
+						<span class="read_more">2015-10-10</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1441697589&version=18&lang=zh_CN" target="_blank">
+						<strong>微信卡券新功能开放公告                                    </strong>
+						<span class="read_more">2015-09-08</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1439368008&version=22&lang=zh_CN" target="_blank">
+						<strong>公众平台新增城市服务功能                                    </strong>
+						<span class="read_more">2015-08-19</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1438332908&version=6&lang=zh_CN" target="_blank">
+						<strong>公众平台新增图文内容中图片上传接口，并过滤外链图片                                    </strong>
+						<span class="read_more">2015-07-31</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1437657670&version=2&lang=zh_CN" target="_blank">
+						<strong>公众平台支持原创文章选择转载类型                                    </strong>
+						<span class="read_more">2015-07-24</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1437461442&version=7&lang=zh_CN" target="_blank">
+						<strong>IM管理平台手机版公测                                    </strong>
+						<span class="read_more">2015-07-21</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1436453021&version=6&lang=zh_CN" target="_blank">
+						<strong>公众号文章新增语音功能                                    </strong>
+						<span class="read_more">2015-07-10</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1436354276&version=11&lang=zh_CN" target="_blank">
+						<strong>IM管理平台运营管理报告                                    </strong>
+						<span class="read_more">2015-07-09</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1436333625&version=2&lang=zh_CN" target="_blank">
+						<strong>IM管理平台推出运营中心                                    </strong>
+						<span class="read_more">2015-07-08</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1435761199&version=3&lang=zh_CN" target="_blank">
+						<strong>IM管理平台关于禁止发布签类测试信息的公告                                    </strong>
+						<span class="read_more">2015-07-01</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1435633820&version=12&lang=zh_CN" target="_blank">
+						<strong>公众平台基础功能优化                                    </strong>
+						<span class="read_more">2015-06-30</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1435557582&version=4&lang=zh_CN" target="_blank">
+						<strong>IM管理平台增加批量获取用户基本信息接口                                    </strong>
+						<span class="read_more">2015-06-29</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1433499635&version=10&lang=zh_CN" target="_blank">
+						<strong>IM管理号文章也可以添加音乐                                    </strong>
+						<span class="read_more">2015-06-05</span>
+					</a>
+					</li>
+					<li class="mp_news_item">
+					<a href="/cgi-bin/announce?action=getannouncement&key=1432021564&version=2&lang=zh_CN" target="_blank">
+						<strong>公众平台向认证的政府与媒体类订阅号开放网页授权接口                                    </strong>
+						<span class="read_more">2015-05-19</span>
+					</a>
+					</li>
+
+				</ul>
+
+			</div>
+
+			<div class="pagination_wrp pageNavigator"></div>
+
+
+		</div>
+	</div>
+
+	<div class="faq">
+		<ul class="links">
 			<li class="links_item"><a href="http://kf.qq.com/faq/120911VrYVrA1509086vyumm.html" target="_blank">客服中心</a></li>
-                        			<li class="links_item"><a href="mailto:weixinmp@qq.com" target="_blank">联系邮箱</a></li>
-            				<li class="links_item"><p class="copyright">Copyright &copy; 2012-2016 Tencent. All Rights Reserved.</p> </li>
+			<li class="links_item"><a href="/acct/infringement?action=getmanual&t=infringement/manual&type=1&lang=zh_CN&token=687206959" target="_blank">侵权投诉</a></li>
+		</ul>
+		<p class="tail">反馈官号weixingongzhong</p>
+	</div>
+
+</div>
+<div class="foot" id="footer">
+	<ul class="links ft">
+		<li class="links_item no_extra"><a href="http://www.tencent.com/zh-cn/index.shtml" target="_blank">关于腾讯</a></li>
+		<li class="links_item"><a href="/cgi-bin/readtemplate?t=home/agreement_tmpl&type=info&lang=zh_CN&token=687206959" target="_blank">服务协议</a></li>
+		<li class="links_item"><a href="/cgi-bin/readtemplate?t=business/faq_operation_tmpl&type=info&lang=zh_CN&token=687206959" target="_blank">运营规范</a></li>
+		<li class="links_item"><a href="/cgi-bin/opshowpage?action=dispelinfo&lang=zh_CN&begin=1&count=9" target="_blank">辟谣中心</a></li>
+		<li class="links_item"><a href="http://kf.qq.com/faq/120911VrYVrA1509086vyumm.html" target="_blank">客服中心</a></li>
+		<li class="links_item"><a href="mailto:weixinmp@qq.com" target="_blank">联系邮箱</a></li>
+		<li class="links_item"><p class="copyright">Copyright &copy; 2012-2016 Tencent. All Rights Reserved.</p> </li>
 	</ul>
-    
-	
+
+
 </div>
 
 
@@ -375,59 +375,59 @@
 
 <script type="text/html" id="js_ban_tpl">
 <div class="highlight_box" class="js_ban_div">
-    <div class="mini_tips">
-        <i class="icon_msg_mini warn"></i><span class="js_ban_wording">{=wording}</span>
-    </div>
+	<div class="mini_tips">
+		<i class="icon_msg_mini warn"></i><span class="js_ban_wording">{=wording}</span>
+	</div>
 </div>
 </script>
-        
+
 <script type="text/html" id="js_faqscene_tpl">
 <div class="faqscene" id="js_faqscene_p">
 <div class="faqscene_inner">
-    <div class="faqscene_name js_faq_trigger">常见问题</div>
-    <div class="faqscene_panel js_faq_main_panel">
-        <a href="###" class="faqscene_close">x</a>
-        <div class="faqscene_hd">{data.question}</div>
-        <div class="faqscene_bd">
-            <div class="faqscene_tabs">
-                <div class="faqscene_tab_hd">
-                    <ul class="js_faq_class1">
-                        {if data.guide_list.length>2}
-                        {each data.guide_list as guide i}
-                        {if guide}
-                        <li data-report-id="{guide.report_id}"><a {if i==0}class="active"{/if} href="javascript:;">{guide.itemname}</a></li>
-                        {/if}
+	<div class="faqscene_name js_faq_trigger">常见问题</div>
+	<div class="faqscene_panel js_faq_main_panel">
+		<a href="###" class="faqscene_close">x</a>
+		<div class="faqscene_hd">{data.question}</div>
+		<div class="faqscene_bd">
+			<div class="faqscene_tabs">
+				<div class="faqscene_tab_hd">
+					<ul class="js_faq_class1">
+						{if data.guide_list.length>2}
+						{each data.guide_list as guide i}
+						{if guide}
+						<li data-report-id="{guide.report_id}"><a {if i==0}class="active"{/if} href="javascript:;">{guide.itemname}</a></li>
+						{/if}
 
-                        {/each}
-                        {/if}
-                    </ul>
-                </div>
-                {if data.guide_list.length>1}
-                {/if}
-                {each data.guide_list as guide i}
-                {if guide}
-                <div class="faqscene_tab_bd js_faqscene_content">
-                    <ul>
-                        {each guide.subitems as subitem i}
-                        {if subitem}
-                        <li><a target="_blank" href="{subitem.kf_url}">{subitem.title}</a></li>
-                        {/if}
-                        {/each}
-                    </ul>
-                </div>
-                {/if}
-                {/each}
-            </div>
-        </div>
-        <div class="faqscene_ft"><a href="{data.more_help.kf_url}" target="_blank">{data.more_help.title}</a></div>
-    </div>
+						{/each}
+						{/if}
+					</ul>
+				</div>
+				{if data.guide_list.length>1}
+				{/if}
+				{each data.guide_list as guide i}
+				{if guide}
+				<div class="faqscene_tab_bd js_faqscene_content">
+					<ul>
+						{each guide.subitems as subitem i}
+						{if subitem}
+						<li><a target="_blank" href="{subitem.kf_url}">{subitem.title}</a></li>
+						{/if}
+						{/each}
+					</ul>
+				</div>
+				{/if}
+				{/each}
+			</div>
+		</div>
+		<div class="faqscene_ft"><a href="{data.more_help.kf_url}" target="_blank">{data.more_help.title}</a></div>
+	</div>
 </div>
 </div>
 </script>
 
 
 
-    </body>
+</body>
 </html>
 
 
