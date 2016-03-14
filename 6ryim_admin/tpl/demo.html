@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>IM管理平台</title>
+<meta charset="UTF-8" />
+</head>
+
+<body>
+<div>
+	<input type="text" placeholder="connection number" id="number" />
+	<input type="button" value="create" id="createbt" />
+	<input type="button" value="shut" id="shutbt" />
+</div>
+
+<div>
+	<input type="text" id="message" placeholder="please enter message ..." /> 
+	<input type="button" value="send" id="sendbt" />
+</div>
+
+<div id="report" style="border:1px solid gray;height:350px;overflow:auto;">
+</div>
+</body>
+</html>
+<script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="http://admin.6renyou.com/statics/price/js/util.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+			var createbt = $('#createbt'),
+				sendbt = $('#sendbt'),
+				shutbt = $('#shutbt'),
+				numbers = $('#number'),
+				message = $('#message'),
+				report = $('#report');
+			
+				var prefix = "my_device_";
+				var stack = [];
+				var tpl = '"from" : "7173f5b47ff076a84c17937e9655bcdaef904b80", "to" : "o5voKuBHUImbwLRMQnPTif0dIua4", "message" : "{message}", "orderid" : "49418", "fromtype" : "2", "totype" : "1", "msgtype" : "2", "createtime" : "2016-3-14 15:26:29", "issystem" : "0", "systemtype" : "0", "source" : "3" ';
+				createbt.click(function(){
+					var size = new Array(parseInt(numbers.val()));
+					$.each(size, function(index){
+								$.ajax({
+										url:'http://im2.6renyou.com:8989/auth',
+										data:{deviceid:prefix + index},
+										type:'POST',
+										dataType:'json',
+										success:function(data){
+											if(data.status == "ok"){
+												var ws = new WebSocket("ws://im2.6renyou.com:8060/" + data.token);
+												ws.onerror = function(){
+												
+												}
+												stack.push(ws);						
+												report.append("<div>created "+stack.length+" ws client!</div>");
+												report.scroll(report.get(0).scrollHeight);
+											}
+										
+										}
+									});
+							});	
+					});
+
+				sendbt.click(function(){
+							$.each(stack, function(index, ws){
+								ws.send('{'+ tpl.replaceTpl({message:message.val()}) + '}');
+								});
+						});
+
+				shutbt.click(function(){
+							$.each(stack, function(_, ws){
+									ws.close();
+								});
+						});
+		});
+</script>
