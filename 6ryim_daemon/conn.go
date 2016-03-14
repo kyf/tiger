@@ -72,6 +72,7 @@ func (c *connection) writePump(logger *log.Logger) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
+		h.unregister <- c
 		c.ws.Close()
 	}()
 	for {
@@ -79,13 +80,16 @@ func (c *connection) writePump(logger *log.Logger) {
 		case message, ok := <-c.send:
 			if !ok {
 				c.write(websocket.CloseMessage, []byte{})
+				logger.Printf("send CloseMessage")
 				return
 			}
 			if err := c.write(websocket.TextMessage, message); err != nil {
+				logger.Printf("write text message err:%v", err)
 				return
 			}
 		case <-ticker.C:
 			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
+				logger.Printf("write ping message err:%v", err)
 				return
 			}
 		}
