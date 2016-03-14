@@ -80,7 +80,7 @@ func init() {
 		key := fmt.Sprintf("%s%s", SESSION_PREFIX, token)
 		v, err := redis.String(redis_cli.Do("hget", key, "clientid"))
 		if err != nil {
-			logger.Printf("getDevicetokenByToken err:%v", err)
+			logger.Printf("getDevicetokenByToken err:%v, key is %v", err, key)
 			response(w, "Server Invalid")
 			return
 		}
