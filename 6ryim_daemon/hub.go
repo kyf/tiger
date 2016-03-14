@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -102,7 +103,11 @@ func (h *hub) run(logger *log.Logger) {
 			}
 
 			if li, ok := h.online[to]; ok {
-
+				m, err = json.Marshal(msg)
+				if err != nil {
+					logger.Println("sendMessage json err:%v", err)
+					break
+				}
 				for _, c := range li {
 					select {
 					case c.send <- m:

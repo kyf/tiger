@@ -79,7 +79,6 @@ func newMsg(m []byte) (*Message, error) {
 		result.SystemType = "0"
 	}
 
-	fmt.Println("IsSystem is ", result.IsSystem, ", SystemType is ", result.SystemType)
 	return &result, nil
 }
 
