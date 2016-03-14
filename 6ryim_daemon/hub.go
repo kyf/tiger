@@ -84,7 +84,7 @@ func (h *hub) run(logger *log.Logger) {
 				logger.Printf("newMsg err:%v", err)
 				break
 			}
-			logger.Printf("<hub>receive message is:%v", msg)
+			logger.Printf("<hub>receive message is:%v, %v", msg.IsSystem, msg.SystemType)
 
 			to := msg.To
 			msg.CreateTime = getFormatNow("num")
