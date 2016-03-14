@@ -79,6 +79,7 @@ func (h *hub) run(logger *log.Logger) {
 				close(c.send)
 			}
 		case m := <-h.message:
+			logger.Printf("<hub>receive message is:%v", m)
 			msg, err := newMsg(m)
 			if err != nil {
 				logger.Printf("newMsg err:%v", err)
