@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
@@ -68,6 +69,14 @@ func newMsg(m []byte) (*Message, error) {
 	err := json.Unmarshal(m, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if strings.EqualFold("", result.IsSystem) {
+		result.IsSystem = "0"
+	}
+
+	if strings.EqualFold("", result.SystemType) {
+		result.SystemType = "0"
 	}
 
 	return &result, nil

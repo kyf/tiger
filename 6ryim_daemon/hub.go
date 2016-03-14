@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"strings"
 )
 
 type hub struct {
@@ -84,13 +83,6 @@ func (h *hub) run(logger *log.Logger) {
 			if err != nil {
 				logger.Printf("newMsg err:%v", err)
 				break
-			}
-			if strings.EqualFold("", msg.IsSystem) {
-				msg.IsSystem = ""
-			}
-
-			if strings.EqualFold("", msg.SystemType) {
-				msg.SystemType = ""
 			}
 
 			to := msg.To
