@@ -45,13 +45,25 @@ func handleMsg(msg *Message, logger *log.Logger) (bool, *Message) {
 
 		switch msg.Source {
 		case MSG_SOURCE_WX:
-			err = msg.sendUserWX()
+			go func() {
+				err := msg.sendUserWX()
+				logger.Printf("sendUserWX err:%v", err)
+			}()
 		case MSG_SOURCE_IOS:
-			err = msg.sendUserIOS()
+			go func() {
+				err := msg.sendUserIOS()
+				logger.Printf("sendUserIOS err:%v", err)
+			}()
 		case MSG_SOURCE_ANDROID:
-			err = msg.sendUserAndroid()
+			go func() {
+				err := msg.sendUserAndroid()
+				logger.Printf("sendUserAndroid err:%v", err)
+			}()
 		case MSG_SOURCE_360STREAM:
-			err = msg.sendUser360Stream()
+			go func() {
+				err := msg.sendUser360Stream()
+				logger.Printf("sendUser360Stream err:%v", err)
+			}()
 		default:
 			return false, msg
 		}

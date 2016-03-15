@@ -150,11 +150,31 @@ type PushResponse struct {
 }
 
 func (m *Message) sendUserIOS() error {
+	params := make(url.Values)
+	params.Set("userId", m.To)
+	res, err := http.PostForm(fmt.Sprintf("%sgetDeviceTokenByUserId", HTTP_SERVICE_URL), params)
+	if err != nil {
+		return err
+	}
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+	var device map[string]string
+	err = json.Unmarshal(body, &device)
+	if err != nil {
+		return err
+	}
+	deviceToken, ok := device["deviceToken"]
+	if !ok {
+		return errors.New("not found deviceToken")
+	}
+
 	data := make(url.Values)
-	data.Set("deviceid", m.To)
+	data.Set("deviceid", deviceToken)
 	data.Set("content", m.Message)
 
-	number, err := countOffline(m.To)
+	number, err := countOffline(deviceToken)
 	if err != nil {
 		return err
 	}
@@ -166,11 +186,11 @@ func (m *Message) sendUserIOS() error {
 	data.Set("accessid", PUSH_SERVICE_ACCESSID)
 	data.Set("signature", signature)
 	data.Set("timestamp", timestamp)
-	res, err := http.PostForm(fmt.Sprintf("%spush/ios/single", PUSH_SERVICE_URL), data)
+	res, err = http.PostForm(fmt.Sprintf("%spush/ios/single", PUSH_SERVICE_URL), data)
 	if err != nil {
 		return err
 	}
-	body, err := ioutil.ReadAll(res.Body)
+	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
