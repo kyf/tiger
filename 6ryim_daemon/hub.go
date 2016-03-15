@@ -52,9 +52,6 @@ func (h *hub) run(logger *log.Logger) {
 		select {
 		case c := <-h.register:
 			h.olmutex.Lock()
-			if ct, ok := h.online[c.token]; ok {
-				close(ct.send)
-			}
 			h.online[c.token] = c
 			h.olmutex.Unlock()
 
