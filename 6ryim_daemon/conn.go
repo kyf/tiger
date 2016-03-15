@@ -72,7 +72,6 @@ func (c *connection) writePump(logger *log.Logger) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		h.unregister <- c
 		c.ws.Close()
 	}()
 	for {
@@ -116,7 +115,6 @@ func auth(context martini.Context, w http.ResponseWriter, r *http.Request, logge
 }
 
 func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params martini.Params) {
-	logger.Printf("enter serveWS 1 ...")
 	token := params["token"]
 	if strings.EqualFold("", token) {
 		logger.Printf("token is empty")
@@ -127,14 +125,11 @@ func serveWS(w http.ResponseWriter, r *http.Request, logger *log.Logger, params 
 		logger.Printf("getDevicetokenByToken err:%v", err)
 		return
 	}
-	logger.Printf("enter serveWS 2 ...")
 
 	if devicetoken == nil {
 		logger.Printf("token %s is invalid", token)
 		return
 	}
-
-	logger.Printf("enter serveWS 3 ...")
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

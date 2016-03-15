@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"sync"
-	"time"
 )
 
 type hub struct {
@@ -52,15 +51,9 @@ func (h *hub) run(logger *log.Logger) {
 	for {
 		select {
 		case c := <-h.register:
-			logger.Printf("register %v", c)
 			h.olmutex.Lock()
 			if ct, ok := h.online[c.token]; ok {
-				go func() {
-					lastc := ct
-					lastc.send <- []byte("you are kicked out!")
-					time.Sleep(time.Second * 5)
-					h.unregister <- lastc
-				}()
+				close(ct.send)
 			}
 			h.online[c.token] = c
 			h.olmutex.Unlock()
@@ -73,7 +66,6 @@ func (h *hub) run(logger *log.Logger) {
 			}
 
 		case c := <-h.unregister:
-			logger.Printf("unregister %v", c)
 			h.olmutex.Lock()
 			if _, ok := h.online[c.token]; ok {
 				delete(h.online, c.token)
@@ -82,19 +74,15 @@ func (h *hub) run(logger *log.Logger) {
 			h.olmutex.Unlock()
 		case m := <-h.message:
 			msg, err := newMsg(m)
-			logger.Printf("receive message %v", msg)
 			if err != nil {
 				logger.Printf("newMsg err:%v", err)
 				break
 			}
 
-			logger.Printf("send message 1 ...")
 			to := msg.To
 			msg.CreateTime = getFormatNow("num")
 			var status bool
-			logger.Printf("send message 2 ...")
 			status, msg = handleMsg(msg, logger)
-			logger.Printf("send message 3 ...")
 			go func() {
 				err := storeMessage(*msg)
 				if err != nil {
@@ -103,11 +91,9 @@ func (h *hub) run(logger *log.Logger) {
 
 			}()
 
-			logger.Printf("break before ...")
 			if status {
 				break
 			}
-			logger.Printf("break after ...")
 
 			if c, ok := h.online[to]; ok {
 				m, err = json.Marshal(msg)
@@ -132,5 +118,4 @@ func (h *hub) run(logger *log.Logger) {
 		}
 	}
 
-	logger.Printf("exit hub run ...")
 }
