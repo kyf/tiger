@@ -174,7 +174,7 @@ func (m *Message) sendUserIOS() error {
 	data.Set("deviceid", deviceToken)
 	data.Set("content", m.Message)
 
-	number, err := countOffline(deviceToken)
+	number, err := countOffline(m.To)
 	if err != nil {
 		return err
 	}
