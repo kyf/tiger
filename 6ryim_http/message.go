@@ -102,7 +102,7 @@ func getNewMessageNum(params url.Values) (int, error) {
 	where := make([]bson.M, 0)
 
 	if len(lastid) > 0 {
-		where = append(where, bson.M{"_id": bson.M{"$lt": bson.ObjectIdHex(lastid)}})
+		where = append(where, bson.M{"_id": bson.M{"$gt": bson.ObjectIdHex(lastid)}})
 	}
 
 	var condition bson.M = nil
