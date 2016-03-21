@@ -17,14 +17,14 @@
 .pages{text-align:center;line-height:60px;}
 .pages span{height:22px; margin:0 3px; border:0px #dbdbdb solid; font-size:12px; font-weight:bold; color:#1e4984;}
 .pages a{display:inline; height:22px; padding:3px 10px; line-height:22px; margin:0 3px; border:0px #dbdbdb solid; background:#fff; font-size:14px; color:#404040; text-decoration:none;}
-.pages a:hover{text-decoration:none;background:#3a3e47 none repeat scroll 0 0;color:#fff;border-radius:3px;}
+.pages a:hover{text-decoration:none;background:#44b549 none repeat scroll 0 0;color:#fff;border-radius:3px;}
 .pages .prev_disabled{width:22px; background:#fff  no-repeat 6px -44px;}
 .pages .prev{width:22px; padding:2px 8px; background:#fff  no-repeat 6px 5px;font-size:16px;}
 .pages .next_disabled{width:22px; background:#fff  no-repeat -45px -44px;}
 .pages .next{width:22px; padding:2px 8px; background:#fff no-repeat -45px 5px;font-size:16px;}
 .pages .text{border:none; color:#1e4984;}
-.pages .current{background:#3a3e47 none repeat scroll 0 0;color:#fff;border-radius:3px;}
-.pages .current:hover{background:#404040; color:#fff;}
+.pages .current{background:#44b549 none repeat scroll 0 0;color:#fff;border-radius:3px;}
+.pages .current:hover{background:#44b549; color:#fff;}
 #RecordCount{height:22px;line-height:22px;float:left;}
 .jumpclass {cursor:pointer;}
 </style>
@@ -75,9 +75,7 @@
 					</i>管理
 					</dt> 
 
-					<dd class="menu_item selected"><a href="/cgi-bin/message?t=message/list&amp;count=20&amp;day=7&amp;token=189298351&amp;lang=zh_CN" data-id="10012">消息管理        </a></dd>
-					<dd class="menu_item "><a href="/cgi-bin/contactmanage?t=user/index&amp;pageidx=0&amp;type=0&amp;token=189298351&amp;lang=zh_CN" data-id="10013">用户管理        </a></dd>
-					<dd class="menu_item "><a href="/cgi-bin/appmsg?begin=0&amp;count=10&amp;t=media/appmsg_list&amp;type=11&amp;action=list&amp;token=189298351&amp;lang=zh_CN" data-id="10014">素材管理        </a></dd>
+					<dd class="menu_item selected"><a href="">消息管理</a></dd>
 				</dl>
 			</div>
 
@@ -108,7 +106,7 @@
 				
 				<div class="msg_box" style="display:none;" id="newMsgTip">
 					<div class="inner">
-						<a href="/cgi-bin/message?t=message/list&amp;token=189298351&amp;count=20&amp;day=7"><span id="newMsgNum"></span>条新消息，点击查看</a>
+						<a href="javascript:window.location.reload();"><span id="newMsgNum"></span>条新消息，点击查看</a>
 					</div>
 				</div>
 
@@ -117,7 +115,7 @@
 
 
 				<div class="tool_area">
-					<div class="pagination_wrp pageNavigator" style="">
+					<div class="pagination_wrp pageNavigator pages" style="">
 					</div>
 				</div>
 
