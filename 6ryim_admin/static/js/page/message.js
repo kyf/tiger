@@ -67,6 +67,7 @@
 			dataType:'json',
 			type:'POST',
 			success:function(data, status, response){
+				if(data.data == null)data.data = [];
 				if(data.data){
 					$.each(data.data, function(i, d){
 						switch(d.msgtype){
