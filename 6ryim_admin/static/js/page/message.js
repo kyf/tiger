@@ -1,8 +1,12 @@
 (function($, window){
 	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://192.168.0.121:8989';
+	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
 	var SECOND = 1000;
+	
+	var msg_type = $('#msgtypeselect').dropdown();
+	var msg_source = $('#msgsourceselect').dropdown();
+	var searchBt = $('.js_reply_OK');
 
 	var listtpl = [
 				'<li data-id="577999267" id="msgListItem577999267" class="message_item ">',
@@ -55,6 +59,9 @@
 			url : SERVICE_DOMAIN + '/message/show',
 			data:{
 				page:toIndex,
+				key:$('.jsSearchInput').val(),
+				msgtype:msg_type.getValue(),
+				msgsource:msg_source.getValue(),
 				size:size
 			},
 			dataType:'json',
@@ -104,4 +111,8 @@
 	};
 
 	loadMsgList(1);
+
+	searchBt.click(function(){
+		loadMsgList(1);
+	});
 })(jQuery, window)

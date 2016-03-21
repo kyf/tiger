@@ -12,7 +12,8 @@
 <link rel="stylesheet" type="text/css" href="/css/base2c31e8.css"/>
 <link rel="stylesheet" type="text/css" href="/css/lib2968da.css"/>
 <link rel="stylesheet" type="text/css" href="/css/page_index296095.css">
-<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/mpres/htmledition/style/page/page_message2a0043.css">
+<link rel="stylesheet" type="text/css" href="/css/page_message2a0043.css">
+<link rel="stylesheet" type="text/css" href="/css/pagination218878.css">
 <style type="text/css">
 .pages{text-align:center;line-height:60px;}
 .pages span{height:22px; margin:0 3px; border:0px #dbdbdb solid; font-size:12px; font-weight:bold; color:#1e4984;}
@@ -103,7 +104,59 @@
 				</span></div>
 			</div>
 			<div class="main_bd">
-				
+
+				<div class="filter_bar" style="margin-bottom:10px;">
+					<!--消息类型start-->
+					<div id="msgtypeselect" class="dropdown_wrp dropdown_menu">
+						<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="" ><label class="jsBtLabel">全部类型</label><i class="arrow"></i></a>
+						<div class="dropdown_data_container jsDropdownList" style="display: none;">
+							<ul class="dropdown_data_list">
+								<li class="dropdown_data_item ">  
+								<a data-name="全部类型" data-index="0" data-value="" class="jsDropdownItem" href="javascript:;" onclick="return false;">全部类型</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="文本" data-index="1" data-value="2" class="jsDropdownItem" href="javascript:;" onclick="return false;">文本</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="图片" data-index="2" data-value="3" class="jsDropdownItem" href="javascript:;" onclick="return false;">图片</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="语音" data-index="3" data-value="4" class="jsDropdownItem" href="javascript:;" onclick="return false;">语音</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--消息类型end-->
+					<!--消息渠道start-->
+					<div id="msgsourceselect" class="dropdown_wrp dropdown_menu">
+						<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="" ><label class="jsBtLabel">全部渠道</label><i class="arrow"></i></a>
+						<div class="dropdown_data_container jsDropdownList" style="display: none;">
+							<ul class="dropdown_data_list">
+								<li class="dropdown_data_item ">  
+								<a data-name="全部渠道" data-index="0" data-value="" class="jsDropdownItem" href="javascript:;" onclick="return false;">全部渠道</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="微信" data-index="1" data-value="1" class="jsDropdownItem" href="javascript:;" onclick="return false;">微信</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="IOS" data-index="2" data-value="2" class="jsDropdownItem" href="javascript:;" onclick="return false;">IOS</a>
+								</li>
+								<li class="dropdown_data_item ">  
+								<a data-name="Android" data-index="3" data-value="3" class="jsDropdownItem" href="javascript:;" onclick="return false;">Android</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--消息渠道end-->
+					
+
+					<span data-id="578024576" class="btn btn_primary btn_input">
+						<button class="js_reply_OK">搜索</button>
+					</span>
+
+				</div>
+
+
 				<div class="msg_box" style="display:none;" id="newMsgTip">
 					<div class="inner">
 						<a href="javascript:window.location.reload();"><span id="newMsgNum"></span>条新消息，点击查看</a>
@@ -119,7 +172,7 @@
 					</div>
 				</div>
 
-				
+
 			</div>
 
 		</div>
@@ -136,6 +189,7 @@
 <script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/pagenav.js"></script>
 <script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/loading/jquery.showLoading.js"></script>
 <script type="text/javascript" src="/js/page/util.js"></script>
+<script type="text/javascript" src="/js/page/dropdown.js"></script>
 <script type="text/javascript" src="/js/page/message.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -144,5 +198,6 @@ $(document).ready(function(){
 			$(this).addClass('selected');
 			});
 		});
+
 </script>
 
