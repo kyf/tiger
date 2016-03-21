@@ -30,7 +30,7 @@ func getData(params url.Values) ([]im_type.BsonMessage, error) {
 	cli := NewMongoClient()
 	err := cli.Connect()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer cli.Close()
 
@@ -89,6 +89,123 @@ func getData(params url.Values) ([]im_type.BsonMessage, error) {
 	return result, nil
 }
 
+func getNewMessageNum(params url.Values) (int, error) {
+	lastid := params.Get("lastid")
+
+	cli := NewMongoClient()
+	err := cli.Connect()
+	if err != nil {
+		return 0, err
+	}
+	defer cli.Close()
+
+	where := make([]bson.M, 0)
+
+	if len(lastid) > 0 {
+		where = append(where, bson.M{"_id": bson.M{"$lt": bson.ObjectIdHex(lastid)}})
+	}
+
+	var condition bson.M = nil
+	if len(where) > 0 {
+		if len(where) > 1 {
+			condition = bson.M{"$and": where}
+		} else {
+			condition = where[0]
+		}
+	}
+
+	var total int
+	total, err = cli.Find("message", condition).Count()
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func getPageData(params url.Values) ([]im_type.BsonMessage, int, error) {
+	_size := params.Get("size")
+	_page := params.Get("page")
+	key := params.Get("key")
+	from := params.Get("from")
+	to := params.Get("to")
+	orderid := params.Get("orderid")
+	sort := params.Get("sort")
+
+	cli := NewMongoClient()
+	err := cli.Connect()
+	if err != nil {
+		return nil, 0, err
+	}
+	defer cli.Close()
+
+	size := 20
+	if len(_size) > 0 {
+		size, err = strconv.Atoi(_size)
+		if err != nil {
+			size = 20
+		}
+	}
+
+	page := 1
+	if len(_page) > 0 {
+		page, err = strconv.Atoi(_page)
+		if err != nil {
+			page = 1
+		}
+	}
+
+	var result []im_type.BsonMessage
+	where := make([]bson.M, 0)
+
+	if len(key) > 0 {
+		where = append(where, bson.M{"message": bson.M{"$regex": key}})
+	}
+
+	if len(from) > 0 {
+		where = append(where, bson.M{"from": from})
+	}
+
+	if len(to) > 0 {
+		where = append(where, bson.M{"to": to})
+	}
+
+	if len(orderid) > 0 {
+		where = append(where, bson.M{"orderid": orderid})
+	}
+
+	var condition bson.M = nil
+	if len(where) > 0 {
+		if len(where) > 1 {
+			condition = bson.M{"$and": where}
+		} else {
+			condition = where[0]
+		}
+	}
+
+	var sort_cond string = "-_id"
+	if sortd, err := strconv.Atoi(sort); err == nil {
+		if sortd > 0 {
+			sort_cond = "_id"
+		}
+	}
+
+	skip := (page - 1) * size
+
+	err = cli.Find("message", condition).Sort(sort_cond).Skip(skip).Limit(size).All(&result)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	var total int
+	total, err = cli.Find("message", condition).Sort(sort_cond).Count()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return result, total, nil
+}
+
 func init() {
 	handlers["/message"] = func(w http.ResponseWriter, logger *log.Logger, r *http.Request, params url.Values) {
 		data, err := getData(params)
@@ -97,6 +214,36 @@ func init() {
 			w.Write([]byte(fmt.Sprintf("%v", err)))
 		} else {
 			js, err := json.Marshal(data)
+			if err == nil {
+				w.Write(js)
+			} else {
+				w.Write([]byte(fmt.Sprintf("%v", err)))
+			}
+		}
+	}
+
+	handlers["/message/show"] = func(w http.ResponseWriter, logger *log.Logger, r *http.Request, params url.Values) {
+		data, total, err := getPageData(params)
+		if err != nil {
+			logger.Printf("message.getPageData err:%v", err)
+			w.Write([]byte(fmt.Sprintf("%v", err)))
+		} else {
+			js, err := json.Marshal(map[string]interface{}{"data": data, "total": total})
+			if err == nil {
+				w.Write(js)
+			} else {
+				w.Write([]byte(fmt.Sprintf("%v", err)))
+			}
+		}
+	}
+
+	handlers["/message/new/number"] = func(w http.ResponseWriter, logger *log.Logger, r *http.Request, params url.Values) {
+		data, err := getNewMessageNum(params)
+		if err != nil {
+			logger.Printf("message.getNewMessageNum err:%v", err)
+			w.Write([]byte(fmt.Sprintf("%v", err)))
+		} else {
+			js, err := json.Marshal(map[string]interface{}{"data": data})
 			if err == nil {
 				w.Write(js)
 			} else {
