@@ -12,6 +12,22 @@
 <link rel="stylesheet" type="text/css" href="/css/base2c31e8.css"/>
 <link rel="stylesheet" type="text/css" href="/css/lib2968da.css"/>
 <link rel="stylesheet" type="text/css" href="/css/page_index296095.css">
+<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/mpres/htmledition/style/page/page_message2a0043.css">
+<style type="text/css">
+.pages{text-align:center;line-height:60px;}
+.pages span{height:22px; margin:0 3px; border:0px #dbdbdb solid; font-size:12px; font-weight:bold; color:#1e4984;}
+.pages a{display:inline; height:22px; padding:3px 10px; line-height:22px; margin:0 3px; border:0px #dbdbdb solid; background:#fff; font-size:14px; color:#404040; text-decoration:none;}
+.pages a:hover{text-decoration:none;background:#3a3e47 none repeat scroll 0 0;color:#fff;border-radius:3px;}
+.pages .prev_disabled{width:22px; background:#fff  no-repeat 6px -44px;}
+.pages .prev{width:22px; padding:2px 8px; background:#fff  no-repeat 6px 5px;font-size:16px;}
+.pages .next_disabled{width:22px; background:#fff  no-repeat -45px -44px;}
+.pages .next{width:22px; padding:2px 8px; background:#fff no-repeat -45px 5px;font-size:16px;}
+.pages .text{border:none; color:#1e4984;}
+.pages .current{background:#3a3e47 none repeat scroll 0 0;color:#fff;border-radius:3px;}
+.pages .current:hover{background:#404040; color:#fff;}
+#RecordCount{height:22px;line-height:22px;float:left;}
+.jumpclass {cursor:pointer;}
+</style>
 
 </head>
 <body class="zh_CN">
@@ -45,120 +61,90 @@
 	</div>
 
 </div>
-<div id="body" class="body page_index">
-	<div id="js_container_box" class="container_box cell_layout side_l">
+
+<div class="body page_message" id="body">
+	<div class="container_box cell_layout side_l" id="js_container_box">
 
 		<div class="col_side">
-			<div class="menu_box" id="menuBar">
-				<dl class="menu no_extra">
-					<dt class="menu_title">
-					<i class="icon_menu" style="background:url(
-						/images/icon_menu_developer.png
-						) no-repeat;">
-					</i>运维
-					</dt> 
-
-					<dd class="menu_item selected"><a data-id="10005" href="javascript:jumpfn('');" >在线连接        </a></dd>
-					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >日志        </a></dd>
-					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >操作        </a></dd>
-					<dd class="menu_item "><a data-id="10007" href="javascript:jumpfn('');" >通知        </a></dd>
-				</dl>
-				<dl class="menu">
-					<dt class="menu_title">
-					<i class="icon_menu" style="background:url(
-						/images/icon_menu_management.png
-						) no-repeat;">
-					</i>测试
-					</dt> 
-
-					<dd class="menu_item "><a data-id="10012" href="javascript:jumpfn('');" >ios推送        </a></dd>
-					<dd class="menu_item "><a data-id="10013" href="javascript:jumpfn('');" >android推送        </a></dd>
-					<dd class="menu_item "><a data-id="10013" href="javascript:jumpfn('');" >微信推送        </a></dd>
-					<dd class="menu_item "><a data-id="10014" href="javascript:jumpfn('');" >websocket测试        </a></dd>
-				</dl>
+			<div id="menuBar" class="menu_box">
 				<dl class="menu ">
 					<dt class="menu_title">
-					<i class="icon_menu" style="background:url(
-						/images/icon_menu_statistics.png
-						) no-repeat;">
-					</i>统计
+					<i style="background:url(
+						https://res.wx.qq.com/mpres/htmledition/images/icon/menu/icon_menu_management.png
+						) no-repeat;" class="icon_menu">
+					</i>管理
 					</dt> 
 
-					<dd class="menu_item "><a data-id="10026" href="javascript:jumpfn('');" >消息曲线图        </a></dd>
-					<dd class="menu_item "><a data-id="10027" href="javascript:jumpfn('');" >op消息统计        </a></dd>
-					<dd class="menu_item "><a data-id="10026" href="javascript:jumpfn('');" >下单统计        </a></dd>
+					<dd class="menu_item selected"><a href="/cgi-bin/message?t=message/list&amp;count=20&amp;day=7&amp;token=189298351&amp;lang=zh_CN" data-id="10012">消息管理        </a></dd>
+					<dd class="menu_item "><a href="/cgi-bin/contactmanage?t=user/index&amp;pageidx=0&amp;type=0&amp;token=189298351&amp;lang=zh_CN" data-id="10013">用户管理        </a></dd>
+					<dd class="menu_item "><a href="/cgi-bin/appmsg?begin=0&amp;count=10&amp;t=media/appmsg_list&amp;type=11&amp;action=list&amp;token=189298351&amp;lang=zh_CN" data-id="10014">素材管理        </a></dd>
 				</dl>
 			</div>
 
 		</div>
 
-		<div class="col_main" id="OnlinePanel">
+		<div class="col_main">
+
 			<div class="main_hd">
-				<h2>在线连接</h2>
-				<div class="title_tab" id="topTab"><ul class="tab_navs title_tab" data-index="0">
-						<li data-index="1" style="float:right;margin-right:40px;" class="tab_nav  js_top selected" data-id="list">
-						<a href="#">当前在线连接数:<span id="TotalConnLabel" style="color:red;margin-left:10px;">0</span></a>
-						</li>
+				<h2>消息管理</h2>
+				<div id="topTab" class="title_tab"><ul data-index="0" class="tab_navs title_tab">
+
+						<li data-id="total" class="tab_nav first js_top selected" data-index="0"><a href="/cgi-bin/message?t=message/list&amp;count=20&amp;day=7&amp;token=189298351&amp;lang=zh_CN&amp;filterivrmsg=1">全部消息</a></li>
+
 					</ul>
 				</div>
+
+				<div id="searchBar" class="extra_info search_bar"><span class="frm_input_box search with_del append ">
+						<a style="display:none" href="javascript:" class="del_btn jsSearchInputClose">
+							<i class="icon_search_del"></i>&nbsp;
+						</a>
+						<a class="frm_input_append jsSearchInputBt" href="javascript:">
+							<i class="icon16_common search_gray">搜索</i>&nbsp;
+						</a>
+						<input type="text" class="frm_input jsSearchInput" value="" placeholder="消息内容">
+				</span></div>
 			</div>
-			<div class="main_hd">
+			<div class="main_bd">
+				
+				<div class="msg_box" style="display:none;" id="newMsgTip">
+					<div class="inner">
+						<a href="/cgi-bin/message?t=message/list&amp;token=189298351&amp;count=20&amp;day=7"><span id="newMsgNum"></span>条新消息，点击查看</a>
+					</div>
+				</div>
+
+				<ul id="listContainer" class="message_list">
+				</ul>
+
+
+				<div class="tool_area">
+					<div class="pagination_wrp pageNavigator" style="">
+					</div>
+				</div>
+
 				
 			</div>
+
 		</div>
-
-		<div class="col_main" id="MsgCountPanel"  style="display:none;">
-			<div class="main_hd">
-				<h2>消息曲线图</h2>
-				<div class="extra_info mini_tips icon_after">
-					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
-				</div>
-			</div>
-			<div class="main_hd">
-
-			</div>
-		</div>
-
-		<div class="col_main" id="OpMsgPanel"  style="display:none;">
-			<div class="main_hd">
-				<h2>OP消息统计</h2>
-				<div class="extra_info mini_tips icon_after">
-					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
-				</div>
-			</div>
-			<div class="main_hd">
-
-			</div>
-		</div>
-
-		<div class="col_main" id="OrderCountPanel" style="display:none;">
-			<div class="main_hd">
-				<h2>下单统计</h2>
-				<div class="extra_info mini_tips icon_after">
-					<a href="" target="_blank">当前在线连接：<span id="TotalConnLabel"></span></a>
-				</div>
-			</div>
-			<div class="main_hd">
-
-			</div>
-		</div>
-
-
 	</div>
 
+	
 </div>
+
 
 </body>
 </html>
 
 <script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="/js/page/online.js"></script>
+<script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/pagenav.js"></script>
+<script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/loading/jquery.showLoading.js"></script>
+<script type="text/javascript" src="/js/page/util.js"></script>
+<script type="text/javascript" src="/js/page/message.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-				$('.menu_item').click(function(){
-						$('.menu_item').removeClass('selected');
-						$(this).addClass('selected');
-					});
+$(document).ready(function(){
+		$('.menu_item').click(function(){
+			$('.menu_item').removeClass('selected');
+			$(this).addClass('selected');
 			});
+		});
 </script>
 
