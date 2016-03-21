@@ -3,6 +3,7 @@
 	var listContainer = $('#listContainer');
 	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
 	var SECOND = 1000;
+	var LAST_ID = null;
 	
 	var msg_type = $('#msgtypeselect').dropdown();
 	var msg_source = $('#msgsourceselect').dropdown();
@@ -12,13 +13,12 @@
 				'<li data-id="577999267" id="msgListItem577999267" class="message_item ">',
 					'<table style="width:100%;">',
 						'<tr>',
-							'<td>{from}</td>',
-							'<td>{to}</td>',
+							'<td style="width:100px;">{from_name}</td>',
+							'<td style="width:100px;">{to_name}</td>',
 							'<td>{message}</td>',
-							'<td>{msgtype}</td>',
-							'<td>{createtime}</td>',
-							'<td>{issystem}</td>',
-							'<td>{source}</td>',
+							'<td style="width:100px;">{msgtype_name}</td>',
+							'<td style="width:150px;">{createtime}</td>',
+							'<td style="width:100px;">{source_name}</td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -69,12 +69,35 @@
 			success:function(data, status, response){
 				if(data.data){
 					$.each(data.data, function(i, d){
-						if(d.status != 1){
-							d.jumpclass = 'jumpclass';
-							d.displayPub = '';
-						}else{
-							d.displayPub = 'display:none;';
+						switch(d.msgtype){
+							case '2':
+								d.msgtype_name = '文本';
+								break;
+							case '3':
+								d.msgtype_name = '图片';
+								d.message = '<img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/>';
+								break;
+							case '4':
+								d.msgtype_name = '语音';
+								break;
+							default:
 						}
+
+						switch(d.source){
+							case '1':
+								d.source_name = '微信';
+								break;
+							case '2':
+								d.source_name = 'IOS';
+								break;
+							case '3':
+								d.source_name = 'Android';
+								break;
+							default:
+						}
+						d.from_name = 'unknwon';
+						d.to_name = 'unknwon';
+
 						listContainer.append(listtpl.replaceTpl(d));	
 					});
 					listContainer.hideLoading();
@@ -98,7 +121,10 @@
 							}
 						});
 						isInitPageNavs = true;
-						setTimeout(function(){monitor(data.data[0].id);}, SECOND * 10);
+						if(LAST_ID == null){
+							setTimeout(function(){monitor(data.data[0].id);}, SECOND * 10);
+							LAST_ID = data.data[0].id;
+						}
 					}else{
 						PageNavCtls.defaults.pageIndex = toIndex;
 						PageNavCtls.defaults.recordCount = data.total;
@@ -113,6 +139,9 @@
 	loadMsgList(1);
 
 	searchBt.click(function(){
+		loadMsgList(1);
+	});
+	$('.search_gray').click(function(){
 		loadMsgList(1);
 	});
 })(jQuery, window)
