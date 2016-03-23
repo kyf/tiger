@@ -16,6 +16,9 @@ import (
 
 const (
 	LOG_PREFIX string = "[6ryim_admin]"
+
+	ADMIN_USER string = "6renyou"
+	ADMIN_PWD  string = "6renyou.com"
 )
 
 var (
@@ -27,10 +30,11 @@ func init() {
 	flag.IntVar(&Port, "port", 6060, "listen port")
 }
 
-func auth(r *http.Request, ren render.Render, sess sessions.Session) {
+func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.Session) {
 	r.ParseForm()
 	admin_user, ok := sess.Get("admin_user").(string)
-	if ok && strings.EqualFold("admin", admin_user) {
+
+	if ok && strings.EqualFold(ADMIN_USER, admin_user) {
 		if strings.EqualFold("/login", r.RequestURI) {
 			ren.Redirect("/main")
 		}
@@ -71,6 +75,10 @@ func main() {
 		ren.HTML(200, "index", nil)
 	})
 
+	m.Get("/", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "index", nil)
+	})
+
 	m.Get("/message/detail", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		ren.HTML(200, "message_detail", nil)
 	})
@@ -84,7 +92,8 @@ func main() {
 		admin_user := r.Form.Get("user")
 		admin_pwd := r.Form.Get("password")
 
-		if strings.EqualFold("6renyou", admin_user) && strings.EqualFold("6renyou.com", admin_pwd) {
+		if strings.EqualFold(ADMIN_USER, admin_user) && strings.EqualFold(ADMIN_PWD, admin_pwd) {
+			sess.Set("admin_user", admin_user)
 			ren.JSON(200, "success")
 		} else {
 			ren.JSON(200, "failure")
