@@ -91,6 +91,7 @@ func getData(params url.Values) ([]im_type.BsonMessage, error) {
 
 func getNewMessageNum(params url.Values) (int, error) {
 	lastid := params.Get("lastid")
+	orderid := params.Get("orderid")
 
 	cli := NewMongoClient()
 	err := cli.Connect()
@@ -103,6 +104,10 @@ func getNewMessageNum(params url.Values) (int, error) {
 
 	if len(lastid) > 0 {
 		where = append(where, bson.M{"_id": bson.M{"$gt": bson.ObjectIdHex(lastid)}})
+	}
+
+	if len(orderid) > 0 {
+		where = append(where, bson.M{"orderid": orderid})
 	}
 
 	var condition bson.M = nil
@@ -128,6 +133,7 @@ func getPageData(params url.Values) ([]im_type.BsonMessage, int, error) {
 	_page := params.Get("page")
 	key := params.Get("key")
 	from := params.Get("from")
+	fromtype := params.Get("fromtype")
 	to := params.Get("to")
 	orderid := params.Get("orderid")
 	msgtype := params.Get("msgtype")
@@ -166,6 +172,10 @@ func getPageData(params url.Values) ([]im_type.BsonMessage, int, error) {
 
 	if len(from) > 0 {
 		where = append(where, bson.M{"from": from})
+	}
+
+	if len(fromtype) > 0 {
+		where = append(where, bson.M{"fromtype": fromtype})
 	}
 
 	if len(to) > 0 {
