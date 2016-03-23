@@ -4,6 +4,8 @@
 	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
 	var SECOND = 1000;
 	var LAST_ID = null;
+
+	var ORDER_ID = getQueryParam('orderid');
 	
 	var msg_type = $('#msgtypeselect').dropdown();
 	var msg_source = $('#msgsourceselect').dropdown();
@@ -14,7 +16,7 @@
 					'<table style="width:100%;text-align:center;">',
 						'<tr>',
 							'<td style="width:70px;">',
-								'<a href="message_detail.html?orderid={orderid}"><img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" /></a>',
+								'<a href="message_detail.html?orderid={orderid}"><img src="{from_icon}" /></a>',
 							'</td>',
 							'<td style="text-align:left;">',
 								'<div><a href="message_detail.html?orderid={orderid}">{from_name}</a></div>',
@@ -37,7 +39,7 @@
 			url : SERVICE_DOMAIN + '/message/new/number',
 			data:{
 				lastid:lastid,
-				fromtype:"2"
+				orderid:ORDER_ID
 			},
 			dataType:'json',
 			type:'POST',
@@ -68,7 +70,7 @@
 				msgtype:msg_type.getValue(),
 				msgsource:msg_source.getValue(),
 				size:size,
-				fromtype:"2"
+				orderid:ORDER_ID
 			},
 			dataType:'json',
 			type:'POST',
@@ -102,6 +104,13 @@
 								break;
 							default:
 						}
+
+						if(d.from_type == "1"){
+							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/six-service.jpg";
+						}else{
+							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/default-user.jpg";
+						}
+
 						d.from_name = d.from;
 						d.to_name = 'unknwon';
 
