@@ -92,6 +92,7 @@ func getData(params url.Values) ([]im_type.BsonMessage, error) {
 func getNewMessageNum(params url.Values) (int, error) {
 	lastid := params.Get("lastid")
 	orderid := params.Get("orderid")
+	fromtype := params.Get("fromtype")
 
 	cli := NewMongoClient()
 	err := cli.Connect()
@@ -108,6 +109,10 @@ func getNewMessageNum(params url.Values) (int, error) {
 
 	if len(orderid) > 0 {
 		where = append(where, bson.M{"orderid": orderid})
+	}
+
+	if len(fromtype) > 0 {
+		where = append(where, bson.M{"fromtype": fromtype})
 	}
 
 	var condition bson.M = nil
