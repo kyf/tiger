@@ -19,4 +19,11 @@
 			}
 		});
 	});
+
+
+	password.bind('keypress', function(e){
+		if(13 == e.keyCode){
+			submitbt.click();	
+		}
+	});
 })(jQuery, window)
