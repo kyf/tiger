@@ -6,6 +6,8 @@
 	var LAST_ID = null;
 
 	var ORDER_ID = getQueryParam('orderid');
+	$('#order_label').text(ORDER_ID);
+	$('#order_label').css('color', 'red');
 	
 	var msg_type = $('#msgtypeselect').dropdown();
 	var msg_source = $('#msgsourceselect').dropdown();
@@ -105,7 +107,7 @@
 							default:
 						}
 
-						if(d.from_type == "1"){
+						if(d.fromtype == "1"){
 							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/six-service.jpg";
 						}else{
 							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/default-user.jpg";
