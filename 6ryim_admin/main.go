@@ -79,6 +79,10 @@ func main() {
 		ren.HTML(200, "index", nil)
 	})
 
+	m.Get("/my/test", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "demo", nil)
+	})
+
 	m.Get("/message/detail", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		ren.HTML(200, "message_detail", nil)
 	})
