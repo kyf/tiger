@@ -86,7 +86,7 @@
 								break;
 							case '3':
 								d.msgtype_name = '图片';
-								d.message = '<img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/>';
+								d.message = '<a href="' + SERVICE_DOMAIN + d.message + '" target="_blank"><img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/></a>';
 								break;
 							case '4':
 								d.msgtype_name = '语音';
