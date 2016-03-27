@@ -4,14 +4,21 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+	"strings"
 
 	"github.com/fvbock/endless"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 )
 
 const (
 	LOG_PREFIX string = "[6ryim_admin]"
+
+	ADMIN_USER string = "6renyou"
+	ADMIN_PWD  string = "6renyou.com"
 )
 
 var (
@@ -21,6 +28,26 @@ var (
 
 func init() {
 	flag.IntVar(&Port, "port", 6060, "listen port")
+}
+
+func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.Session) {
+	r.ParseForm()
+	admin_user, ok := sess.Get("admin_user").(string)
+
+	if ok && strings.EqualFold(ADMIN_USER, admin_user) {
+		if strings.EqualFold("/login", r.RequestURI) {
+			ren.Redirect("/main")
+		}
+	} else {
+		if !strings.EqualFold("/login", r.RequestURI) && !strings.EqualFold("/checklogin", r.RequestURI) {
+			ren.Redirect("/login")
+		} else {
+			if !strings.EqualFold("/checklogin", r.RequestURI) {
+				ren.HTML(200, "login", nil)
+			}
+		}
+	}
+
 }
 
 func main() {
@@ -35,8 +62,47 @@ func main() {
 	mylogger := log.New(fp, LOG_PREFIX, log.LstdFlags)
 	m.Map(mylogger)
 
+	store := sessions.NewCookieStore([]byte(LOG_PREFIX))
+
+	m.Use(sessions.Sessions("admin_session", store))
+
+	m.Use(render.Renderer(render.Options{Directory: "./tpl", Extensions: []string{".html"}}))
 	m.Use(martini.Static("./static"))
-	m.Use(martini.Static("./tpl"))
+
+	m.Use(auth)
+
+	m.Get("/main", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "index", nil)
+	})
+
+	m.Get("/", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "index", nil)
+	})
+
+	m.Get("/my/test", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "demo", nil)
+	})
+
+	m.Get("/message/detail", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		ren.HTML(200, "message_detail", nil)
+	})
+
+	m.Get("/logout", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		sess.Delete("admin_user")
+		ren.Redirect("/login")
+	})
+
+	m.Post("/checklogin", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user := r.Form.Get("user")
+		admin_pwd := r.Form.Get("password")
+
+		if strings.EqualFold(ADMIN_USER, admin_user) && strings.EqualFold(ADMIN_PWD, admin_pwd) {
+			sess.Set("admin_user", admin_user)
+			ren.JSON(200, "success")
+		} else {
+			ren.JSON(200, "failure")
+		}
+	})
 
 	var exit chan error
 	go func() {
