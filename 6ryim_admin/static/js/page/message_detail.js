@@ -1,7 +1,7 @@
 (function($, window){
 	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
+	var SERVICE_DOMAIN = 'http://im1.6renyou.com:8989';
 	var SECOND = 1000;
 	var LAST_ID = null;
 
