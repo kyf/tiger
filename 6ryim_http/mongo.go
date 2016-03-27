@@ -55,9 +55,9 @@ func (this *Mongo) Connect() error {
 	session.SetPoolLimit(mongodbPoolSize)
 	this.session = session
 	this.db = session.DB(this.dbname)
-	//err = this.db.Login(this.user, this.pass)
-	//return err
-	return nil
+	err = this.db.Login(this.user, this.pass)
+	return err
+	//return nil
 }
 
 func (this *Mongo) Add(coll string, data ...interface{}) error {
