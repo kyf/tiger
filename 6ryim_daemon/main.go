@@ -15,7 +15,7 @@ const (
 	LOG_PREFIX string = "[6ryim_daemon]"
 
 	HTTP_SERVICE_URL string = "http://127.0.0.1:8989/"
-	PUSH_SERVICE_URL string = "http://127.0.0.1:3031/"
+	PUSH_SERVICE_URL string = "http://im2.6renyou.com:3031/"
 
 	PUSH_SERVICE_ACCESSID  string = "6renyou_20151222"
 	PUSH_SERVICE_SECRETKEY string = "123456789"
