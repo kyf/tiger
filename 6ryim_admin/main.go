@@ -34,13 +34,12 @@ func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.
 	r.ParseForm()
 	admin_user, ok := sess.Get("admin_user").(string)
 
-	if ok && strings.EqualFold(ADMIN_USER, admin_user) {
-		if strings.EqualFold("/login", r.RequestURI) {
-			ren.Redirect("/main")
-		}
-	} else {
-		if strings.EqualFold("/login", r.RequestURI) {
-			ren.HTML(200, "login", nil)
+	authlist := []string{"/", "/main", "/my/test", "/message/detail"}
+	for _, it := range authlist {
+		if strings.EqualFold(it, r.URL.Path) {
+			if !ok || !strings.EqualFold(ADMIN_USER, admin_user) {
+				ren.Redirect("/login")
+			}
 		}
 	}
 
@@ -86,6 +85,15 @@ func main() {
 	m.Get("/logout", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		sess.Delete("admin_user")
 		ren.Redirect("/login")
+	})
+
+	m.Get("/login", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		admin_user, ok := sess.Get("admin_user").(string)
+		if ok && strings.EqualFold(ADMIN_USER, admin_user) {
+			ren.Redirect("/")
+		} else {
+			ren.HTML(200, "login", nil)
+		}
 	})
 
 	m.Post("/checklogin", func(r *http.Request, ren render.Render, sess sessions.Session) {
