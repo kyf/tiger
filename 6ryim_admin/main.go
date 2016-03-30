@@ -37,17 +37,10 @@ func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.
 	if ok && strings.EqualFold(ADMIN_USER, admin_user) {
 		if strings.EqualFold("/login", r.RequestURI) {
 			ren.Redirect("/main")
-			return
 		}
 	} else {
-		if !strings.EqualFold("/login", r.RequestURI) && !strings.EqualFold("/checklogin", r.RequestURI) {
-			ren.Redirect("/login")
-			return
-		} else {
-			if !strings.EqualFold("/checklogin", r.RequestURI) {
-				ren.HTML(200, "login", nil)
-				return
-			}
+		if strings.EqualFold("/login", r.RequestURI) {
+			ren.HTML(200, "login", nil)
 		}
 	}
 
