@@ -39,13 +39,13 @@ $(document).ready(function(){
 					var size = new Array(parseInt(numbers.val()));
 					$.each(size, function(index){
 								$.ajax({
-										url:'http://im2.6renyou.com:8989/auth',
+										url:'http://im1.6renyou.com:8989/auth',
 										data:{deviceid:prefix + index},
 										type:'POST',
 										dataType:'json',
 										success:function(data){
 											if(data.status == "ok"){
-												var ws = new WebSocket("ws://im2.6renyou.com:8060/" + data.token);
+												var ws = new WebSocket("ws://im1.6renyou.com:8060/" + data.token);
 												ws.onerror = function(){
 												
 												}
