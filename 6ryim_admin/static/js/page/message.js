@@ -23,6 +23,7 @@
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
 							'<td style="width:100px;">{source_name}</td>',
+							'<td style="width:100px;color:red" class="{orderid}_reply"></td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -55,6 +56,24 @@
 	};
 
 
+	var loadOrderLastMessage = function(orderid){
+			$.ajax({
+				url : SERVICE_DOMAIN + '/message/show',
+				data:{
+					page:1,
+					size:1,
+					orderid:orderid
+				},
+				dataType:'json',
+				type:'POST',
+				success:function(data, status, response){
+					if(data.data[0]["fromtype"] == "1"){
+						$('.' + orderid + '_reply').html('已回复');
+					}	
+				}
+			});
+	};
+
 	var loadMsgList = function(toIndex){
 		listContainer.hideLoading();
 		listContainer.showLoading();
@@ -75,6 +94,8 @@
 			success:function(data, status, response){
 				if(data.data == null)data.data = [];
 				if(data.data){
+
+
 					$.each(data.data, function(i, d){
 						switch(d.msgtype){
 							case '2':
@@ -106,6 +127,12 @@
 						d.to_name = 'unknwon';
 
 						listContainer.append(listtpl.replaceTpl(d));	
+					});
+					var hasOrderid = {};
+					$.each(data.data, function(i, d){
+						if(hasOrderid[d.orderid])return
+						loadOrderLastMessage(d.orderid);
+						hasOrderid[d.orderid] = true;
 					});
 					listContainer.hideLoading();
 
