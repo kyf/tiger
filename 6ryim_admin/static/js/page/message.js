@@ -68,7 +68,7 @@
 				type:'POST',
 				success:function(data, status, response){
 					if(data.data[0]["fromtype"] == "1"){
-						$('.' + orderid + '_reply').html('已回复');
+						$('.' + orderid + '_reply').html('[已回复]');
 					}	
 				}
 			});
