@@ -1,7 +1,7 @@
 (function($, window){
 	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://im1.6renyou.com:8989';
+	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
 	var SECOND = 1000;
 	var LAST_ID = null;
 	
@@ -17,7 +17,7 @@
 								'<a href="/message/detail?orderid={orderid}" target="_blank"><img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" /></a>',
 							'</td>',
 							'<td style="text-align:left;">',
-								'<div><a href="/message/detail?orderid={orderid}" target="_blank">{from_name}</a></div>',
+								'<div><a href="/message/detail?orderid={orderid}" target="_blank" class="{from}_label">{from_name}</a></div>',
 								'<div>{message}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
@@ -68,6 +68,7 @@
 				dataType:'json',
 				type:'POST',
 				success:function(data, status, response){
+					if(!data.data)return;
 					if(data.data.length == 0){
 						return;	
 					}
@@ -81,6 +82,31 @@
 					});
 				}
 			});
+	};
+
+
+	var loadUser = function(userids, source){
+		$.ajax({
+			url:"/user/get",
+			data:{
+				openids:userids.join(","),
+				source:source.join(",")
+			},
+			type:'POST',
+			dataType:'json',
+			success:function(data, status, response){
+				if(data.status != 0){
+					alert(data.info);
+					return;
+				}
+				data = data.data;
+				if(data.length > 0){
+					$.each(data, function(i, d){
+						$('.' + d.userid + "_label").text(d.realname + '(' + d.mobile + ')');
+					})
+				}
+			}
+		});
 	};
 
 	var loadMsgList = function(toIndex){
@@ -104,8 +130,14 @@
 				if(data.data == null)data.data = [];
 				if(data.data){
 
+					var tmpkv = new Object(), userids = new Array(), source = new Array();
 
 					$.each(data.data, function(i, d){
+						if(!tmpkv[d.from] && d.from != 'system'){
+							userids.push(d.from);
+							source.push(d.source == "1" ? "weixin" : "app");
+							tmpkv[d.from] = true;
+						}
 						switch(d.msgtype){
 							case '2':
 								d.msgtype_name = '文本';
@@ -143,6 +175,7 @@
 						loadOrderLastMessage(d.orderid);
 						hasOrderid[d.orderid] = true;
 					});
+					loadUser(userids, source);
 					listContainer.hideLoading();
 
 					if(data.total == 0){

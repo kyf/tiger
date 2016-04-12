@@ -105,6 +105,19 @@
 			<div class="main_bd">
 
 				<div class="filter_bar" style="margin-bottom:10px;">
+					<table width="100%" style="background:#e7e7eb;text-align:center;" cellpadding="0" cellspacing="1">
+						<tr>
+							<td id="realname" style="background:white;padding:7px 0px;"></td>
+							<td id="order_title" style="background:white;"></td>
+							<td id="start_date" style="background:white;"></td>
+							<td id="days" style="background:white;"></td>
+							<td id="operator" style="background:white;"></td>
+						</tr>
+					</table>
+				</div>
+				
+
+				<div class="filter_bar" style="margin-bottom:10px;">
 					<!--消息类型start-->
 					<div id="msgtypeselect" class="dropdown_wrp dropdown_menu">
 						<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="" ><label class="jsBtLabel">全部类型</label><i class="arrow"></i></a>
@@ -189,8 +202,10 @@
 <script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/loading/jquery.showLoading.js"></script>
 <script type="text/javascript" src="/js/page/util.js"></script>
 <script type="text/javascript" src="/js/page/dropdown.js"></script>
-<script type="text/javascript" src="/js/page/message_detail.js"></script>
 <script type="text/javascript">
+var PageData = {{.}};
+PageData = eval('(' + PageData + ')');
+
 $(document).ready(function(){
 		$('.menu_item').click(function(){
 			$('.menu_item').removeClass('selected');
@@ -199,4 +214,4 @@ $(document).ready(function(){
 		});
 
 </script>
-
+<script type="text/javascript" src="/js/page/message_detail.js"></script>

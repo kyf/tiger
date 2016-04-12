@@ -1,9 +1,19 @@
 (function($, window){
 	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://im1.6renyou.com:8989';
+	var SERVICE_DOMAIN = 'http://im2.6renyou.com:8989';
 	var SECOND = 1000;
 	var LAST_ID = null;
+
+
+	if(PageData.data.status == 1){
+		var pd = PageData.data;
+		$('#realname').text(pd.realname + '(' + pd.mobile + ')');
+		$('#order_title').text(pd.order_title);
+		$('#start_date').text(pd.start_date);
+		$('#days').text(pd.detail.days + '天');
+		$('#operator').text('Op: ' + pd.operator.name);
+	}
 
 	var ORDER_ID = getQueryParam('orderid');
 	$('#order_label').text(ORDER_ID);
@@ -21,7 +31,7 @@
 								'<img src="{from_icon}" />',
 							'</td>',
 							'<td style="text-align:left;">',
-								'<div>{from_name}</div>',
+								'<div class="{from}_label">{from_name}</div>',
 								'<div>{message}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
@@ -59,6 +69,32 @@
 	};
 
 
+
+	var loadUser = function(userids, source){
+		$.ajax({
+			url:"/user/get",
+			data:{
+				openids:userids.join(","),
+				source:source.join(",")
+			},
+			type:'POST',
+			dataType:'json',
+			success:function(data, status, response){
+				if(data.status != 0){
+					alert(data.info);
+					return;
+				}
+				data = data.data;
+				if(data.length > 0){
+					$.each(data, function(i, d){
+						$('.' + d.userid + "_label").text(d.realname + '(' + d.mobile + ')');
+					})
+				}
+			}
+		});
+	};
+
+
 	var loadMsgList = function(toIndex){
 		listContainer.hideLoading();
 		listContainer.showLoading();
@@ -79,7 +115,17 @@
 			success:function(data, status, response){
 				if(data.data == null)data.data = [];
 				if(data.data){
+					var tmpkv = new Object(), userids = new Array(), source = new Array();
 					$.each(data.data, function(i, d){
+						if(!tmpkv[d.from] && d.from != 'system'){
+							userids.push(d.from);
+							if(d.fromtype == "1"){
+								source.push("weixin");
+							}else{
+								source.push(d.source == "1" ? "weixin" : "app");
+							}
+							tmpkv[d.from] = true;
+						}
 						switch(d.msgtype){
 							case '2':
 								d.msgtype_name = '文本';
@@ -118,6 +164,7 @@
 
 						listContainer.append(listtpl.replaceTpl(d));	
 					});
+					loadUser(userids, source);
 					listContainer.hideLoading();
 
 					if(data.total == 0){

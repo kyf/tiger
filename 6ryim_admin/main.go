@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -15,11 +16,18 @@ import (
 )
 
 const (
+	ORDER_REQUEST_URL = "http://admin.6renyou.com/weixin_plugin/getAjaxDetail?oid="
+
 	LOG_PREFIX string = "[6ryim_admin]"
 
 	ADMIN_USER string = "6renyou"
 	ADMIN_PWD  string = "6renyou.com"
 )
+
+type m6ryResponse struct {
+	Status int    `json:"status"`
+	Info   string `json:"info"`
+}
 
 var (
 	LogPath string = "/var/log/6ryim_admin/6ryim_admin.log"
@@ -66,6 +74,8 @@ func main() {
 
 	m.Use(auth)
 
+	um := NewUserManager()
+
 	m.Get("/main", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		ren.HTML(200, "index", nil)
 	})
@@ -79,7 +89,68 @@ func main() {
 	})
 
 	m.Get("/message/detail", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
-		ren.HTML(200, "message_detail", nil)
+		orderid := r.Form.Get("orderid")
+		if len(orderid) == 0 {
+			ren.HTML(200, "<div style='text-align:center;margin-top:150px;color:red;'>无效的订单</div>", nil)
+			return
+		}
+
+		res, err := http.Get(ORDER_REQUEST_URL + orderid)
+		if err != nil {
+			logger.Printf("request order detail err:%v", err)
+			ren.HTML(200, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err), nil)
+			return
+		}
+		defer res.Body.Close()
+
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			logger.Printf("request err:%v", err)
+			ren.HTML(200, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err), nil)
+			return
+		}
+
+		ren.HTML(200, "message_detail", string(body))
+	})
+
+	m.Post("/user/get", func(r *http.Request, ren render.Render, logger *log.Logger) {
+		openids := r.Form.Get("openids")
+		source := r.Form.Get("source")
+
+		result := struct {
+			m6ryResponse
+			Data interface{} `json:"data"`
+		}{}
+
+		if len(openids) == 0 || len(source) == 0 {
+			result.Status = -1
+			result.Info = "params is invalid!"
+			ren.JSON(200, result)
+			return
+		}
+
+		_openids := strings.Split(openids, ",")
+		_source := strings.Split(source, ",")
+
+		if len(_openids) != len(_source) {
+			result.Status = -1
+			result.Info = "params is invalid!"
+			ren.JSON(200, result)
+			return
+		}
+
+		data, err := um.Get(_openids, _source)
+		if err != nil {
+			result.Status = -1
+			result.Info = fmt.Sprintf("UserManager get err:%v", err)
+			logger.Printf("UserManager get err:%v", err)
+			ren.JSON(200, result)
+			return
+		}
+
+		result.Status = 0
+		result.Data = data
+		ren.JSON(200, result)
 	})
 
 	m.Get("/logout", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
