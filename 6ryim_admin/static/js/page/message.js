@@ -23,7 +23,7 @@
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
 							'<td style="width:100px;">{source_name}</td>',
-							'<td style="width:100px;color:red" class="{orderid}_reply"></td>',
+							'<td style="width:100px;color:red" class="{orderid}_reply" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -62,14 +62,23 @@
 				data:{
 					page:1,
 					size:1,
+					fromtype:"1",
 					orderid:orderid
 				},
 				dataType:'json',
 				type:'POST',
 				success:function(data, status, response){
-					if(data.data[0]["fromtype"] == "1"){
-						$('.' + orderid + '_reply').html('[已回复]');
-					}	
+					if(data.data.length == 0){
+						return;	
+					}
+					var current = $('.' + orderid + '_reply');
+					var latestId = data.data[0].id;
+					current.each(function(){
+						var id = $(this).attr('jqid');
+						if(latestId > id){
+							$(this).html('[已回复]');
+						}	
+					});
 				}
 			});
 	};
