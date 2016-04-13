@@ -88,17 +88,17 @@ func main() {
 		ren.HTML(200, "demo", nil)
 	})
 
-	m.Get("/message/detail", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
-		orderid := r.Form.Get("orderid")
+	m.Get("/message/detail", func(w http.ResponseWriter, logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		orderid := r.FormValue("orderid")
 		if len(orderid) == 0 {
-			ren.HTML(200, "<div style='text-align:center;margin-top:150px;color:red;'>无效的订单</div>", nil)
+			fmt.Fprintf(w, "<div style='text-align:center;margin-top:150px;color:red;'>无效的订单</div>")
 			return
 		}
 
 		res, err := http.Get(ORDER_REQUEST_URL + orderid)
 		if err != nil {
 			logger.Printf("request order detail err:%v", err)
-			ren.HTML(200, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err), nil)
+			fmt.Fprintf(w, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err))
 			return
 		}
 		defer res.Body.Close()
@@ -106,7 +106,7 @@ func main() {
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			logger.Printf("request err:%v", err)
-			ren.HTML(200, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err), nil)
+			fmt.Fprintf(w, fmt.Sprintf("<div style='text-align:center;margin-top:150px;color:red;'>%v</div>", err))
 			return
 		}
 
