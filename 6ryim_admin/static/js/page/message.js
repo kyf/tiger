@@ -42,6 +42,7 @@
 			},
 			dataType:'json',
 			type:'POST',
+			beforeSend:ajaxBeforeSend,
 			success:function(data, status, response){
 				if(data.data){
 					var num = data.data;

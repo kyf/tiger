@@ -18,3 +18,8 @@ String.prototype.trim = function(){
 	return this.replace(/^\s+|\s+$/g, '');
 };
 
+
+
+function ajaxBeforeSend(R){
+	R.setRequestHeader("Connection", "keep-alive");
+};
