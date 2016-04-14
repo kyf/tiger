@@ -5,10 +5,13 @@ import (
 	"time"
 )
 
+type MessageType int
+
 type Message struct {
 	openid  string `json:"openid"`
 	created int64
 	content string `json:"content"`
+	msgType MessageType
 }
 
 const (
