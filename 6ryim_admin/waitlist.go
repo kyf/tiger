@@ -1,12 +1,13 @@
 package main
 
 import (
-	"net/http"
+	"sync"
+	"time"
 )
 
 type Message struct {
 	openid  string `json:"openid"`
-	created string
+	created int64
 	content string `json:"content"`
 }
 
@@ -25,18 +26,21 @@ func NewWaitList() *WaitList {
 
 func (wl *WaitList) Add(msg Message) {
 	wl.locker.Lock()
-	wl.waitPool[msg.openid] = Message
+	wl.waitPool[msg.openid] = msg
 	wl.locker.Unlock()
 }
 
 func (wl *WaitList) Fetch(opid, openid string) bool {
 	wl.locker.Lock()
-	if _, ok := wl.waitPool[openid]; !ok {
+	var msg Message
+	var ok bool
+	if msg, ok = wl.waitPool[openid]; !ok {
 		return false
 	}
-	defaultOL.bind(opid, openid)
+	defaultOL.bind(opid, openid, msg)
 	delete(wl.waitPool, openid)
 	wl.locker.Unlock()
+	return true
 }
 
 var defaultWL *WaitList = NewWaitList()

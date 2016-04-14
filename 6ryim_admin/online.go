@@ -1,7 +1,9 @@
 package main
 
 import (
+	"strings"
 	"sync"
+	"time"
 )
 
 type Client struct {
@@ -24,6 +26,8 @@ func NewOnline() *Online {
 }
 
 func (ol *Online) findOpByUser(openid string) string {
+	ol.poolLocker.Lock()
+	defer ol.poolLocker.Unlock()
 	if opid, ok := ol.userMapping[openid]; ok {
 		return opid
 	} else {
@@ -31,10 +35,12 @@ func (ol *Online) findOpByUser(openid string) string {
 	}
 }
 
-func (ol *Online) bind(opid, openid string) {
+func (ol *Online) bind(opid, openid string, msg Message) {
 	ol.poolLocker.Lock()
 	ol.userMapping[openid] = opid
-	ol.olPool[opid] = append(ol.olPool[opid], &Client{openid: openid, lastTS: time.Now(), msgPool: make([]Message, 0, 10)})
+	msgPool := make([]Message, 0, 10)
+	msgPool = append(msgPool, msg)
+	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), msgPool: msgPool})
 	ol.poolLocker.Unlock()
 }
 
@@ -65,6 +71,20 @@ func (ol *Online) unbind(opid, openid string) {
 
 	}
 	ol.poolLocker.Unlock()
+}
+
+func (ol *Online) getClient(opid, openid string) *Client {
+	ol.poolLocker.Lock()
+	defer ol.poolLocker.Unlock()
+	if clients, ok := ol.olPool[opid]; ok {
+		for _, client := range clients {
+			if strings.EqualFold(openid, client.openid) {
+				return &client
+			}
+		}
+	}
+
+	return nil
 }
 
 func (client *Client) appendMsg(msg Message) {

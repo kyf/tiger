@@ -81,7 +81,7 @@
 			dataType:'json',
 			success:function(data, status, response){
 				if(data.status != 0){
-					alert(data.info);
+					//alert(data.info);
 					return;
 				}
 				data = data.data;

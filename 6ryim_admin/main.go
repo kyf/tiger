@@ -3,10 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/fvbock/endless"
@@ -22,6 +24,8 @@ const (
 
 	ADMIN_USER string = "6renyou"
 	ADMIN_PWD  string = "6renyou.com"
+
+	SERVER_INVALID = "Server Invalid"
 )
 
 type m6ryResponse struct {
@@ -42,12 +46,12 @@ func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.
 	r.ParseForm()
 	admin_user, ok := sess.Get("admin_user").(string)
 
-	authlist := []string{"/", "/main", "/my/test", "/message/detail"}
+	authlist := []string{"/login", "/checklogin"}
+	extlist := []string{"css", "js", "jpg", "gif", "png"}
+	ext := path.Ext(r.RequestURI)
 	for _, it := range authlist {
-		if strings.EqualFold(it, r.URL.Path) {
-			if !ok || !strings.EqualFold(ADMIN_USER, admin_user) {
-				ren.Redirect("/login")
-			}
+		if !strings.EqualFold(it, r.URL.Path) && StringSliceContains(ext, extlist) && (!ok || strings.EqualFold("", admin_user)) {
+			ren.Redirect("/login")
 		}
 	}
 
@@ -76,12 +80,19 @@ func main() {
 
 	um := NewUserManager()
 
-	m.Get("/main", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
-		ren.HTML(200, "index", nil)
+	m.Get("/message", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "index", data)
 	})
 
 	m.Get("/", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
-		ren.HTML(200, "index", nil)
+		ren.Redirect("/message")
 	})
 
 	m.Get("/my/test", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
@@ -110,7 +121,19 @@ func main() {
 			return
 		}
 
-		ren.HTML(200, "message_detail", string(body))
+		admin_user, _ := sess.Get("admin_user").(string)
+		top, _ := fetchTop(admin_user)
+		left, _ := fetchLeft()
+		data := struct {
+			Order string
+			Left  template.HTML
+			Top   template.HTML
+		}{
+			string(body),
+			template.HTML(string(left)),
+			template.HTML(string(top)),
+		}
+		ren.HTML(200, "message_detail", data)
 	})
 
 	m.Post("/user/get", func(r *http.Request, ren render.Render, logger *log.Logger) {
@@ -167,16 +190,73 @@ func main() {
 		}
 	})
 
-	m.Post("/checklogin", func(r *http.Request, ren render.Render, sess sessions.Session) {
+	m.Post("/checklogin", func(logger *log.Logger, r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user := r.Form.Get("user")
 		admin_pwd := r.Form.Get("password")
 
-		if strings.EqualFold(ADMIN_USER, admin_user) && strings.EqualFold(ADMIN_PWD, admin_pwd) {
-			sess.Set("admin_user", admin_user)
-			ren.JSON(200, "success")
-		} else {
+		mgo := NewMongoClient()
+		err := mgo.Connect()
+		if err != nil {
+			logger.Printf("mgo.Connect err:%v", err)
 			ren.JSON(200, "failure")
+			return
 		}
+		defer mgo.Close()
+
+		adm := NewAdmin(admin_user, admin_pwd, "", mgo)
+		status, err := adm.checkValid()
+		if err != nil {
+			logger.Printf("mgo.Connect err:%v", err)
+			ren.JSON(200, "failure")
+			return
+		}
+
+		if !status {
+			ren.JSON(200, "failure")
+			return
+		}
+
+		sess.Set("admin_user", admin_user)
+		ren.JSON(200, "success")
+	})
+
+	m.Post("/admin/add", handleAdminAdd)
+	m.Post("/admin/remove", handleAdminRemove)
+	m.Post("/admin/list", handleAdminList)
+	m.Get("/admin/list", handleAdminList)
+	m.Post("/admin/edit", handleAdminEdit)
+
+	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "account", data)
+	})
+
+	m.Get("/call/center/message", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "waitlist", data)
+	})
+
+	m.Get("/my/call/center", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "mycc", data)
 	})
 
 	var exit chan error
