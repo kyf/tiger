@@ -15,37 +15,11 @@
     <div class="panel">
       <div class="nav_view ng-scope" style="visibility: visible; width: auto;top:0px;">
         <div class="scroll-wrapper chat_list scrollbar-dynamic" style="position: relative;">
-          <div id="J_NavChatScrollBody" class="chat_list scrollbar-dynamic scroll-content scroll-scrolly_visible" style="height: 100%;overflow:hidden;">
+          <div id="J_NavChatScrollBody" class="chat_list scrollbar-dynamic scroll-content scroll-scrolly_visible" style="height: 600px;;overflow:auto;">
             <div class="ng-scope">
               <div class="top-placeholder ng-scope" style="height: 0px;"></div>
-              <div class="ng-scope">
-                <div class="chat_item slide-left ng-scope active">
-                  <div class="ext">
-                    <p class="attr ng-binding">10:57</p>
-                  </div>
-                  <div class="avatar"> 
-					  <img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" class="img"> 
-				  </div>
-                  <div class="info">
-                    <h3 class="nickname"> <span class="nickname_text ng-binding">文件传输助手</span> </h3>
-                    <p class="msg ng-scope"> <span class="ng-binding">很烦很烦</span> </p>
-                  </div>
-                </div>
-              </div>
-              <div class="ng-scope">
-                <div class="chat_item slide-left ng-scope">
-                  <div class="ext">
-                    <p class="attr ng-binding"></p>
-                  </div>
-                  <div class="avatar"> 
-					  <img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" class="img"> 
-				  </div>
-                  <div class="info">
-                    <h3 class="nickname"> <span  class="nickname_text ng-binding">一家人</span> </h3>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom-placeholder ng-scope"  style="height: 896px;"></div>
+                            
+              <div class="bottom-placeholder ng-scope UserContainer"  style="height: 0px;"></div>
             </div>
           </div>
         </div>
@@ -60,29 +34,11 @@
           </div>
         </div>
         <div class="scroll-wrapper box_bd chat_bd scrollbar-dynamic" style="position: absolute;">
-          <div class="box_bd chat_bd scrollbar-dynamic scroll-content" style="height: 386px;">
+          <div class="box_bd chat_bd scrollbar-dynamic scroll-content MainChatContainer" style="height: 386px;">
             <div data-pre-calc="true" data-buffer-height="300" data-height-calc="heightCalc"  class="ng-scope">
               <div class="top-placeholder ng-scope"  style="height: 0px;"></div>
-              <div  class="ng-scope">
-                <div message-directive="" class="clearfix">
-                  <div  style="overflow: hidden;" on="message.MsgType" ng-switch="">
-                    <div  class="message ng-scope me" ng-switch-default="">
-                      <p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>
-                      <img  title="风筝" src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">
-                      <div class="content">
-                        <div class="bubble js_message_bubble ng-scope bubble_primary right">
-                          <div  class="bubble_cont ng-scope">
-                            <div class="plain">
-                              <pre  class="js_message_plain ng-binding">很烦很烦</pre>
-                              <img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading ng-hide" > <i title="重新发送"   class="ico_fail web_wechat_message_fail ng-hide"></i> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom-placeholder ng-scope"  style="height: 0px;"></div>
+              
+              <div class="bottom-placeholder ng-scope ChatContainer"  style="height: 0px;"></div>
             </div>
             <div style="visibility:hidden;position:absolute;width:100%;top:333px;height:0;padding:019px;box-sizing:border-box;margin-left:-19px;overflow:hidden;" id="prerender"></div>
           </div>
@@ -97,10 +53,11 @@
               <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label>
             </div>
             </a> </div>
-          <div   mm-action-track="" class="content ng-isolate-scope">
-            <pre contenteditable="true"      class="flex edit_area ng-isolate-scope ng-valid ng-dirty" mm-paste="" contenteditable-directive="" id="editArea"></pre>
+          <div class="content ng-isolate-scope">
+			  <!--<pre contenteditable="true"      class="flex edit_area ng-isolate-scope ng-valid ng-dirty" mm-paste="" contenteditable-directive="" id="editArea"></pre>-->
+			  <textarea id="editArea" style="width:100%;height:90px;margin-left:8px;background:transparent;border:0px;font-size:14px;"></textarea>
             <span id="caretPosHelper" class="caret_pos_helper"></span></div>
-          <div class="action"> <span class="desc ng-scope" >按下Ctrl+Enter换行</span> <a  href="javascript:;" class="btn btn_send">发送</a> </div>
+          <div class="action"> <span class="desc ng-scope" >按下Ctrl+Enter发送</span> <a  href="javascript:;" class="btn btn_send">发送</a> </div>
         </div>
       </div>
     </div>
