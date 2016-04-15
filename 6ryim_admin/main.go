@@ -22,8 +22,7 @@ const (
 
 	LOG_PREFIX string = "[6ryim_admin]"
 
-	ADMIN_USER string = "6renyou"
-	ADMIN_PWD  string = "6renyou.com"
+	TIME_LAYOUT string = "2006-01-02 15:04:05"
 
 	SERVER_INVALID = "Server Invalid"
 )
@@ -183,7 +182,7 @@ func main() {
 
 	m.Get("/login", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		admin_user, ok := sess.Get("admin_user").(string)
-		if ok && strings.EqualFold(ADMIN_USER, admin_user) {
+		if ok && !strings.EqualFold("", admin_user) {
 			ren.Redirect("/")
 		} else {
 			ren.HTML(200, "login", nil)
@@ -225,6 +224,12 @@ func main() {
 	m.Post("/admin/list", handleAdminList)
 	m.Get("/admin/list", handleAdminList)
 	m.Post("/admin/edit", handleAdminEdit)
+
+	m.Post("/request/receive", handleReceive)
+	m.Post("/request/bind", handleBind)
+	m.Post("/request/cc", handleRequestCC)
+	m.Post("/request/send", handleSend)
+	m.Post("/request/wait", handleListWait)
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
@@ -272,6 +277,18 @@ func main() {
 
 	m.Get("/chat", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		ren.HTML(200, "chat", nil)
+	})
+
+	m.Get("/call/center/my/sendwx", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+
+		ren.HTML(200, "sendwx", data)
 	})
 
 	var exit chan error

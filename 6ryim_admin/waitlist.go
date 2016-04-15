@@ -16,6 +16,10 @@ type Message struct {
 
 const (
 	CLIENT_DEADLINE time.Duration = time.Second * 60 * 5 //5 minutes
+
+	MSG_TYPE_TEXT  MessageType = 1
+	MSG_TYPE_IMAGE MessageType = 2
+	MSG_TYPE_AUDIO MessageType = 3
 )
 
 type WaitList struct {

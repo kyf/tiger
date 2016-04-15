@@ -7,7 +7,7 @@
 		            '<span class="frm_input_box with_counter counter_in append count" style="padding:0px;">',
 		                '<input type="text" class="frm_input username" value="{user}">',
 		            '</span>',
-		            '<span class="frm_msg fail js_usernamefail">请输入用户名</span>',
+		            '<span class="frm_msg fail js_usernamefail">用户名长度为6到16位，只能为字母和数据组成</span>',
 		        '</div>',
 		    '</div>',
 		    '<div class="frm_control_group">',
@@ -146,6 +146,12 @@
 			var openid = dialog.find('.openid').val().trim();	
 
 			if(username == ""){
+				dialog.find('.js_usernamefail').show();
+				return;
+			}
+
+			var reg = /^[0-9a-zA-Z]{6,16}$/;
+			if(!reg.test(username)){
 				dialog.find('.js_usernamefail').show();
 				return;
 			}

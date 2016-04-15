@@ -3,12 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
-	//"time"
+	"strconv"
+	"time"
+
+	"github.com/martini-contrib/sessions"
 )
 
 func handleReceive(r *http.Request, w http.ResponseWriter) {
 	openid := r.Form.Get("openid")
 	content := r.Form.Get("content")
+	msgType := r.Form.Get("msgType")
 
 	if len(openid) == 0 {
 		responseJson(w, false, "openid is empty")
@@ -20,25 +24,31 @@ func handleReceive(r *http.Request, w http.ResponseWriter) {
 		return
 	}
 
-	//msg := Message{openid: openid, created: time.Now().Unix(), content: content}
+	if len(msgType) == 0 {
+		responseJson(w, false, "msgType is empty")
+		return
+	}
 
-	/*
-		if client := defaultOL.getClient(opid, openid); client != nil {
-			client.appendMsg(msg)
-			responseJson(w, true, "success")
-			return
-		} else {
-			defaultWL.Add(msg)
-			responseJson(w, true, "success")
-			return
-		}
+	_msg_type, err := strconv.Atoi(msgType)
+	if err != nil {
+		responseJson(w, false, "msgType is invalid")
+		return
+	}
 
-	*/
+	msg := Message{openid: openid, created: time.Now().Unix(), content: content, msgType: MessageType(_msg_type)}
+
+	if client := defaultOL.getClientByOpenid(openid); client != nil {
+		client.appendMsg(msg)
+	} else {
+		defaultWL.Add(msg)
+	}
+
+	responseJson(w, true, "success")
 }
 
-func handleBind(w http.ResponseWriter, r *http.Request) {
+func handleBind(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
 	openid := r.Form.Get("openid")
-	opid := r.Form.Get("opid")
+	opid, _ := sess.Get("admin_user").(string)
 
 	if len(openid) == 0 {
 		responseJson(w, false, "openid is empty")
@@ -54,12 +64,36 @@ func handleBind(w http.ResponseWriter, r *http.Request) {
 	responseJson(w, status, "")
 }
 
-func handleFetch() {
+func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
+	opid, _ := sess.Get("admin_user").(string)
+
+	if len(opid) == 0 {
+		responseJson(w, false, "opid is empty")
+		return
+	}
+
+	clients := defaultOL.getClients(opid)
+	var data []map[string]string = make([]map[string]string, 0, 5)
+	for _, client := range clients {
+		client.refresh()
+		msg := client.lastMsg.content
+		_ts := time.Unix(client.lastMsg.created, 0)
+		openid := client.openid
+		ts := _ts.Format(TIME_LAYOUT)
+
+		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid})
+	}
+
+	responseJson(w, true, "", data)
 
 }
 
 func handleSend() {
 
+}
+
+func handleListWait(w http.ResponseWriter) {
+	responseJson(w, true, "", defaultWL.waitPool)
 }
 
 func handleAdminAdd(w http.ResponseWriter, r *http.Request, logger *log.Logger) {

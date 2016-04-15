@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+
+<meta charset="utf-8">
+
+<title>IM管理平台</title> 
+<link href="http://www.6renyou.com/favicon.ico" rel="Shortcut Icon">
+<link rel="stylesheet" type="text/css" href="/css/layout_head2880f5.css"/>
+<link rel="stylesheet" type="text/css" href="/css/base2c31e8.css"/>
+<link rel="stylesheet" type="text/css" href="/css/page_message2a0043.css">
+<link rel="stylesheet" type="text/css" href="/css/pagination218878.css">
+</head>
+<body class="zh_CN">
+{{.Top}}
+<div class="body page_message" id="body">
+	<div class="container_box cell_layout side_l" id="js_container_box">
+
+		{{.Left}}	
+		<div class="col_main">
+
+			<div class="main_hd">
+				<h2>微信发送测试工具</h2>
+				<div id="topTab" class="title_tab">
+					<ul data-index="0" class="tab_navs title_tab">
+					</ul>
+				</div>
+			</div>
+
+			<div class="main_bd">
+				<div class="filter_bar">
+				</div>
+
+				<ul id="listContainer" class="message_list">
+
+
+					<div class="frm_control_group">
+						<label class="frm_label">选择发送人</label>
+						<div class="frm_controls">
+							<span style="padding:0px;border:0px;" class="frm_input_box with_counter counter_in append count">
+								<!--消息类型start-->
+								<div id="sender" class="dropdown_wrp dropdown_menu">
+									<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="o5voKuA644vh_pUxYW3h0N9XuQ4M" ><label class="jsBtLabel">小柯</label><i class="arrow"></i></a>
+									<div class="dropdown_data_container jsDropdownList" style="display: none;">
+										<ul class="dropdown_data_list">
+											<li class="dropdown_data_item ">  
+											<a data-name="小柯" data-index="0" data-value="o5voKuA644vh_pUxYW3h0N9XuQ4M" class="jsDropdownItem" href="javascript:;" onclick="return false;">小柯</a>
+											</li>
+											<li class="dropdown_data_item ">  
+											<a data-name="老陈" data-index="1" data-value="o5voKuBHUImbwLRMQnPTif0dIua4" class="jsDropdownItem" href="javascript:;" onclick="return false;">老陈</a>
+											</li>
+											<li class="dropdown_data_item ">  
+											<a data-name="贾建强" data-index="2" data-value="o5voKuA5qnXmLcAacv_yGioCUZPE" class="jsDropdownItem" href="javascript:;" onclick="return false;">贾建强</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!--消息类型end-->
+							</span>
+						</div>
+					</div>
+
+					<div class="frm_control_group">
+						<label class="frm_label">发送内容</label>
+						<div class="frm_controls">
+							<span style="padding:0px;border:0px;" class="frm_input_box with_counter counter_in append count">
+								<textarea id="content" style="width:530px;height:270px;border:1px solid #e7e7eb;"></textarea>
+							</span>
+						</div>
+					</div>
+
+
+					<div class="frm_control_group" style="margin-top:240px;">
+						<label class="frm_label"></label>
+						<div class="frm_controls">
+							<span style="padding:0px;border:0px;" class="frm_input_box with_counter counter_in append count">
+								<span class="btn btn_primary btn_input" >
+									<button class="js_reply_OK">发送</button>
+								</span>
+							</span>
+						</div>
+					</div>
+
+
+				</ul>
+
+			</div>
+
+
+		</div>
+	</div>
+
+	
+</div>
+
+
+</body>
+</html>
+
+<script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="/js/page/common.js"></script>
+<script type="text/javascript" src="/js/page/dropdown.js"></script>
+<script type="text/javascript" src="/js/page/util.js"></script>
+<script type="text/javascript" src="/js/page/sendwx.js"></script>
+

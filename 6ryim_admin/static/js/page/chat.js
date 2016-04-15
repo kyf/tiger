@@ -70,6 +70,8 @@
 	addUserItem("6人游", "说设么");
 	addUserItem("6人游", "说设么");
 	addUserItem("6人游", "说设么");
+	addUserItem("6人游", "说设么");
+	addUserItem("6人游", "说设么");
 
 
 })(jQuery, window)
