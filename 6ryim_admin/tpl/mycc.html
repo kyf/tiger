@@ -3,32 +3,11 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
-
 <meta charset="utf-8">
-
 <title>IM管理平台</title> 
 <link href="http://www.6renyou.com/favicon.ico" rel="Shortcut Icon">
 <link rel="stylesheet" type="text/css" href="/css/layout_head2880f5.css"/>
 <link rel="stylesheet" type="text/css" href="/css/base2c31e8.css"/>
-<link rel="stylesheet" type="text/css" href="/css/lib2968da.css"/>
-<link rel="stylesheet" type="text/css" href="/css/page_index296095.css">
-<link rel="stylesheet" type="text/css" href="/css/page_message2a0043.css">
-<link rel="stylesheet" type="text/css" href="/css/pagination218878.css">
-<style type="text/css">
-.pages{text-align:center;line-height:60px;}
-.pages span{height:22px; margin:0 3px; border:0px #dbdbdb solid; font-size:12px; font-weight:bold; color:#1e4984;}
-.pages a{display:inline; height:22px; padding:3px 10px; line-height:22px; margin:0 3px; border:0px #dbdbdb solid; background:#fff; font-size:14px; color:#404040; text-decoration:none;}
-.pages a:hover{text-decoration:none;background:#44b549 none repeat scroll 0 0;color:#fff;border-radius:3px;}
-.pages .prev_disabled{width:22px; background:#fff  no-repeat 6px -44px;}
-.pages .prev{width:22px; padding:2px 8px; background:#fff  no-repeat 6px 5px;font-size:16px;}
-.pages .next_disabled{width:22px; background:#fff  no-repeat -45px -44px;}
-.pages .next{width:22px; padding:2px 8px; background:#fff no-repeat -45px 5px;font-size:16px;}
-.pages .text{border:none; color:#1e4984;}
-.pages .current{background:#44b549 none repeat scroll 0 0;color:#fff;border-radius:3px;}
-.pages .current:hover{background:#44b549; color:#fff;}
-#RecordCount{height:22px;line-height:22px;float:left;}
-.jumpclass {cursor:pointer;}
-</style>
 
 </head>
 <body class="zh_CN">
@@ -40,93 +19,19 @@
 		<div class="col_main">
 
 			<div class="main_hd">
-				<h2>消息管理</h2>
-				<div id="topTab" class="title_tab"><ul data-index="0" class="tab_navs title_tab">
-
-						<li data-id="total" class="tab_nav first js_top selected" data-index="0"><a href="javascript:void(0);">全部消息</a></li>
-
+				<h2>我的消息</h2>
+				<div id="topTab" class="title_tab">
+					<ul data-index="0" class="tab_navs title_tab">
 					</ul>
 				</div>
-
-				<div id="searchBar" class="extra_info search_bar"><span class="frm_input_box search with_del append ">
-						<a style="display:none" href="javascript:" class="del_btn jsSearchInputClose">
-							<i class="icon_search_del"></i>&nbsp;
-						</a>
-						<a class="frm_input_append jsSearchInputBt" href="javascript:">
-							<i class="icon16_common search_gray">搜索</i>&nbsp;
-						</a>
-						<input type="text" class="frm_input jsSearchInput" value="" placeholder="消息内容">
-				</span></div>
 			</div>
 			<div class="main_bd">
-
-				<div class="filter_bar" style="margin-bottom:10px;">
-					<!--消息类型start-->
-					<div id="msgtypeselect" class="dropdown_wrp dropdown_menu">
-						<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="" ><label class="jsBtLabel">全部类型</label><i class="arrow"></i></a>
-						<div class="dropdown_data_container jsDropdownList" style="display: none;">
-							<ul class="dropdown_data_list">
-								<li class="dropdown_data_item ">  
-								<a data-name="全部类型" data-index="0" data-value="" class="jsDropdownItem" href="javascript:;" onclick="return false;">全部类型</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="文本" data-index="1" data-value="2" class="jsDropdownItem" href="javascript:;" onclick="return false;">文本</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="图片" data-index="2" data-value="3" class="jsDropdownItem" href="javascript:;" onclick="return false;">图片</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="语音" data-index="3" data-value="4" class="jsDropdownItem" href="javascript:;" onclick="return false;">语音</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<!--消息类型end-->
-					<!--消息渠道start-->
-					<div id="msgsourceselect" class="dropdown_wrp dropdown_menu">
-						<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="0" data-value="" ><label class="jsBtLabel">全部渠道</label><i class="arrow"></i></a>
-						<div class="dropdown_data_container jsDropdownList" style="display: none;">
-							<ul class="dropdown_data_list">
-								<li class="dropdown_data_item ">  
-								<a data-name="全部渠道" data-index="0" data-value="" class="jsDropdownItem" href="javascript:;" onclick="return false;">全部渠道</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="微信" data-index="1" data-value="1" class="jsDropdownItem" href="javascript:;" onclick="return false;">微信</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="IOS" data-index="2" data-value="2" class="jsDropdownItem" href="javascript:;" onclick="return false;">IOS</a>
-								</li>
-								<li class="dropdown_data_item ">  
-								<a data-name="Android" data-index="3" data-value="3" class="jsDropdownItem" href="javascript:;" onclick="return false;">Android</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<!--消息渠道end-->
-					
-
-					<span data-id="578024576" class="btn btn_primary btn_input">
-						<button class="js_reply_OK">搜索</button>
-					</span>
-
-				</div>
-
-
-				<div class="msg_box" style="display:none;" id="newMsgTip">
-					<div class="inner">
-						<a href="javascript:window.location.reload();"><span id="newMsgNum"></span>条新消息，点击查看</a>
-					</div>
+				<div class="filter_bar">
 				</div>
 
 				<ul id="listContainer" class="message_list">
+					<iframe src="/chat" style="width:930px;height:600px;margin:30px 30px;" frameborder="0" ></iframe>
 				</ul>
-
-
-				<div class="tool_area">
-					<div class="pagination_wrp pageNavigator pages" style="">
-					</div>
-				</div>
-
 
 			</div>
 
@@ -141,10 +46,7 @@
 </html>
 
 <script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/pagenav.js"></script>
-<script type="text/javascript" src="http://admin.6renyou.com/statics/trip/js/loading/jquery.showLoading.js"></script>
 <script type="text/javascript" src="/js/page/common.js"></script>
 <script type="text/javascript" src="/js/page/util.js"></script>
-<script type="text/javascript" src="/js/page/dropdown.js"></script>
-<script type="text/javascript" src="/js/page/waitlist.js"></script>
+<script type="text/javascript" src="/js/page/mycc.js"></script>
 

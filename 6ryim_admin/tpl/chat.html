@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+<style type="text/css">
+@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}
+</style>
+<meta charset="UTF-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<link href="https://res.wx.qq.com/zh_CN/htmledition/v2/css/base/base28a2f7.css" type="text/css" rel="stylesheet">
+</head>
+<body ng-click="appClick($event)" ng-class="{loaded:isLoaded,unlogin:isUnLogin}" ng-controller="appController" track-type="resize" mm-action-track="" class="ng-scope ng-isolate-scope loaded">
+
+<div class="main">
+	<div class="main_inner">
+
+		<div class="panel">
+
+			<div class="nav_view ng-scope" style="visibility: visible; width: auto;top:0px;">
+
+				<div class="scroll-wrapper chat_list scrollbar-dynamic" style="position: relative;">
+					<div id="J_NavChatScrollBody" class="chat_list scrollbar-dynamic scroll-content scroll-scrolly_visible" jquery-scrollbar="" style="margin-bottom: -17px; margin-right: -17px; height: 463px;">
+						<p class="ico_loading ng-hide">
+						<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif">正在获取最近的聊天...
+						</p>
+
+						<div class="ng-scope">
+							<div class="top-placeholder ng-scope" style="height: 0px;"></div>
+							<div ng-repeat="chatContact in chatList track by chatContact.UserName" class="ng-scope">
+								<div class="chat_item slide-left ng-scope active">
+									<div class="ext">
+										<p class="attr ng-binding">10:57</p>
+									</div>
+
+									<div class="avatar">
+										<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=720006&amp;username=filehelper&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=720006&amp;username=filehelper&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img">
+
+									</div>
+
+									<div class="info">
+										<h3 class="nickname">
+											<span ng-bind-html="chatContact.getDisplayName()" class="nickname_text ng-binding">文件传输助手</span>
+										</h3>
+
+										<p ng-if="chatContact.MMDigest" class="msg ng-scope">
+
+										<!-- ngIf: chatContact.NoticeCount>1 && chatContact.isMuted() -->
+										<span ng-bind-html="chatContact.MMDigest" class="ng-binding">很烦很烦</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							
+							
+							
+							<div ng-repeat="chatContact in chatList track by chatContact.UserName" class="ng-scope">
+								<div data-cm="{&quot;type&quot;:&quot;chat&quot;,&quot;username&quot;:&quot;@@1c3b90bd456237b7b46246fd5cc69c11d875a8d079f3e7f9e78b241b428b1c5b&quot;}" ng-class="{'active': (chatContact.UserName == currentUserName),'top':chatContact.isTop()}" ng-click="itemClick(chatContact.UserName)" ng-if="!chatContact.isShieldUser()" class="chat_item slide-left ng-scope">
+
+									<div class="ext">
+										<p class="attr ng-binding"></p>
+
+									</div>
+
+									<div class="avatar">
+										<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgetheadimg?seq=642354764&amp;username=@@1c3b90bd456237b7b46246fd5cc69c11d875a8d079f3e7f9e78b241b428b1c5b&amp;skey=" src="/cgi-bin/mmwebwx-bin/webwxgetheadimg?seq=642354764&amp;username=@@1c3b90bd456237b7b46246fd5cc69c11d875a8d079f3e7f9e78b241b428b1c5b&amp;skey=" class="img">
+
+
+
+
+
+									</div>
+
+									<div class="info">
+										<h3 class="nickname">
+											<span ng-bind-html="chatContact.getDisplayName()" class="nickname_text ng-binding">一家人</span>
+										</h3>
+									</div>
+								</div>
+						</div><div class="bottom-placeholder ng-scope" ng-style="{height:bottomHeight}" style="height: 896px;"></div></div>
+				</div><div class="scroll-element scroll-x scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="width: 89px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div><div class="scroll-element scroll-y scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="height: 123px; top: 0px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div></div>
+			</div>
+			<div nav-contact-directive="" ng-style="{visibility:$state.current.name ==='contact'?'visible':'hidden',width:$state.current.name ==='contact'?'auto':'0'}" class="nav_view ng-scope" style="visibility: hidden; width: 0px;">
+				<div class="scroll-wrapper J_ContactScrollBody scrollbar-dynamic contact_list ng-isolate-scope" style="position: relative;"><div class="J_ContactScrollBody scrollbar-dynamic contact_list ng-isolate-scope scroll-content scroll-scrollx_visible scroll-scrolly_visible" jquery-scrollbar="" data-dblclick-callback="dblclick" data-click-user-callback="showProfile" data-friend-contacts="friendContacts" data-chatroom-contacts="chatroomContacts" data-star-contacts="starContacts" data-current-contact="currentContact" data-all-contacts="allContacts" contact-list-directive="" id="navContact" style="margin-bottom: -17px; margin-right: -17px; height: 463px;">
+
+						<div data-buffer-height="100" data-height-calc="heightCalc" mm-repeat="item in allContacts" data-no-cache="true" class="ng-scope"><div class="top-placeholder ng-scope" ng-style="{height:topHeight}" style="height: 0px;"></div><div ng-repeat="item in allContacts" class="ng-scope">
+								<h4 class="contact_title ng-binding ng-scope" ng-if="item.type==&quot;header&quot;">群组</h4>
+
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgetheadimg?seq=643665854&amp;username=@@b00dcd1ac65843aa61d3fea62f656c891411fc3b7e6e3c3e99c5f7049a4702e7&amp;skey=" src="/cgi-bin/mmwebwx-bin/webwxgetheadimg?seq=643665854&amp;username=@@b00dcd1ac65843aa61d3fea62f656c891411fc3b7e6e3c3e99c5f7049a4702e7&amp;skey=" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">栗木小学1997届同学群</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+								<h4 class="contact_title ng-binding ng-scope" ng-if="item.type==&quot;header&quot;">A</h4>
+
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=637218543&amp;username=@ba7c1b6ce57237153736427cea76e5b4e215e0368bf1a0aede68240c04dbfe4e&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=637218543&amp;username=@ba7c1b6ce57237153736427cea76e5b4e215e0368bf1a0aede68240c04dbfe4e&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">AAA深圳群屿---PC扩散板</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642347508&amp;username=@9d442fbc2e1346f31fc3cfd514813167493f62e3bc5d478fbbfa5270394d2af7&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642347508&amp;username=@9d442fbc2e1346f31fc3cfd514813167493f62e3bc5d478fbbfa5270394d2af7&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">安仔美丽热线13428064577</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=643664063&amp;username=@eaf29d2477e11c7462ecfc93ffef09254a1bedd0f2fd8ae95335a37b30b0b553&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=643664063&amp;username=@eaf29d2477e11c7462ecfc93ffef09254a1bedd0f2fd8ae95335a37b30b0b553&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">阿蕊</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642355200&amp;username=@727b563a2dfae82316e069cabfbbcba4476fd48037840540858711da5e86a832&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642355200&amp;username=@727b563a2dfae82316e069cabfbbcba4476fd48037840540858711da5e86a832&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">A<img src="/zh_CN/htmledition/v2/images/spacer.gif" text="_web" class="emoji emoji1f339">傻傻滴 <img src="/zh_CN/htmledition/v2/images/spacer.gif" text="_web" class="emoji emoji1f339"></h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=643664394&amp;username=@6505fd7bb562bf4b2f14ee5982d9da2a5047364baa544f88347d65893e8b4c69&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=643664394&amp;username=@6505fd7bb562bf4b2f14ee5982d9da2a5047364baa544f88347d65893e8b4c69&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">A<img src="/zh_CN/htmledition/v2/images/spacer.gif" text="_web" class="emoji emoji1f3c6"> Z.O单鹏</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+								<h4 class="contact_title ng-binding ng-scope" ng-if="item.type==&quot;header&quot;">C</h4>
+
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=632265195&amp;username=@154f955dbc7a2b05db3568335835f2b992e2b04bca82dd182553aa7892bacbe3&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=632265195&amp;username=@154f955dbc7a2b05db3568335835f2b992e2b04bca82dd182553aa7892bacbe3&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">cedoomnego</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=641601144&amp;username=@368bdff96ec19413d21ec407bff649481da601b966b0d4d5d34366213e80a5f7&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=641601144&amp;username=@368bdff96ec19413d21ec407bff649481da601b966b0d4d5d34366213e80a5f7&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">柴伦志</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=631870374&amp;username=@f03713c9114812de092038617118e9481debc70f3bac40e678ac2b2ebdf03cf5&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=631870374&amp;username=@f03713c9114812de092038617118e9481debc70f3bac40e678ac2b2ebdf03cf5&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">超人我来拯救你</h4>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="item in allContacts" class="ng-scope">
+
+								<div ng-class="{'active':currentContact.UserName == item.UserName}" ng-dblclick="dblclickCallback(item)" data-click-user-callback="clickUserCallback" data-user="item" contact-item-directive="" ng-if="item.type!=&quot;header&quot;" class="ng-isolate-scope">
+
+									<div ng-click="clickUserCallback &amp;&amp; clickUserCallback(user)" class="contact_item ">
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=623084708&amp;username=@de96a0a76abca3dd6ed839bb97b6e154610399c802785770983e9b08b0d8ee2f&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=623084708&amp;username=@de96a0a76abca3dd6ed839bb97b6e154610399c802785770983e9b08b0d8ee2f&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img lazy">
+										</div>
+										<div class="info">
+											<h4 ng-bind-html="user.getDisplayName()" class="nickname ng-binding">車仔</h4>
+										</div>
+									</div>
+								</div>
+						</div><div class="bottom-placeholder ng-scope" ng-style="{height:bottomHeight}" style="height: 6180px;"></div></div>
+				</div><div class="scroll-element scroll-x scroll-scrollx_visible scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="width: 0px; left: 0px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div><div class="scroll-element scroll-y scroll-scrollx_visible scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="height: 28px; top: 0px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div></div>
+			</div>
+			<div nav-read-directive="" ng-style="{visibility:$state.current.name ==='read'?'visible':'hidden',width:$state.current.name ==='read'?'auto':'0'}" class="nav_view ng-scope" style="visibility: hidden; width: 0px;">
+				<div class="scroll-wrapper read_list scrollbar-dynamic" style="position: relative;"><div id="J_NavReadScrollBody" class="read_list scrollbar-dynamic scroll-content scroll-scrollx_visible scroll-scrolly_visible" jquery-scrollbar="" style="margin-bottom: -17px; margin-right: -17px; height: 463px;">
+
+						<p ng-show="subscribeMsgs.defaultValue" class="ico_loading ng-hide"><img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif">加载中...</p>
+						<p ng-show="!subscribeMsgs.defaultValue &amp;&amp; subscribeMsgs.length == 0" class="ico_loading ng-hide">暂无文章...</p>
+						<div mm-repeat-keyboard-scroll-selector="#J_NavReadScrollBody" mm-repeat-keyboard="" data-buffer-height="200" data-height-calc="heightCalc" mm-repeat="readItem in articleList" data-no-cache="true" class="ng-scope"><div class="top-placeholder ng-scope" ng-style="{height:topHeight}" style="height: 0px;"></div><div ng-repeat="readItem in articleList" class="ng-scope">
+								<div ng-class="{first: readItem._index === 0}" ng-if="readItem.UserName" class="just_for_bg ng-scope first">
+									<div class="read_item_hd">
+										<p class="date ng-binding">9:32</p>
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=0&amp;username=@1d5d9961a061af4cc607236e53296dec&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=0&amp;username=@1d5d9961a061af4cc607236e53296dec&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img">
+										</div>
+										<p class="info">
+										<span class="username ng-binding">交通银行北京市分行</span>
+										</p>
+									</div>
+								</div>
+
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope active" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">告诉您一个秘密，有个比国债更好的品种根本不用抢!</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/jjSyOo5hiboeeVOzLXDLJLarhCeF90gr3UK6jCPicTPnbbflIq4obiazWPq3eoibGPbKnppu9YeyMamOoBbKMR6lfA/640?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">【私银专享】“魅力扎染，养眼春夏”乐享系列主题沙龙</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/jjSyOo5hiboeeVOzLXDLJLarhCeF90gr3QErKbxxwVZYa77HFV5SORMwZhmsibj2hwj96ic8DuOT8XDH1RoJIWHqQ/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">【免费观影】《纽约纽约》免费观影活动中奖信息</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/jjSyOo5hiboeeVOzLXDLJLarhCeF90gr3eKthKYRGKicJ2iaC1o3IlfeWMopfuNrq8ib6icCJYiaLqLuW8J1huiblRjpw/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">【京城掠影】北京最美的公交车，跟着它从南到北，这样的一日游有意思极了！</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/jjSyOo5hiboeeVOzLXDLJLarhCeF90gr3b65F5TMzcaZaUiaKiaibgib6kkhtCgFdAniaxHIlGXtczwQ9X8YUJ1wZEng/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">【健康生活】日本医生发明走路减肥法 亲测3个月减20斤（图）</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/jjSyOo5hiboeeVOzLXDLJLarhCeF90gr37AmQpGur3Is7advThEsSLib2ibONItgCCQoP4C8CTQdicGvvRQQKldpdA/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+								<div ng-class="{first: readItem._index === 0}" ng-if="readItem.UserName" class="just_for_bg ng-scope">
+									<div class="read_item_hd">
+										<p class="date ng-binding">8:46</p>
+										<div class="avatar">
+											<img alt="" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=0&amp;username=@af3df3836455ab24e44d57df452e16b4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=0&amp;username=@af3df3836455ab24e44d57df452e16b4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="img">
+										</div>
+										<p class="info">
+										<span class="username ng-binding">小窍门</span>
+										</p>
+									</div>
+								</div>
+
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">臀部的形状居然能看出身体状况？太准了！</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/15gAL0NAgmk66ehNRNtHz6WJfYX7wMmA6Yoj1qBfXvPSFn9yB12MMuCg8WibQM3icNmFyeujWzORfzicDQYhMZJJQ/640?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">厨房、衣物 的各种清洁小妙招，爱干净的你快收了吧！</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/15gAL0NAgmk66ehNRNtHz6WJfYX7wMmA6VadhQjbgLOeicFpn4GMOIM7IZ4zPkJeYGU5JK4W4uxaXUTS1m5ZYIQ/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">7件事给大脑快速充满电</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/15gAL0NAgmk66ehNRNtHz6WJfYX7wMmA9w8H6dnexAhmo01gWSywC7assa2iapwIsDg2JB9f2mG7UDa3dnGs54g/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">不用烤箱，不用做披萨皮，几分钟就好的披萨蛋饼~</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/15gAL0NAgmk66ehNRNtHz6WJfYX7wMmAP7ibrmaxJuDs4msvmhqae3yASkwibaJUlJxUL7kWEZiawA9icYDupRpdww/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+							</div><div ng-repeat="readItem in articleList" class="ng-scope">
+
+								<div ng-class="{'active': (readItem == currentItem)}" ng-click="itemClick(readItem)" class="read_item slide-left ng-scope" ng-if="!readItem.UserName">
+									<div class="cont">
+										<h3 class="title ng-binding">小盐粒，大用途！</h3>
+									</div>
+									<div class="ext">
+										<div class="cover">
+											<div ng-style="{'background-image': 'url('+ readItem.Cover +')'}" class="img" style="background-image: url(&quot;http://mmbiz.qpic.cn/mmbiz/15gAL0NAgmk66ehNRNtHz6WJfYX7wMmAicqTWhd6phazHC5EnlcIsvIDzl7G0icEglNKxibYM1bLhrmxibF7C7wqlQ/300?wxtype=jpeg&amp;wxfrom=0|0|0&quot;);"></div>
+										</div>
+									</div>
+								</div>
+						</div><div class="bottom-placeholder ng-scope" ng-style="{height:bottomHeight}" style="height: 1235px;"></div></div>
+				</div><div class="scroll-element scroll-x scroll-scrollx_visible scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="width: 0px; left: 0px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div><div class="scroll-element scroll-y scroll-scrollx_visible scroll-scrolly_visible"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="height: 91px; top: 0px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div></div>
+			</div>
+
+			<!--</div>-->
+
+		</div>
+
+
+
+		<div style="height:100%;" ui-view="contentView" class="ng-scope"><div class="box chat ng-scope" ng-class="{'chatRoom':currentContact.isRoomContact()}" id="chatArea">
+
+				<div class="box_hd">
+					<!--<a class="ext web_wechat_addfriend" href="javascript:;" ng-click="showChatRoomMembers($event)" ng-show="currentContact.isRoomContact()" title="成员"></a>-->
+					<!--<a class="ext web_wechat_addfriend" href="javascript:;" ng-click="showProfile($event)" ng-show="!currentContact.isRoomContact()" title="Profile"></a>-->
+					<div id="chatRoomMembersWrap"></div>
+					<div class="title_wrap">
+						<div ng-click="currentContact.MMCanCreateChatroom &amp;&amp; showChatRoomMembers($event)" class="title poi">
+							<a ng-bind-html="currentContact.getDisplayName()" class="title_name ng-binding">文件传输助手</a>
+
+							<i ng-show="currentContact.getDisplayName() &amp;&amp; currentContact.MMCanCreateChatroom" ng-class="{'web_wechat_up_icon': isShowChatRoomMembers, 'web_wechat_down_icon': !isShowChatRoomMembers}" class="web_wechat_down_icon ng-hide"></i>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="scroll-wrapper box_bd chat_bd scrollbar-dynamic" style="position: absolute;"><div data-cm="{&quot;type&quot;:&quot;clean&quot;,&quot;username&quot;:&quot;filehelper&quot;}" class="box_bd chat_bd scrollbar-dynamic scroll-content" jquery-scrollbar="" style="margin-bottom: -17px; margin-right: -17px; height: 386px;">
+
+						<div data-pre-calc="true" data-buffer-height="300" data-height-calc="heightCalc" mm-repeat="message in chatContent" class="ng-scope"><div class="top-placeholder ng-scope" ng-style="{height:topHeight}" style="height: 0px;"></div><div ng-repeat="message in chatContent" class="ng-scope">
+								<div message-directive="" class="clearfix"><div ng-init="contact = getUserContact(message.MMActualSender,message.MMPeerUserName);" style="overflow: hidden;" on="message.MsgType" ng-switch="">
+
+
+										<div ng-class="{&quot;you&quot;:!message.MMIsSend,&quot;me&quot;:message.MMIsSend}" class="message ng-scope me" ng-switch-default="">
+											<p class="message_system ng-scope" ng-if="message.MMTime"><span class="content ng-binding">10:53</span></p>
+											<img ng-click="showProfile($event,message.MMActualSender)" title="风筝" data-cm="{&quot;type&quot;:&quot;avatar&quot;,&quot;username&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,&quot;isFriend&quot;:&quot;true&quot;}" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="avatar">
+											<div class="content">
+
+												<div data-cm="{&quot;type&quot;:&quot;message&quot;,&quot;actualSender&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,
+													&quot;msgType&quot;:&quot;1&quot;,&quot;subType&quot;:0,&quot;msgId&quot;:&quot;7282947204009751531&quot;}" ng-class="{&quot;bubble_default left&quot;:!message.MMIsSend,&quot;bubble_primary right&quot;:message.MMIsSend, &quot;arrow_primary&quot;: message.MsgType == CONF.MSGTYPE_APP &amp;&amp; message.AppMsgType == CONF.APPMSGTYPE_URL, &quot;no_arrow&quot;: message.MsgType == CONF.MSGTYPE_IMAGE || message.MsgType == CONF.MSGTYPE_MICROVIDEO || message.MsgType == CONF.MSGTYPE_VIDEO}" ng-if="message.MsgType != CONF.MSGTYPE_EMOTICON" class="bubble js_message_bubble ng-scope bubble_primary right">
+
+
+
+
+
+
+
+													<div ng-if="message.MsgType == CONF.MSGTYPE_TEXT &amp;&amp; message.SubMsgType != CONF.MSGTYPE_LOCATION" class="bubble_cont ng-scope">
+														<div class="plain">
+															<pre ng-bind-html="message.MMActualContent" class="js_message_plain ng-binding">asdasd</pre>
+															<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading ng-hide" ng-show="message.MMStatus == 1">
+															<i title="重新发送" ng-show="message.MMStatus == 5" ng-click="resendMsg(message)" class="ico_fail web_wechat_message_fail ng-hide"></i>
+														</div>
+													</div>
+
+												</div>
+
+											</div>
+										</div>
+								</div></div>
+							</div><div ng-repeat="message in chatContent" class="ng-scope">
+								<div message-directive="" class="clearfix"><div ng-init="contact = getUserContact(message.MMActualSender,message.MMPeerUserName);" style="overflow: hidden;" on="message.MsgType" ng-switch="">
+
+
+										<div ng-class="{&quot;you&quot;:!message.MMIsSend,&quot;me&quot;:message.MMIsSend}" class="message ng-scope me" ng-switch-default="">
+
+											<img ng-click="showProfile($event,message.MMActualSender)" title="风筝" data-cm="{&quot;type&quot;:&quot;avatar&quot;,&quot;username&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,&quot;isFriend&quot;:&quot;true&quot;}" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="avatar">
+											<div class="content">
+
+												<div data-cm="{&quot;type&quot;:&quot;message&quot;,&quot;actualSender&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,
+													&quot;msgType&quot;:&quot;1&quot;,&quot;subType&quot;:0,&quot;msgId&quot;:&quot;6965165250212508292&quot;}" ng-class="{&quot;bubble_default left&quot;:!message.MMIsSend,&quot;bubble_primary right&quot;:message.MMIsSend, &quot;arrow_primary&quot;: message.MsgType == CONF.MSGTYPE_APP &amp;&amp; message.AppMsgType == CONF.APPMSGTYPE_URL, &quot;no_arrow&quot;: message.MsgType == CONF.MSGTYPE_IMAGE || message.MsgType == CONF.MSGTYPE_MICROVIDEO || message.MsgType == CONF.MSGTYPE_VIDEO}" ng-if="message.MsgType != CONF.MSGTYPE_EMOTICON" class="bubble js_message_bubble ng-scope bubble_primary right">
+
+													<div ng-if="message.MsgType == CONF.MSGTYPE_TEXT &amp;&amp; message.SubMsgType != CONF.MSGTYPE_LOCATION" class="bubble_cont ng-scope">
+														<div class="plain">
+															<pre ng-bind-html="message.MMActualContent" class="js_message_plain ng-binding"><img src="/zh_CN/htmledition/v2/images/spacer.gif" text="[微笑]_web" class="qqemoji qqemoji0"></pre>
+															<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading ng-hide" ng-show="message.MMStatus == 1">
+															<i title="重新发送" ng-show="message.MMStatus == 5" ng-click="resendMsg(message)" class="ico_fail web_wechat_message_fail ng-hide"></i>
+														</div>
+													</div>
+
+
+												</div>
+
+
+											</div>
+										</div>
+								</div></div>
+							</div><div ng-repeat="message in chatContent" class="ng-scope">
+								<div message-directive="" class="clearfix"><div ng-init="contact = getUserContact(message.MMActualSender,message.MMPeerUserName);" style="overflow: hidden;" on="message.MsgType" ng-switch="">
+
+
+										<div ng-class="{&quot;you&quot;:!message.MMIsSend,&quot;me&quot;:message.MMIsSend}" class="message ng-scope me" ng-switch-default="">
+
+											<img ng-click="showProfile($event,message.MMActualSender)" title="风筝" data-cm="{&quot;type&quot;:&quot;avatar&quot;,&quot;username&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,&quot;isFriend&quot;:&quot;true&quot;}" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="avatar">
+											<div class="content">
+
+												<div data-cm="{&quot;type&quot;:&quot;message&quot;,&quot;actualSender&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,
+													&quot;msgType&quot;:&quot;3&quot;,&quot;subType&quot;:0,&quot;msgId&quot;:&quot;8310519974639758589&quot;}" ng-class="{&quot;bubble_default left&quot;:!message.MMIsSend,&quot;bubble_primary right&quot;:message.MMIsSend, &quot;arrow_primary&quot;: message.MsgType == CONF.MSGTYPE_APP &amp;&amp; message.AppMsgType == CONF.APPMSGTYPE_URL, &quot;no_arrow&quot;: message.MsgType == CONF.MSGTYPE_IMAGE || message.MsgType == CONF.MSGTYPE_MICROVIDEO || message.MsgType == CONF.MSGTYPE_VIDEO}" ng-if="message.MsgType != CONF.MSGTYPE_EMOTICON" class="bubble js_message_bubble ng-scope bubble_primary right no_arrow">
+
+													<div ng-if="message.MsgType == CONF.MSGTYPE_IMAGE" class="bubble_cont ng-scope">
+														<div ng-init="imageInit(message,message.MMPreviewSrc || message.MMThumbSrc || getMsgImg(message.MsgId,'slave'))" class="picture">
+															<i class="arrow"></i>
+															<p ng-show="message.MMStatus == 1 || message.MMFileStatus == CONF.MM_SEND_FILE_STATUS_FAIL" class="loading ng-hide">
+															<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif">
+															</p>
+														</div>
+													</div>
+
+												</div>
+
+
+											</div>
+										</div>
+								</div></div>
+							</div><div ng-repeat="message in chatContent" class="ng-scope">
+								<div message-directive="" class="clearfix"><div ng-init="contact = getUserContact(message.MMActualSender,message.MMPeerUserName);" style="overflow: hidden;" on="message.MsgType" ng-switch="">
+
+
+										<div ng-class="{&quot;you&quot;:!message.MMIsSend,&quot;me&quot;:message.MMIsSend}" class="message ng-scope me" ng-switch-default="">
+											<p class="message_system ng-scope" ng-if="message.MMTime"><span class="content ng-binding">10:57</span></p>
+											<img ng-click="showProfile($event,message.MMActualSender)" title="风筝" data-cm="{&quot;type&quot;:&quot;avatar&quot;,&quot;username&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,&quot;isFriend&quot;:&quot;true&quot;}" mm-src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" src="/cgi-bin/mmwebwx-bin/webwxgeticon?seq=642042562&amp;username=@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&amp;skey=@crypt_4778bc81_9c3843cb8b522255ee464cf7fb3b15ed" class="avatar">
+											<div class="content">
+												<div data-cm="{&quot;type&quot;:&quot;message&quot;,&quot;actualSender&quot;:&quot;@f613894583f711cadc1c23632992ce5891145d44f0b6323b774d9a54fcd37ac4&quot;,
+													&quot;msgType&quot;:&quot;1&quot;,&quot;subType&quot;:0,&quot;msgId&quot;:&quot;5269546950506799920&quot;}" ng-class="{&quot;bubble_default left&quot;:!message.MMIsSend,&quot;bubble_primary right&quot;:message.MMIsSend, &quot;arrow_primary&quot;: message.MsgType == CONF.MSGTYPE_APP &amp;&amp; message.AppMsgType == CONF.APPMSGTYPE_URL, &quot;no_arrow&quot;: message.MsgType == CONF.MSGTYPE_IMAGE || message.MsgType == CONF.MSGTYPE_MICROVIDEO || message.MsgType == CONF.MSGTYPE_VIDEO}" ng-if="message.MsgType != CONF.MSGTYPE_EMOTICON" class="bubble js_message_bubble ng-scope bubble_primary right">
+
+													<div ng-if="message.MsgType == CONF.MSGTYPE_TEXT &amp;&amp; message.SubMsgType != CONF.MSGTYPE_LOCATION" class="bubble_cont ng-scope">
+														<div class="plain">
+															<pre ng-bind-html="message.MMActualContent" class="js_message_plain ng-binding">很烦很烦</pre>
+															<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading ng-hide" ng-show="message.MMStatus == 1">
+															<i title="重新发送" ng-show="message.MMStatus == 5" ng-click="resendMsg(message)" class="ico_fail web_wechat_message_fail ng-hide"></i>
+														</div>
+													</div>
+
+
+												</div>
+
+											</div>
+										</div>
+								</div></div>
+						</div><div class="bottom-placeholder ng-scope" ng-style="{height:bottomHeight}" style="height: 0px;"></div></div>
+
+						<div style="
+							visibility: hidden;
+							position: absolute;
+							width: 100%;
+							top: 333px;
+							height: 0;
+							padding: 0 19px;
+							box-sizing: border-box;
+							margin-left: -19px;
+							overflow: hidden;
+							" id="prerender"></div>
+
+				</div><div class="scroll-element scroll-x"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="width: 96px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div><div class="scroll-element scroll-y"><div class="scroll-element_corner"></div><div class="scroll-arrow scroll-arrow_less"></div><div class="scroll-arrow scroll-arrow_more"></div><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_inner-wrapper">        <div class="scroll-element_inner scroll-element_track">            <div class="scroll-element_inner-bottom"></div>        </div>    </div>    <div class="scroll-bar" style="height: 96px;">        <div class="scroll-bar_body">            <div class="scroll-bar_body-inner"></div>        </div>        <div class="scroll-bar_bottom"></div>        <div class="scroll-bar_center"></div>    </div></div></div></div>
+
+
+				<div ng-show="currentContact &amp;&amp; !currentContact.isReadOnlyContact()" ng-controller="chatSenderController" class="box_ft ng-scope">
+					<div id="tool_bar" class="toolbar">
+						<a title="表情" href="javascript:;" ng-click="showEmojiPanel($event)" class="web_wechat_face"></a>
+						<a title="截屏" href="javascript:;" ng-click="screenShot()" ng-hide="noflash" class="web_wechat_screencut ng-isolate-scope" track-opt="{'target':'截图'}" track-type="['click']" mm-action-track=""></a>
+						<a title="图片和文件" href="javascript:;" ng-hide="noflash" class="web_wechat_pic js_fileupload ng-isolate-scope webuploader-container" track-opt="{'target':'发文件'}" track-type="['click']" mm-action-track=""><div class="webuploader-pick"></div><div id="rt_rt_1agbsgph2fhp4m1ru71rb116lg1" style="position: absolute; top: 0px; left: 0px; width: 30px; height: 30px; overflow: hidden; bottom: auto; right: auto;"><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple"><label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label></div></a>
+					</div>
+					<div track-opt="{target:'发送框',keys:['enter','backspace','blankspace']}" track-type="['click','keydown']" mm-action-track="" class="content ng-isolate-scope">
+						<pre contenteditable="true" ng-keydown="editAreaKeydown($event)" ng-keyup="editAreaKeyup($event)" ng-click="editAreaClick($event)" ng-model="editAreaCtn" ng-blur="editAreaBlur($event)" class="flex edit_area ng-isolate-scope ng-valid ng-dirty" mm-paste="" contenteditable-directive="" id="editArea"></pre>
+
+						<span id="caretPosHelper" class="caret_pos_helper"></span></div>
+
+					<div class="action">
+						<span class="desc ng-scope" ng-if="!isMacOS">按下Ctrl+Enter换行</span>
+
+						<a ng-click="sendTextMessage()" href="javascript:;" class="btn btn_send">发送</a>
+					</div>
+				</div>
+
+		</div></div>
+
+
+	</div>
+
+</div>
+
+
+
+
+<div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"><div style="border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div></div></body></html>

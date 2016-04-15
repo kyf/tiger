@@ -245,10 +245,21 @@ func main() {
 			Left template.HTML
 			Top  template.HTML
 		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "ccmsglist", data)
+	})
+
+	m.Get("/call/center/wait", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
 		ren.HTML(200, "waitlist", data)
 	})
 
-	m.Get("/my/call/center", func(r *http.Request, ren render.Render, sess sessions.Session) {
+	m.Get("/call/center/my", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
 		left, _ := fetchLeft()
 		top, _ := fetchTop(admin_user)
@@ -257,6 +268,10 @@ func main() {
 			Top  template.HTML
 		}{template.HTML(string(left)), template.HTML(string(top))}
 		ren.HTML(200, "mycc", data)
+	})
+
+	m.Get("/chat", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		ren.HTML(200, "chat", nil)
 	})
 
 	var exit chan error
