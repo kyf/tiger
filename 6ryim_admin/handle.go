@@ -80,8 +80,9 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 		_ts := time.Unix(client.lastMsg.created, 0)
 		openid := client.openid
 		ts := _ts.Format(TIME_LAYOUT)
+		msgType := strconv.Itoa(int(client.lastMsg.msgType))
 
-		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid})
+		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType})
 	}
 
 	responseJson(w, true, "", data)
@@ -93,7 +94,17 @@ func handleSend() {
 }
 
 func handleListWait(w http.ResponseWriter) {
-	responseJson(w, true, "", defaultWL.waitPool)
+	data := make([]map[string]string, 0, len(defaultWL.waitPool))
+	for openid, msg := range defaultWL.waitPool {
+		_msg := msg.content
+		_ts := time.Unix(msg.created, 0)
+		ts := _ts.Format(TIME_LAYOUT)
+		msgType := strconv.Itoa(int(msg.msgType))
+
+		data = append(data, map[string]string{"msg": _msg, "ts": ts, "openid": openid, "msgType": msgType})
+
+	}
+	responseJson(w, true, "", data)
 }
 
 func handleAdminAdd(w http.ResponseWriter, r *http.Request, logger *log.Logger) {

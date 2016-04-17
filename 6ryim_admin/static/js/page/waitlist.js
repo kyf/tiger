@@ -1,26 +1,23 @@
 (function($, window){
-	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://im1.6renyou.com:8989';
-	var SECOND = 1000;
-	var LAST_ID = null;
+	var SERVICE_DOMAIN = '';
 	
 	var listtpl = [
 				'<li data-id="577999267" id="msgListItem577999267" class="message_item ">',
 					'<table style="width:100%;text-align:center;">',
 						'<tr>',
 							'<td style="width:70px;">',
-								'<a href="/message/detail?orderid={orderid}" target="_blank"><img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" /></a>',
+								'<img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" />',
 							'</td>',
 							'<td style="text-align:left;">',
-								'<div><a href="/message/detail?orderid={orderid}" target="_blank" class="{from}_label">{from_name}</a></div>',
-								'<div>{message}</div>',
+								'<div class="{from}_label">{from_name}</div>',
+								'<div>{msg}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
-							'<td style="width:150px;">{createtime}</td>',
-							'<td style="width:200px;color:red" class="{orderid}_reply" jqid="{id}">',
+							'<td style="width:150px;">{ts}</td>',
+							'<td style="width:200px;color:red" >',
 								'<span class="btn btn_primary btn_input">',
-									'<button class="js_fetch">接入</button>',
+									'<button class="js_fetch" jqopenid="{openid}">接入</button>',
 								'</span>',
 							'</td>',
 						'</tr>',
@@ -29,35 +26,9 @@
 	];
 	listtpl = listtpl.join('');
 
-	var isInitPageNavs = false,
-		PageNavCtls = null;
-
-	var monitor = function(lastid){
-		$.ajax({
-			url : SERVICE_DOMAIN + '/message/new/number',
-			data:{
-				lastid:lastid,
-				fromtype:"2"
-			},
-			dataType:'json',
-			type:'POST',
-			beforeSend:ajaxBeforeSend,
-			success:function(data, status, response){
-				if(data.data){
-					var num = data.data;
-					if(num > 0){
-						$('#newMsgTip').show(true);
-						$('#newMsgNum').text(num);
-					}
-				}	
-				setTimeout(function(){monitor(lastid);}, SECOND * 10);
-			}
-		});
-	};
-
-
-	
 	var loadUser = function(userids, source){
+		if(!userids || !source)return;
+		if(userids.length == 0 || source.length == 0)return;
 		$.ajax({
 			url:"/user/get",
 			data:{
@@ -85,12 +56,9 @@
 		listContainer.html('');
 		var size = 20;
 		$.ajax({
-			url : SERVICE_DOMAIN + '/message/show',
+			url : SERVICE_DOMAIN + '/request/wait',
 			data:{
-				page:toIndex,
-				key:$('.jsSearchInput').val(),
 				size:size,
-				fromtype:"2"
 			},
 			dataType:'json',
 			type:'POST',
@@ -101,12 +69,13 @@
 					var tmpkv = new Object(), userids = new Array(), source = new Array();
 
 					$.each(data.data, function(i, d){
+						d.from = d.openid;
 						if(!tmpkv[d.from] && d.from != 'system'){
 							userids.push(d.from);
-							source.push(d.source == "1" ? "weixin" : "app");
+							source.push("weixin");
 							tmpkv[d.from] = true;
 						}
-						switch(d.msgtype){
+						switch(d.msgType){
 							case '2':
 								d.msgtype_name = '文本';
 								break;
@@ -120,27 +89,10 @@
 							default:
 						}
 
-						switch(d.source){
-							case '1':
-								d.source_name = '微信';
-								break;
-							case '2':
-								d.source_name = 'IOS';
-								break;
-							case '3':
-								d.source_name = 'Android';
-								break;
-							default:
-						}
 						d.from_name = d.from;
 						d.to_name = 'unknwon';
 
 						listContainer.append(listtpl.replaceTpl(d));	
-					});
-					var hasOrderid = {};
-					$.each(data.data, function(i, d){
-						if(hasOrderid[d.orderid])return
-						hasOrderid[d.orderid] = true;
 					});
 					loadUser(userids, source);
 
@@ -156,7 +108,24 @@
 
 	loadMsgList(1);
 
-	$('.search_gray').click(function(){
-		loadMsgList(1);
+	$(document.body).on('click', '.js_fetch', function(){
+		var openid = $(this).attr('jqopenid');	
+
+		$.ajax({
+			url : '/request/bind',
+			data:{
+				openid:openid
+			},
+			dataType:'json',
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					window.location.href = '/call/center/my';
+				}else{
+					alert(data.msg);
+				}
+			}
+		});
 	});
+
 })(jQuery, window)

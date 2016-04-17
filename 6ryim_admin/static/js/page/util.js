@@ -23,3 +23,8 @@ String.prototype.trim = function(){
 function ajaxBeforeSend(R){
 	R.setRequestHeader("Connection", "keep-alive");
 };
+
+
+var MSG_TYPE_TEXT = 1, 
+	MSG_TYPE_IMAGE= 2,
+	MSG_TYPE_AUDIO = 3;

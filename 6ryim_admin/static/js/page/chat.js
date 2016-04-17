@@ -67,6 +67,14 @@
 	});
 
 
+
+	var loadMyUser = function(){
+		$.ajax({
+			url:'/request/cc',
+			data:{}
+		});
+	};
+
 	addUserItem("6人游", "说设么");
 	addUserItem("6人游", "说设么");
 	addUserItem("6人游", "说设么");
