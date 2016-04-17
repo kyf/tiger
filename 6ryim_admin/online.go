@@ -30,9 +30,9 @@ func (ol *Online) getClientByOpenid(openid string) *Client {
 	defer ol.poolLocker.Unlock()
 	if opid, ok := ol.userMapping[openid]; ok {
 		if clients, ok := ol.olPool[opid]; ok {
-			for _, client := range clients {
+			for index, client := range clients {
 				if strings.EqualFold(client.openid, openid) {
-					return &client
+					return &(ol.olPool[opid][index])
 				}
 			}
 		}
@@ -96,16 +96,6 @@ func (ol *Online) getClient(opid, openid string) *Client {
 				return &client
 			}
 		}
-	}
-
-	return nil
-}
-
-func (ol *Online) getClients(opid string) []Client {
-	ol.poolLocker.Lock()
-	defer ol.poolLocker.Unlock()
-	if clients, ok := ol.olPool[opid]; ok {
-		return clients
 	}
 
 	return nil

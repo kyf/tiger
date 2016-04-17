@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -60,8 +59,7 @@ func rmExpire() {
 	for opid, clients := range defaultOL.olPool {
 		tmpClients := make([]Client, 0, len(clients))
 		for _, client := range clients {
-			fmt.Println("client lastTS is", client.lastTS.Format(TIME_LAYOUT))
-			if client.lastTS.Add(CLIENT_DEADLINE).Unix() < time.Now().Unix() {
+			if client.lastTS.Add(CLIENT_DEADLINE).Unix() > time.Now().Unix() {
 				tmpClients = append(tmpClients, client)
 			} else {
 				delete(defaultOL.userMapping, client.openid)

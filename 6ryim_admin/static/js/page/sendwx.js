@@ -20,7 +20,12 @@
 			type:'POST',
 			dataType:'json',
 			success:function(data){
-			
+				if(data.status){
+					alert('发送成功!');
+					$('#content').val('');
+				}else{
+					alert(data.msg);
+				}	
 			}
 		});
 	});

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/kyf/postwx"
 	"github.com/martini-contrib/sessions"
 )
 
@@ -73,35 +75,64 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 		return
 	}
 
-	clients := defaultOL.getClients(opid)
 	var data []map[string]string = make([]map[string]string, 0, 5)
-	for _, client := range clients {
-		client.refresh()
-		fmt.Println(client.lastTS.Format(TIME_LAYOUT))
-		msg := client.lastMsg.content
-		_ts := time.Unix(client.lastMsg.created, 0)
-		openid := client.openid
-		ts := _ts.Format(TIME_LAYOUT)
-		msgType := strconv.Itoa(int(client.lastMsg.msgType))
-		openid_name := openid
+	defaultOL.poolLocker.Lock()
+	defer defaultOL.poolLocker.Unlock()
+	if clients, ok := defaultOL.olPool[opid]; ok {
+		for index, client := range clients {
+			defaultOL.olPool[opid][index].refresh()
+			msg := client.lastMsg.content
+			_ts := time.Unix(client.lastMsg.created, 0)
+			openid := client.openid
+			ts := _ts.Format(TIME_LAYOUT)
+			msgType := strconv.Itoa(int(client.lastMsg.msgType))
+			openid_name := openid
 
-		user, err := um.Get([]string{openid}, []string{"weixin"})
-		if err != nil {
-			logger.Printf("usermanager.Get err:%v", err)
-		} else {
-			if len(user) > 0 {
-				openid_name = user[0].RealName
+			user, err := um.Get([]string{openid}, []string{"weixin"})
+			if err != nil {
+				logger.Printf("usermanager.Get err:%v", err)
+			} else {
+				if len(user) > 0 {
+					openid_name = user[0].RealName
+				}
 			}
-		}
 
-		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
+			data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
+
+		}
 	}
 
 	responseJson(w, true, "", data)
 
 }
 
-func handleSend() {
+func handleSend(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+	openid, message, msgType := r.Form.Get("openid"), r.Form.Get("message"), r.Form.Get("msg_type")
+
+	_msgType, err := strconv.Atoi(msgType)
+	if err != nil {
+		responseJson(w, false, fmt.Sprintf("msgtype [%v] is invalid!", msgType))
+		return
+	}
+
+	var posterr error = nil
+
+	switch MessageType(_msgType) {
+	case MSG_TYPE_TEXT:
+		_, posterr = postwx.PostText(openid, message)
+	case MSG_TYPE_IMAGE:
+		_, posterr = postwx.PostImage(openid, message)
+	default:
+		posterr = errors.New("Do not support wx message type!")
+	}
+
+	if posterr != nil {
+		logger.Printf("postwx err:%v", posterr)
+		responseJson(w, false, fmt.Sprintf("%v", posterr))
+		return
+	}
+
+	responseJson(w, true, "")
 
 }
 
