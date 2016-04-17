@@ -24,8 +24,8 @@
 	chattpl = chattpl.join('')
 
 	var usertpl = [
-			'<div class="ng-scope">',
-                '<div class="chat_item slide-left ng-scope">', //active
+			'<div class="ng-scope useritem">',
+                '<div class="chat_item slide-left ng-scope {active}">', //active
                   '<div class="avatar"> ',
 					  '<img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" class="img"> ',
 				  '</div>',
@@ -38,10 +38,11 @@
 	];
 	usertpl = usertpl.join('');
 
-	var addUserItem = function(username, lastmsg){
+	var addUserItem = function(username, lastmsg, active){
 		var data = {
 			username : username,
-			lastmsg : lastmsg
+			lastmsg : lastmsg,
+			active : active ? "active" : ''
 		};
 		$('.UserContainer').before(usertpl.replaceTpl(data));	
 	};
@@ -71,15 +72,27 @@
 	var loadMyUser = function(){
 		$.ajax({
 			url:'/request/cc',
-			data:{}
+			data:{},
+			dataType:'json',
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					$('.useritem').remove();
+					$.each(data.data, function(i, d){
+						addUserItem(d.openid_name, d.msg, i == 0 ? true : false);
+					});	
+				}else{
+					alert(data.msg);
+				}
+			}
 		});
 	};
 
-	addUserItem("6人游", "说设么");
-	addUserItem("6人游", "说设么");
-	addUserItem("6人游", "说设么");
-	addUserItem("6人游", "说设么");
-	addUserItem("6人游", "说设么");
+	(function(){
+		var cb = arguments.callee;
+		loadMyUser();
+		setTimeout(cb, 20000);
+	})();
 
 
 })(jQuery, window)

@@ -87,6 +87,8 @@
 
 
 	var loadUser = function(userids, source){
+		if(!userids || !source)return;
+		if(userids.length == 0 || source.length == 0)return;
 		$.ajax({
 			url:"/user/get",
 			data:{

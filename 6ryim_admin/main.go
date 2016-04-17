@@ -35,6 +35,8 @@ type m6ryResponse struct {
 var (
 	LogPath string = "/var/log/6ryim_admin/6ryim_admin.log"
 	Port    int
+
+	um *UserManager
 )
 
 func init() {
@@ -77,7 +79,7 @@ func main() {
 
 	m.Use(auth)
 
-	um := NewUserManager()
+	um = NewUserManager()
 
 	m.Get("/message", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		admin_user, _ := sess.Get("admin_user").(string)

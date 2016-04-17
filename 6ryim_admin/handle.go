@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -64,7 +65,7 @@ func handleBind(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
 	responseJson(w, status, "")
 }
 
-func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
+func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Session, logger *log.Logger) {
 	opid, _ := sess.Get("admin_user").(string)
 
 	if len(opid) == 0 {
@@ -76,13 +77,24 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 	var data []map[string]string = make([]map[string]string, 0, 5)
 	for _, client := range clients {
 		client.refresh()
+		fmt.Println(client.lastTS.Format(TIME_LAYOUT))
 		msg := client.lastMsg.content
 		_ts := time.Unix(client.lastMsg.created, 0)
 		openid := client.openid
 		ts := _ts.Format(TIME_LAYOUT)
 		msgType := strconv.Itoa(int(client.lastMsg.msgType))
+		openid_name := openid
 
-		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType})
+		user, err := um.Get([]string{openid}, []string{"weixin"})
+		if err != nil {
+			logger.Printf("usermanager.Get err:%v", err)
+		} else {
+			if len(user) > 0 {
+				openid_name = user[0].RealName
+			}
+		}
+
+		data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
 	}
 
 	responseJson(w, true, "", data)
