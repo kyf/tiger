@@ -6,13 +6,14 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kyf/postwx"
 	"github.com/martini-contrib/sessions"
 )
 
-func handleReceive(r *http.Request, w http.ResponseWriter) {
+func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 	openid := r.Form.Get("openid")
 	content := r.Form.Get("content")
 	msgType := r.Form.Get("msgType")
@@ -38,7 +39,19 @@ func handleReceive(r *http.Request, w http.ResponseWriter) {
 		return
 	}
 
-	msg := Message{openid: openid, created: time.Now().Unix(), content: content, msgType: MessageType(_msg_type)}
+	msg := Message{Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type)}
+
+	mgo := NewMongoClient()
+	err = mgo.Connect()
+	if err != nil {
+		logger.Printf("mgo.Connect err:%v", err)
+	} else {
+		defer mgo.Close()
+		err := storeMessage(msg, mgo)
+		if err != nil {
+			logger.Printf("storeMessage err:%v", err)
+		}
+	}
 
 	if client := defaultOL.getClientByOpenid(openid); client != nil {
 		client.appendMsg(msg)
@@ -47,6 +60,33 @@ func handleReceive(r *http.Request, w http.ResponseWriter) {
 	}
 
 	responseJson(w, true, "success")
+}
+
+func handleListMessage(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+	openid := r.Form.Get("openid")
+
+	if len(openid) == 0 {
+		responseJson(w, false, "openid is empty")
+		return
+	}
+
+	mgo := NewMongoClient()
+	err := mgo.Connect()
+	if err != nil {
+		logger.Printf("mgo.Connect err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+	defer mgo.Close()
+
+	data, err := listMessage(openid, mgo)
+	if err != nil {
+		logger.Printf("listMessage err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+
+	responseJson(w, true, "", data)
 }
 
 func handleBind(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
@@ -67,6 +107,37 @@ func handleBind(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
 	responseJson(w, status, "")
 }
 
+func handleFetchMsg(w http.ResponseWriter, r *http.Request, sess sessions.Session, logger *log.Logger) {
+	openid := r.Form.Get("openid")
+	if len(openid) == 0 {
+		responseJson(w, false, "openid is empty")
+		return
+	}
+
+	opid, _ := sess.Get("admin_user").(string)
+
+	if len(opid) == 0 {
+		responseJson(w, false, "opid is empty")
+		return
+	}
+
+	defaultOL.poolLocker.Lock()
+	defer defaultOL.poolLocker.Unlock()
+	var result map[string]interface{}
+	if clients, ok := defaultOL.olPool[opid]; ok {
+		for index, client := range clients {
+			if strings.EqualFold(client.openid, openid) {
+				result = defaultOL.olPool[opid][index].fetchMsg()
+				goto FOUND
+			}
+		}
+	}
+
+FOUND:
+
+	responseJson(w, true, "", result)
+}
+
 func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Session, logger *log.Logger) {
 	opid, _ := sess.Get("admin_user").(string)
 
@@ -75,18 +146,25 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 		return
 	}
 
-	var data []map[string]string = make([]map[string]string, 0, 5)
+	var data []map[string]interface{} = make([]map[string]interface{}, 0, 5)
 	defaultOL.poolLocker.Lock()
 	defer defaultOL.poolLocker.Unlock()
 	if clients, ok := defaultOL.olPool[opid]; ok {
 		for index, client := range clients {
 			defaultOL.olPool[opid][index].refresh()
-			msg := client.lastMsg.content
-			_ts := time.Unix(client.lastMsg.created, 0)
+
+			msg := client.lastMsg.Content
+			_ts := time.Unix(client.lastMsg.Created, 0)
 			openid := client.openid
-			ts := _ts.Format(TIME_LAYOUT)
-			msgType := strconv.Itoa(int(client.lastMsg.msgType))
+			times := _ts.Format(TIME_LAYOUT)
+			ts := client.lastMsg.Created
+			msgType := strconv.Itoa(int(client.lastMsg.MsgType))
 			openid_name := openid
+			isUpdate := false
+			number := len(client.unRead)
+			if len(client.unRead) > 0 {
+				isUpdate = true
+			}
 
 			user, err := um.Get([]string{openid}, []string{"weixin"})
 			if err != nil {
@@ -97,7 +175,7 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 				}
 			}
 
-			data = append(data, map[string]string{"msg": msg, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
+			data = append(data, map[string]interface{}{"number": number, "isUpdate": isUpdate, "msg": msg, "times": times, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
 
 		}
 	}
@@ -106,8 +184,9 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 
 }
 
-func handleSend(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 	openid, message, msgType := r.Form.Get("openid"), r.Form.Get("message"), r.Form.Get("msg_type")
+	opid, _ := sess.Get("admin_user").(string)
 
 	_msgType, err := strconv.Atoi(msgType)
 	if err != nil {
@@ -130,6 +209,20 @@ func handleSend(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 		logger.Printf("postwx err:%v", posterr)
 		responseJson(w, false, fmt.Sprintf("%v", posterr))
 		return
+	} else {
+		msg := Message{Openid: openid, Created: time.Now().Unix(), Content: message, MsgType: MessageType(_msgType), Opid: opid}
+
+		mgo := NewMongoClient()
+		err = mgo.Connect()
+		if err != nil {
+			logger.Printf("mgo.Connect err:%v", err)
+		} else {
+			defer mgo.Close()
+			err := storeMessage(msg, mgo)
+			if err != nil {
+				logger.Printf("storeMessage err:%v", err)
+			}
+		}
 	}
 
 	responseJson(w, true, "")
@@ -138,11 +231,15 @@ func handleSend(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 
 func handleListWait(w http.ResponseWriter) {
 	data := make([]map[string]string, 0, len(defaultWL.waitPool))
-	for openid, msg := range defaultWL.waitPool {
-		_msg := msg.content
-		_ts := time.Unix(msg.created, 0)
+	for openid, msgs := range defaultWL.waitPool {
+		if len(msgs) == 0 {
+			continue
+		}
+		msg := msgs[len(msgs)-1]
+		_msg := msg.Content
+		_ts := time.Unix(msg.Created, 0)
 		ts := _ts.Format(TIME_LAYOUT)
-		msgType := strconv.Itoa(int(msg.msgType))
+		msgType := strconv.Itoa(int(msg.MsgType))
 
 		data = append(data, map[string]string{"msg": _msg, "ts": ts, "openid": openid, "msgType": msgType})
 

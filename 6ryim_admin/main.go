@@ -232,6 +232,8 @@ func main() {
 	m.Post("/request/cc", handleRequestCC)
 	m.Post("/request/send", handleSend)
 	m.Post("/request/wait", handleListWait)
+	m.Post("/request/fetch", handleFetchMsg)
+	m.Post("/request/message/list", handleListMessage)
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)

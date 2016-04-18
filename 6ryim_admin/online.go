@@ -9,6 +9,7 @@ import (
 type Client struct {
 	openid    string `json:"openid"`
 	lastMsg   *Message
+	unRead    []Message
 	msgLocker sync.Mutex
 	lastTS    time.Time
 	tsLocker  sync.Mutex
@@ -51,10 +52,10 @@ func (ol *Online) findOpByUser(openid string) string {
 	}
 }
 
-func (ol *Online) bind(opid, openid string, msg Message) {
+func (ol *Online) bind(opid, openid string, msgs []Message) {
 	ol.poolLocker.Lock()
 	ol.userMapping[openid] = opid
-	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), lastMsg: &msg})
+	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), lastMsg: &(msgs[len(msgs)-1]), unRead: msgs})
 	ol.poolLocker.Unlock()
 }
 
@@ -104,15 +105,17 @@ func (ol *Online) getClient(opid, openid string) *Client {
 func (client *Client) appendMsg(msg Message) {
 	client.msgLocker.Lock()
 	client.lastMsg = &msg
+	client.unRead = append(client.unRead, msg)
 	client.msgLocker.Unlock()
 }
 
-func (client *Client) fetchMsg() Message {
+func (client *Client) fetchMsg() map[string]interface{} {
 	client.msgLocker.Lock()
-	result := client.lastMsg
-	client.lastMsg = nil
+	last := client.lastMsg
+	unRead := client.unRead
+	client.unRead = client.unRead[:0]
 	client.msgLocker.Unlock()
-	return *result
+	return map[string]interface{}{"last": *last, "unread": unRead}
 }
 
 func (client *Client) refresh() {

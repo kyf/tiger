@@ -1,12 +1,11 @@
 (function($, window){
 	var pageNavigator = $('.pageNavigator');
 	var listContainer = $('#listContainer');
-	var SERVICE_DOMAIN = 'http://im1.6renyou.com:8989';
+	var SERVICE_DOMAIN = '';
 	var SECOND = 1000;
 	var LAST_ID = null;
 	
 	var msg_type = $('#msgtypeselect').dropdown();
-	var msg_source = $('#msgsourceselect').dropdown();
 	var searchBt = $('.js_reply_OK');
 
 	var listtpl = [
@@ -22,7 +21,6 @@
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
-							'<td style="width:100px;">{source_name}</td>',
 							'<td style="width:100px;color:red" class="{orderid}_reply" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
@@ -34,6 +32,7 @@
 		PageNavCtls = null;
 
 	var monitor = function(lastid){
+		return;
 		$.ajax({
 			url : SERVICE_DOMAIN + '/message/new/number',
 			data:{
@@ -58,6 +57,7 @@
 
 
 	var loadOrderLastMessage = function(orderid){
+		return;
 			$.ajax({
 				url : SERVICE_DOMAIN + '/message/show',
 				data:{

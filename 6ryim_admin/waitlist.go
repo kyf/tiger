@@ -3,15 +3,19 @@ package main
 import (
 	"sync"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type MessageType int
 
 type Message struct {
-	openid  string `json:"openid"`
-	created int64
-	content string `json:"content"`
-	msgType MessageType
+	Id      bson.ObjectId `json:"id" bson:"_id"`
+	Openid  string        `json:"openid" bson:"openid"`
+	Created int64         `json:"ts" bson:"created"`
+	Content string        `json:"content" bson:"content"`
+	MsgType MessageType   `json:"msgType" bson:"msgtype"`
+	Opid    string        `json:"opid" bson:"opid"`
 }
 
 const (
@@ -20,31 +24,62 @@ const (
 	MSG_TYPE_TEXT  MessageType = 1
 	MSG_TYPE_IMAGE MessageType = 2
 	MSG_TYPE_AUDIO MessageType = 3
+
+	CC_MESSAGE_TABLE = "cc_message"
 )
 
+func listMessage(openid string, mgo *Mongo) ([]Message, error) {
+	var result []Message
+	err := mgo.Find(CC_MESSAGE_TABLE, bson.M{"openid": openid}).Sort("-_id").Limit(20).All(&result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func storeMessage(msg Message, mgo *Mongo) error {
+	data := bson.M{
+		"_id":     bson.NewObjectId(),
+		"openid":  msg.Openid,
+		"created": msg.Created,
+		"content": msg.Content,
+		"msgtype": msg.MsgType,
+		"opid":    msg.Opid,
+	}
+	err := mgo.Add(CC_MESSAGE_TABLE, data)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
 type WaitList struct {
-	waitPool map[string]Message
+	waitPool map[string][]Message
 	locker   sync.Mutex
 }
 
 func NewWaitList() *WaitList {
-	return &WaitList{waitPool: make(map[string]Message)}
+	return &WaitList{waitPool: make(map[string][]Message)}
 }
 
 func (wl *WaitList) Add(msg Message) {
 	wl.locker.Lock()
-	wl.waitPool[msg.openid] = msg
+	if _, ok := wl.waitPool[msg.Openid]; !ok {
+		wl.waitPool[msg.Openid] = make([]Message, 0)
+	}
+	wl.waitPool[msg.Openid] = append(wl.waitPool[msg.Openid], msg)
 	wl.locker.Unlock()
 }
 
 func (wl *WaitList) Fetch(opid, openid string) bool {
 	wl.locker.Lock()
-	var msg Message
+	var msgs []Message
 	var ok bool
-	if msg, ok = wl.waitPool[openid]; !ok {
+	if msgs, ok = wl.waitPool[openid]; !ok {
 		return false
 	}
-	defaultOL.bind(opid, openid, msg)
+	defaultOL.bind(opid, openid, msgs)
 	delete(wl.waitPool, openid)
 	wl.locker.Unlock()
 	return true
