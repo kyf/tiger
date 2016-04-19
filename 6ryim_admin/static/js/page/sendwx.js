@@ -1,6 +1,7 @@
 (function($, window){
 
 	var sender = $('#sender').dropdown();
+	var msg_type = $('#msg_type').dropdown();
 
 
 	$('.js_reply_OK').click(function(){
@@ -15,7 +16,7 @@
 			data:{
 				content:content,
 				openid:sender.getValue(),
-				msgType:MSG_TYPE_TEXT
+				msgType:msg_type.getValue()
 			},
 			type:'POST',
 			dataType:'json',

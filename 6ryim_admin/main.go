@@ -76,6 +76,7 @@ func main() {
 
 	m.Use(render.Renderer(render.Options{Directory: "./tpl", Extensions: []string{".html"}}))
 	m.Use(martini.Static("./static"))
+	m.Use(martini.Static(UPLOAD_PATH))
 
 	m.Use(auth)
 
@@ -237,6 +238,7 @@ func main() {
 	m.Post("/request/message/show", handleListAllMessage)
 	m.Post("/request/message/new/number", getNewMessageNum)
 	m.Get("/call/center/message/detail", handleListDetail)
+	m.Post("/upload", handleUpload)
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)

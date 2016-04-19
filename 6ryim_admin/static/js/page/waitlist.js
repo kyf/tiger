@@ -110,6 +110,7 @@
 
 	$(document.body).on('click', '.js_fetch', function(){
 		var openid = $(this).attr('jqopenid');	
+		var _this = $(this);
 
 		$.ajax({
 			url : '/request/bind',
@@ -122,7 +123,8 @@
 				if(data.status){
 					window.location.href = '/call/center/my';
 				}else{
-					alert(data.msg);
+					alert("该用户已经被接入");
+					_this.parents('.message_item').remove();
 				}
 			}
 		});

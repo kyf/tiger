@@ -79,14 +79,16 @@ func (wl *WaitList) Add(msg Message) {
 
 func (wl *WaitList) Fetch(opid, openid string) bool {
 	wl.locker.Lock()
+	defer wl.locker.Unlock()
 	var msgs []Message
 	var ok bool
 	if msgs, ok = wl.waitPool[openid]; !ok {
+		msgs = make([]Message, 0)
+	}
+	if status := defaultOL.bind(opid, openid, msgs); !status {
 		return false
 	}
-	defaultOL.bind(opid, openid, msgs)
 	delete(wl.waitPool, openid)
-	wl.locker.Unlock()
 	return true
 }
 

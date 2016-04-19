@@ -3,8 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -37,6 +40,18 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 	if err != nil {
 		responseJson(w, false, "msgType is invalid")
 		return
+	}
+
+	switch MessageType(_msg_type) {
+	case MSG_TYPE_IMAGE:
+		fallthrough
+	case MSG_TYPE_AUDIO:
+		content, err = fetchWxMedia(content)
+		if err != nil {
+			logger.Printf("fetchWxMedia err:%v", err)
+			responseJson(w, false, "media_id is invalid")
+			return
+		}
 	}
 
 	msg := Message{Fromtype: MSG_FROM_TYPE_USER, Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type)}
@@ -104,7 +119,11 @@ func handleBind(w http.ResponseWriter, r *http.Request, sess sessions.Session) {
 	}
 
 	status := defaultWL.Fetch(opid, openid)
-	responseJson(w, status, "")
+	msg := ""
+	if !status {
+		msg = "接入失败"
+	}
+	responseJson(w, status, msg)
 }
 
 func handleFetchMsg(w http.ResponseWriter, r *http.Request, sess sessions.Session, logger *log.Logger) {
@@ -185,7 +204,7 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 }
 
 func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, logger *log.Logger) {
-	openid, message, msgType := r.Form.Get("openid"), r.Form.Get("message"), r.Form.Get("msg_type")
+	media_id, openid, message, msgType := r.Form.Get("media_id"), r.Form.Get("openid"), r.Form.Get("message"), r.Form.Get("msg_type")
 	opid, _ := sess.Get("admin_user").(string)
 
 	_msgType, err := strconv.Atoi(msgType)
@@ -200,7 +219,7 @@ func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, l
 	case MSG_TYPE_TEXT:
 		_, posterr = postwx.PostText(openid, message)
 	case MSG_TYPE_IMAGE:
-		_, posterr = postwx.PostImage(openid, message)
+		_, posterr = postwx.PostImage(openid, media_id)
 	default:
 		posterr = errors.New("Do not support wx message type!")
 	}
@@ -367,4 +386,100 @@ func handleAdminEdit(w http.ResponseWriter, r *http.Request, logger *log.Logger)
 	}
 
 	responseJson(w, true, "success")
+}
+
+func uploadDir(prepath string) (string, error) {
+	now := time.Now()
+	path := fmt.Sprintf("%s/%v/%s/%v", prepath, now.Year(), now.Month(), now.Day())
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+	return path, nil
+}
+
+const (
+	MAX_IMAGE_SIZE = 1024 * 1024 * 2
+	UPLOAD_PATH    = "/mnt/uploads"
+)
+
+func handleUpload(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+	var result map[string]string
+	var cb string = "parent.callback"
+
+	err := r.ParseMultipartForm(MAX_IMAGE_SIZE)
+	if err != nil {
+		cbResponseJson(w, false, fmt.Sprintf("err :%v", err), cb)
+		return
+	}
+
+	if r.MultipartForm != nil && len(r.MultipartForm.File) > 0 {
+		var msg string
+		for _, files := range r.MultipartForm.File {
+			if len(files) == 0 {
+				msg = "no file upload"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			file := files[0]
+			f, err := file.Open()
+			if err != nil {
+				logger.Printf("upload file err:%v", err)
+				msg = "file error"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			d, err := ioutil.ReadAll(f)
+			if err != nil {
+				logger.Printf("upload file err:%v", err)
+				msg = "read file error"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			data_len := int64(len(d))
+			if data_len > MAX_IMAGE_SIZE {
+				msg = "read file size more than maxImageSize"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			dir, err := uploadDir(UPLOAD_PATH)
+			if err != nil {
+				logger.Printf("uploadDir err:%v", err)
+				msg = "upload dir error"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			if state := IsImage(file.Filename); !state {
+				msg = "upload file extension invalid"
+				cbResponseJson(w, false, msg, cb)
+				return
+			}
+
+			fp := fmt.Sprintf("%s/%s", dir, fmt.Sprintf("%v%s", time.Now().UnixNano(), filepath.Ext(file.Filename)))
+			ioutil.WriteFile(fp, d, os.ModePerm)
+			result = map[string]string{
+				"filepath": strings.Replace(fp, UPLOAD_PATH, "", -1),
+			}
+
+			mediaType := "image"
+			media_id, err := postwx.UploadMedia(fp, mediaType)
+			if err == nil {
+				result["media_id"] = media_id
+			} else {
+				logger.Printf("postwx.UploadMedia err:%v", err)
+			}
+
+			cbResponseJson(w, true, "", cb, result)
+			break
+		}
+	} else {
+		msg := "no file upload"
+		cbResponseJson(w, false, msg, cb)
+	}
+
 }

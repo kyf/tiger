@@ -13,7 +13,7 @@ import (
 )
 
 func handleListAllMessage(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
-	_msg_type, keyword, _from_type := r.Form.Get("msg_type"), r.Form.Get("keyword"), r.Form.Get("fromtype")
+	openid, _msg_type, keyword, _from_type := r.Form.Get("openid"), r.Form.Get("msg_type"), r.Form.Get("keyword"), r.Form.Get("fromtype")
 
 	_size := r.Form.Get("size")
 	_page := r.Form.Get("page")
@@ -51,6 +51,10 @@ func handleListAllMessage(w http.ResponseWriter, r *http.Request, logger *log.Lo
 
 	if len(keyword) > 0 {
 		where = append(where, bson.M{"content": bson.M{"$regex": keyword}})
+	}
+
+	if len(openid) > 0 {
+		where = append(where, bson.M{"openid": openid})
 	}
 
 	if from_type > 0 {

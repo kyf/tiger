@@ -52,15 +52,24 @@ func (ol *Online) findOpByUser(openid string) string {
 	}
 }
 
-func (ol *Online) bind(opid, openid string, msgs []Message) {
+func (ol *Online) bind(opid, openid string, msgs []Message) bool {
 	ol.poolLocker.Lock()
+	defer ol.poolLocker.Unlock()
+	if _, ok := ol.userMapping[openid]; ok {
+		return false
+	}
 	ol.userMapping[openid] = opid
-	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), lastMsg: &(msgs[len(msgs)-1]), unRead: msgs})
-	ol.poolLocker.Unlock()
+	lastMsg := new(Message)
+	if len(msgs) > 0 {
+		lastMsg = &(msgs[len(msgs)-1])
+	}
+	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), lastMsg: lastMsg, unRead: msgs})
+	return true
 }
 
 func (ol *Online) unbind(opid, openid string) {
 	ol.poolLocker.Lock()
+	defer ol.poolLocker.Unlock()
 	if clients, ok := ol.olPool[opid]; ok {
 		var currentIndex int = -1
 		for index, client := range clients {
@@ -85,7 +94,6 @@ func (ol *Online) unbind(opid, openid string) {
 		}
 
 	}
-	ol.poolLocker.Unlock()
 }
 
 func (ol *Online) getClient(opid, openid string) *Client {

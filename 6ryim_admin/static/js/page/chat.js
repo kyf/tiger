@@ -1,4 +1,40 @@
 (function($, window){
+	$('.webuploader-element-invisible').css({'opacity':0});
+
+	var text_tpl = {
+		'rightplain' : [
+                     '<div class="plain">',
+                          '<pre  class="js_message_plain ng-binding">{content}</pre>',
+                          '<img alt="" style="display:none" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading" > <i title="{error}"   class="ico_fail web_wechat_message_fail" style="display:none;"></i>',
+					'</div>'
+		],
+		'rightpicture' : [
+					'<div class="picture">',
+	                       '<img class="msg-img" src="{content}" style="width: 100px;">',
+	                       '<i class="arrow"></i>',
+	                       '<p class="loading ng-hide">',
+	                            '<img src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif"><i title="{error}"   class="ico_fail web_wechat_message_fail" style="display:none;"></i>',
+	                        '</p>',
+	              	'</div>'
+		],
+		'leftplain':[
+					'<div class="plain">',
+						'<pre class="js_message_plain ng-binding">{content}</pre>',
+						//'<img alt="" src="/images/ico_loading28a2f7.gif" class="ico_loading ng-hide" >',
+						//'<i title="重新发送" class="ico_fail web_wechat_message_fail ng-hide"></i>',
+					'</div>',
+			],
+		'leftpicture':[
+					'<div class="picture">',
+			        	'<img class="msg-img" src="{content}" style="width: 100px;">',
+						'<i class="arrow"></i>',
+						'<p class="loading ng-hide">',
+							'<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif">',
+						'</p>',
+					'</div>'
+			],
+	};
+
 
 	var chattpl = [
 		'<div  class="ng-scope chat_list_item">',
@@ -10,9 +46,7 @@
                   '<div class="content">',
                     '<div class="bubble js_message_bubble ng-scope bubble_primary right">',
                       '<div  class="bubble_cont ng-scope">',
-                        '<div class="plain">',
-                          '<pre  class="js_message_plain ng-binding">{content}</pre>',
-                          '<img alt="" style="display:none" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif" class="ico_loading" > <i title="{error}"   class="ico_fail web_wechat_message_fail" style="display:none;"></i> </div>',
+					  	'{main_content}',
                       '</div>',
                     '</div>',
                   '</div>',
@@ -34,11 +68,7 @@
 					'<div class="content">',
 						'<div class="bubble js_message_bubble ng-scope bubble_default left">',
 							'<div class="bubble_cont ng-scope">',
-								'<div class="plain">',
-									'<pre class="js_message_plain ng-binding">{content}</pre>',
-									//'<img alt="" src="/images/ico_loading28a2f7.gif" class="ico_loading ng-hide" >',
-									//'<i title="重新发送" class="ico_fail web_wechat_message_fail ng-hide"></i>',
-								'</div>',
+								'{main_content}',
 							'</div>',
 						'</div>',
 					'</div>',
@@ -68,7 +98,15 @@
 	];
 	usertpl = usertpl.join('');
 
-	var addUserItem = function(username, lastmsg, active, number, openid){
+	var addUserItem = function(username, lastmsg, active, number, openid, msgtype){
+		switch(parseInt(msgtype)){
+			case MSG_TYPE_IMAGE:
+				lastmsg = "[图片]";
+				break;
+			case MSG_TYPE_AUDIO:
+				lastmsg = "[语音]";
+				break;
+		}
 		var data = {
 			openid:openid,
 			username : username,
@@ -82,16 +120,25 @@
 
 	var CurrentOpenid = '';
 
-	var addChatItem = function(content){
+	var addChatItem = function(content, media_id, msg_type){
 		if(!content){
 			content = $('#editArea').val();
+			$('#editArea').val('');
 		}
 		if(content.trim().length == 0)return;
-		$('#editArea').val('');
-		var data = {
-			content : content
-		};
-		var item = $(chattpl.replaceTpl(data));
+		if(!msg_type){
+			msg_type = MSG_TYPE_TEXT;
+		}
+		var main_content = "";
+		switch(msg_type){
+			case MSG_TYPE_TEXT:
+				main_content = text_tpl["rightplain"].join('').replaceTpl({content:content});
+				break;
+			case MSG_TYPE_IMAGE:
+				main_content = text_tpl["rightpicture"].join('').replaceTpl({content:content});
+				break;
+		}
+		var item = $(chattpl.replaceTpl({main_content:main_content}));
 		$('.ChatContainer').before(item);
 		$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 		$(item).find('.ico_loading').show();
@@ -100,8 +147,9 @@
 			url:'/request/send',
 			data:{
 				openid:CurrentOpenid,
-				msg_type:MSG_TYPE_TEXT,
-				message:content
+				msg_type:msg_type,
+				message:content,
+				media_id:media_id
 			},
 			dataType:'json',
 			type:'POST',
@@ -150,7 +198,7 @@
 						loadHistory();
 					}
 					$.each(data.data, function(i, d){
-						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid);
+						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid, d.msgType);
 						if(CurrentOpenid == d.openid && d.number > 0){
 							getUnread();
 						}
@@ -185,7 +233,17 @@
 					data = data.data.unread;
 					if(data.length == 0)return;
 					$.each(data, function(i, d){
-						$('.ChatContainer').before(chatlefttpl.replaceTpl(d));
+						var in_tpl;
+						switch(d.msgType){
+							case MSG_TYPE_TEXT:
+								in_tpl = text_tpl['leftplain'];
+								break;
+							case MSG_TYPE_IMAGE:
+								in_tpl = text_tpl['leftpicture'];
+								break;
+						}
+						var main_content = in_tpl.join('').replaceTpl(d);
+						$('.ChatContainer').before(chatlefttpl.replaceTpl({main_content:main_content}));
 						$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 					});
 
@@ -210,11 +268,30 @@
 					$('.chat_list_item').remove();
 					data = data.reverse();
 					$.each(data, function(i, d){
-						var tpl = chatlefttpl;
+						var tpl = chatlefttpl, in_tpl;
+						switch(d.msgType){
+							case MSG_TYPE_TEXT:
+								in_tpl = text_tpl['leftplain'];
+								break;
+							case MSG_TYPE_IMAGE:
+								in_tpl = text_tpl['leftpicture'];
+								break;
+						}
+
 						if(d.opid !== ""){
 							tpl = chattpl;
+
+							switch(d.msgType){
+								case MSG_TYPE_TEXT:
+									in_tpl = text_tpl['rightplain'];
+									break;
+								case MSG_TYPE_IMAGE:
+									in_tpl = text_tpl['rightpicture'];
+									break;
+							}
 						}
-						$('.ChatContainer').before(tpl.replaceTpl(d));
+						var main_content = in_tpl.join('').replaceTpl(d);
+						$('.ChatContainer').before(tpl.replaceTpl({main_content:main_content}));
 						$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 					});
 
@@ -237,6 +314,18 @@
 		CurrentOpenid = openid;
 		$('.title_name').text(openid_name);
 		loadHistory();
+	});
+
+	window.callback = function(data){
+		if(data.status){
+			data = data.data;
+			addChatItem(data.filepath, data.media_id, MSG_TYPE_IMAGE);
+		}else{
+			alert(data.msg);
+		}
+	}
+	$('.webuploader-element-invisible').change(function(){
+		$('#myform').submit();
 	});
 
 

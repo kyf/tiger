@@ -21,7 +21,7 @@
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
-							'<td style="width:100px;color:red" class="{openid}_reply" jqid="{id}"></td>',
+							'<td style="width:150px;color:red" class="{openid}_reply" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -68,21 +68,43 @@
 				type:'POST',
 				success:function(data, status, response){
 					data.data = data.data.data;
-					if(!data.data)return;
-					if(data.data.length == 0){
-						return;	
-					}
+					if(!data.data)data.data = [0];
 					var current = $('.' + openid + '_reply');
 					var latestId = data.data[0].id;
 					current.each(function(){
 						var id = $(this).attr('jqid');
 						if(latestId > id){
 							$(this).html('[已回复]');
+						}else{
+							$(this).html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">接入</button></span>');
 						}	
 					});
 				}
 			});
 	};
+
+
+	$(document.body).on('click', '.js_fetch', function(){
+		var openid = $(this).attr('jqopenid');	
+
+		$.ajax({
+			url : '/request/bind',
+			data:{
+				openid:openid
+			},
+			dataType:'json',
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					window.location.href = '/call/center/my';
+				}else{
+					alert('该用户已经接入');
+				}
+			}
+		});
+	});
+
+
 
 
 	var loadUser = function(userids, source){
@@ -139,6 +161,7 @@
 							source.push("weixin");
 							tmpkv[d.openid] = true;
 						}
+						d.message = d.content;
 						switch(d.msgType){
 							case MSG_TYPE_TEXT:
 								d.msgtype_name = '文本';
@@ -162,7 +185,7 @@
 					});
 					var hasOpenid = {};
 					$.each(data.data.data, function(i, d){
-						if(hasOpenid[d.openidid])return
+						if(hasOpenid[d.openid])return
 						loadOpenidLastMessage(d.openid);
 						hasOpenid[d.openid] = true;
 					});

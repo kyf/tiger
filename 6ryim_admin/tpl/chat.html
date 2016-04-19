@@ -49,8 +49,10 @@
 			  <a title="图片和文件" href="javascript:;"  class="web_wechat_pic js_fileupload ng-isolate-scope webuploader-container">
 				  <div class="webuploader-pick"></div>
 				  <div id="rt_rt_1agbsgph2fhp4m1ru71rb116lg1" style="position: absolute; top: 0px; left: 0px; width: 30px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
-					  <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
-					  <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label>
+					  <form id="myform" action="/upload" method="post" enctype="multipart/form-data" target="pictarget" >
+						  <input type="file" style="cursor:pointer;" name="file" class="webuploader-element-invisible">
+						  <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label>
+					  </form>
 				  </div>
 			  </a> 
 		  </div>
@@ -67,6 +69,7 @@
 <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
   <div style="border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"> </div>
 </div>
+<iframe name="pictarget" style="display:none" ></iframe>
 </body>
 </html>
 <script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
