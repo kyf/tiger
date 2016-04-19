@@ -75,8 +75,8 @@
 							source.push("weixin");
 							tmpkv[d.from] = true;
 						}
-						d.message = d.content;
-						switch(d.msgType){
+						d.message = d.msg;
+						switch(parseInt(d.msgType)){
 							case MSG_TYPE_TEXT:
 								d.msgtype_name = '文本';
 								break;
