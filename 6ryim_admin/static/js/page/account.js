@@ -54,7 +54,7 @@
 					'</div>',
 				'</td>',
 				'<td class="table_cell opr"><div class="opr_inner">',
-					'<a href="javascript:;" class="js_kf_record" data-id="{id}" data-openid="{opid}">客服记录</a>',
+					//'<a href="javascript:;" class="js_kf_record" data-id="{id}" data-openid="{opid}">客服记录</a>',
 					'<a href="javascript:;" class="js_kf_edit" data-user="{user}" data-openid="{opid}" data-id="{id}">编辑</a>',
 					'<a href="javascript:;" class="js_kf_del" data-id="{id}">删除</a>',
 				'</div></td>',

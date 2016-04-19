@@ -1,6 +1,4 @@
 (function($, window){
-	var MESSAGE_TYPE_TEXT = 1, MESSAGE_TYPE_IMAGE = 2, MESSAGE_TYPE_AUDIO = 3;
-
 
 	var chattpl = [
 		'<div  class="ng-scope chat_list_item">',
@@ -102,7 +100,7 @@
 			url:'/request/send',
 			data:{
 				openid:CurrentOpenid,
-				msg_type:MESSAGE_TYPE_TEXT,
+				msg_type:MSG_TYPE_TEXT,
 				message:content
 			},
 			dataType:'json',

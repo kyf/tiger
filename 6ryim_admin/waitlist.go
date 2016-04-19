@@ -10,12 +10,13 @@ import (
 type MessageType int
 
 type Message struct {
-	Id      bson.ObjectId `json:"id" bson:"_id"`
-	Openid  string        `json:"openid" bson:"openid"`
-	Created int64         `json:"ts" bson:"created"`
-	Content string        `json:"content" bson:"content"`
-	MsgType MessageType   `json:"msgType" bson:"msgtype"`
-	Opid    string        `json:"opid" bson:"opid"`
+	Id       bson.ObjectId `json:"id" bson:"_id"`
+	Openid   string        `json:"openid" bson:"openid"`
+	Created  int64         `json:"ts" bson:"created"`
+	Content  string        `json:"content" bson:"content"`
+	MsgType  MessageType   `json:"msgType" bson:"msgtype"`
+	Opid     string        `json:"opid" bson:"opid"`
+	Fromtype int           `json:"fromtype" bson:"fromtype"`
 }
 
 const (
@@ -24,6 +25,9 @@ const (
 	MSG_TYPE_TEXT  MessageType = 1
 	MSG_TYPE_IMAGE MessageType = 2
 	MSG_TYPE_AUDIO MessageType = 3
+
+	MSG_FROM_TYPE_USER int = 1
+	MSG_FROM_TYPE_OP   int = 2
 
 	CC_MESSAGE_TABLE = "cc_message"
 )
@@ -39,12 +43,13 @@ func listMessage(openid string, mgo *Mongo) ([]Message, error) {
 
 func storeMessage(msg Message, mgo *Mongo) error {
 	data := bson.M{
-		"_id":     bson.NewObjectId(),
-		"openid":  msg.Openid,
-		"created": msg.Created,
-		"content": msg.Content,
-		"msgtype": msg.MsgType,
-		"opid":    msg.Opid,
+		"_id":      bson.NewObjectId(),
+		"openid":   msg.Openid,
+		"created":  msg.Created,
+		"content":  msg.Content,
+		"msgtype":  msg.MsgType,
+		"opid":     msg.Opid,
+		"fromtype": msg.Fromtype,
 	}
 	err := mgo.Add(CC_MESSAGE_TABLE, data)
 	if err != nil {

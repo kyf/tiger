@@ -4,6 +4,11 @@
 	var SERVICE_DOMAIN = '';
 	var SECOND = 1000;
 	var LAST_ID = null;
+
+
+	
+	var ORDER_ID = getQueryParam('openid');
+	$('#order_label').css('color', 'red');
 	
 	var msg_type = $('#msgtypeselect').dropdown();
 	var searchBt = $('.js_reply_OK');
@@ -13,15 +18,14 @@
 					'<table style="width:100%;text-align:center;">',
 						'<tr>',
 							'<td style="width:70px;">',
-								'<a href="/call/center/message/detail?openid={openid}" target="_blank"><img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" /></a>',
+								'<img src="{from_icon}" />',
 							'</td>',
 							'<td style="text-align:left;">',
-								'<div><a href="/call/center/message/detail?openid={openid}" target="_blank" class="{from}_label">{from_name}</a></div>',
-								'<div>{content}</div>',
+								'<div class="{from}_label">{from_name}</div>',
+								'<div>{message}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
-							'<td style="width:100px;color:red" class="{openid}_reply" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -36,11 +40,10 @@
 			url : SERVICE_DOMAIN + '/request/message/new/number',
 			data:{
 				lastid:lastid,
-				fromtype:1
+				openid:ORDER_ID
 			},
 			dataType:'json',
 			type:'POST',
-			beforeSend:ajaxBeforeSend,
 			success:function(data, status, response){
 				if(data.data){
 					var num = data.data;
@@ -55,40 +58,10 @@
 	};
 
 
-	var loadOpenidLastMessage = function(openid){
-			$.ajax({
-				url : SERVICE_DOMAIN + '/request/message/show',
-				data:{
-					page:1,
-					size:1,
-					fromtype:2,
-					openid:openid
-				},
-				dataType:'json',
-				type:'POST',
-				success:function(data, status, response){
-					data.data = data.data.data;
-					if(!data.data)return;
-					if(data.data.length == 0){
-						return;	
-					}
-					var current = $('.' + openid + '_reply');
-					var latestId = data.data[0].id;
-					current.each(function(){
-						var id = $(this).attr('jqid');
-						if(latestId > id){
-							$(this).html('[已回复]');
-						}	
-					});
-				}
-			});
-	};
-
 
 	var loadUser = function(userids, source){
 		if(!userids || !source)return;
 		if(userids.length == 0 || source.length == 0)return;
-		if(userids.length != source.length)return;
 		$.ajax({
 			url:"/user/get",
 			data:{
@@ -99,18 +72,22 @@
 			dataType:'json',
 			success:function(data, status, response){
 				if(data.status != 0){
-					alert(data.info);
 					return;
 				}
 				data = data.data;
+				
 				if(data.length > 0){
 					$.each(data, function(i, d){
 						$('.' + d.userid + "_label").text(d.realname + '(' + d.mobile + ')');
+						if(d.userid == ORDER_ID){
+							$('#order_label').text(d.realname + '(' + d.mobile + ')');	
+						}
 					})
 				}
 			}
 		});
 	};
+
 
 	var loadMsgList = function(toIndex){
 		listContainer.hideLoading();
@@ -124,28 +101,29 @@
 				keyword:$('.jsSearchInput').val(),
 				msg_type:msg_type.getValue(),
 				size:size,
-				fromtype:1
+				openid:ORDER_ID
 			},
 			dataType:'json',
 			type:'POST',
 			success:function(data, status, response){
 				if(data.status){
+					if(data.data.total == 0)data.data.data = [];
 					var tmpkv = new Object(), userids = new Array(), source = new Array();
-
-					if(!data.data.data)data.data.data = [];
 					$.each(data.data.data, function(i, d){
-						if(!tmpkv[d.openid] && d.openid != ''){
-							userids.push(d.openid);
+						d.from = d.openid;
+						if(!tmpkv[d.from] && d.from != 'system'){
+							userids.push(d.from);
 							source.push("weixin");
-							tmpkv[d.openid] = true;
+							tmpkv[d.from] = true;
 						}
+						d.message = d.content;
 						switch(d.msgType){
 							case MSG_TYPE_TEXT:
 								d.msgtype_name = '文本';
 								break;
 							case MSG_TYPE_IMAGE:
 								d.msgtype_name = '图片';
-								d.content = '<a href="' + SERVICE_DOMAIN + d.message + '" target="_blank"><img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/></a>';
+								d.message = '<a href="' + SERVICE_DOMAIN + d.message + '" target="_blank"><img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/></a>';
 								break;
 							case MSG_TYPE_AUDIO:
 								d.msgtype_name = '语音';
@@ -153,18 +131,18 @@
 							default:
 						}
 
-						d.from = d.openid;
-						d.from_name = d.openid;
+						
+						if(d.fromtype == 2){
+							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/six-service.jpg";
+						}else{
+							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/default-user.jpg";
+						}
+
+						d.from_name = d.from;
 						d.to_name = 'unknwon';
 						d.createtime = ts2time(d.ts);
 
 						listContainer.append(listtpl.replaceTpl(d));	
-					});
-					var hasOpenid = {};
-					$.each(data.data.data, function(i, d){
-						if(hasOpenid[d.openidid])return
-						loadOpenidLastMessage(d.openid);
-						hasOpenid[d.openid] = true;
 					});
 					loadUser(userids, source);
 					listContainer.hideLoading();

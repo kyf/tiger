@@ -24,6 +24,16 @@ function ajaxBeforeSend(R){
 	R.setRequestHeader("Connection", "keep-alive");
 };
 
+function ts2time(timestamp){
+	var d = new Date(timestamp * 1000);    //根据时间戳生成的时间对象
+	var date = (d.getFullYear()) + "-" + 
+		(d.getMonth() + 1) + "-" +
+		(d.getDate()) + " " + 
+		(d.getHours()) + ":" + 
+		(d.getMinutes()) + ":" + 
+		(d.getSeconds());
+	return date;
+}
 
 var MSG_TYPE_TEXT = 1, 
 	MSG_TYPE_IMAGE= 2,

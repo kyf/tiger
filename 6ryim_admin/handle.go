@@ -39,7 +39,7 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		return
 	}
 
-	msg := Message{Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type)}
+	msg := Message{Fromtype: MSG_FROM_TYPE_USER, Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type)}
 
 	mgo := NewMongoClient()
 	err = mgo.Connect()
@@ -210,7 +210,7 @@ func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, l
 		responseJson(w, false, fmt.Sprintf("%v", posterr))
 		return
 	} else {
-		msg := Message{Openid: openid, Created: time.Now().Unix(), Content: message, MsgType: MessageType(_msgType), Opid: opid}
+		msg := Message{Fromtype: MSG_FROM_TYPE_OP, Openid: openid, Created: time.Now().Unix(), Content: message, MsgType: MessageType(_msgType), Opid: opid}
 
 		mgo := NewMongoClient()
 		err = mgo.Connect()
