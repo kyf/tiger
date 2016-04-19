@@ -45,15 +45,14 @@ func init() {
 
 func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.Session) {
 	r.ParseForm()
-	admin_user, ok := sess.Get("admin_user").(string)
+	var admin_user string = ""
+	admin_user, _ = sess.Get("admin_user").(string)
 
 	authlist := []string{"/login", "/checklogin"}
 	extlist := []string{"css", "js", "jpg", "gif", "png"}
 	ext := path.Ext(r.RequestURI)
-	for _, it := range authlist {
-		if !strings.EqualFold(it, r.URL.Path) && StringSliceContains(ext, extlist) && (!ok || strings.EqualFold("", admin_user)) {
-			ren.Redirect("/login")
-		}
+	if !StringSliceContains(r.URL.Path, authlist) && !StringSliceContains(ext, extlist) && strings.EqualFold("", admin_user) {
+		ren.Redirect("/login")
 	}
 
 }
