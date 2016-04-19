@@ -11,7 +11,7 @@
 							'</td>',
 							'<td style="text-align:left;">',
 								'<div class="{from}_label">{from_name}</div>',
-								'<div>{msg}</div>',
+								'<div>{message}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{ts}</td>',
