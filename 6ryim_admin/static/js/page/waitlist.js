@@ -75,15 +75,16 @@
 							source.push("weixin");
 							tmpkv[d.from] = true;
 						}
+						d.message = d.content;
 						switch(d.msgType){
-							case '2':
+							case MSG_TYPE_TEXT:
 								d.msgtype_name = '文本';
 								break;
-							case '3':
+							case MSG_TYPE_IMAGE:
 								d.msgtype_name = '图片';
 								d.message = '<a href="' + SERVICE_DOMAIN + d.message + '" target="_blank"><img style="width:100px;height:100px;" src="' + SERVICE_DOMAIN + d.message + '"/></a>';
 								break;
-							case '4':
+							case MSG_TYPE_AUDIO:
 								d.msgtype_name = '语音';
 								break;
 							default:
