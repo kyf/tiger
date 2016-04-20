@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/go-mgo/mgo"
-	"github.com/go-mgo/mgo/bson"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type DeviceToken struct {

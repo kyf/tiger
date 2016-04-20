@@ -1,7 +1,7 @@
 package im_type
 
 import (
-	"github.com/go-mgo/mgo/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Message struct {

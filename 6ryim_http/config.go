@@ -16,6 +16,7 @@ type Config struct {
 	mongodbServer   string
 	mongodbPort     string
 	mongodbName     string
+	msgMongodbName  string
 	mongodbUser     string
 	mongodbPass     string
 	mongodbPoolSize int
@@ -43,11 +44,12 @@ func initConfig(fileName string) (Config, error) {
 	conf.mongodbPort = c.MustValue("mongodb", "mongodb_port", "")
 	conf.mongodbUser = c.MustValue("mongodb", "mongodb_user", "")
 	conf.mongodbName = c.MustValue("mongodb", "mongodb_name", "")
+	conf.msgMongodbName = c.MustValue("mongodb", "msgmongodb_name", "")
 	conf.mongodbPass = c.MustValue("mongodb", "mongodb_pass", "")
 	conf.mongodbPoolSize = c.MustInt("mongodb", "mongodb_pool_size", 300)
 
 	InitRedis(conf.redisServer, conf.redisPass, conf.redisMaxIdleNum)
 
-	InitMongodb(conf.mongodbServer, conf.mongodbPort, conf.mongodbUser, conf.mongodbName, conf.mongodbPass, conf.mongodbPoolSize)
+	InitMongodb(conf.mongodbServer, conf.mongodbPort, conf.mongodbUser, conf.mongodbName, conf.msgMongodbName, conf.mongodbPass, conf.mongodbPoolSize)
 	return conf, nil
 }
