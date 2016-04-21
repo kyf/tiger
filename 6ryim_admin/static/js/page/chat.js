@@ -26,7 +26,7 @@
 			],
 		'leftpicture':[
 					'<div class="picture">',
-			        	'<img class="msg-img" src="{content}" style="width: 100px;">',
+			        	'<a href="{content}" target="_blank"><img class="msg-img" src="{content}" style="width: 100px;"></a>',
 						'<i class="arrow"></i>',
 						'<p class="loading ng-hide">',
 							'<img alt="" src="https://res.wx.qq.com/zh_CN/htmledition/v2/images/icon/ico_loading28a2f7.gif">',
