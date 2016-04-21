@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/go-mgo/mgo/bson"
 	im_type "github.com/kyf/6ryim/6ryim_http/im_type"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var (
