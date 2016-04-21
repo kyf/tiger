@@ -55,7 +55,20 @@
 	};
 
 
+	var loadOnline = function(cb){
+			$.ajax({
+				url : SERVICE_DOMAIN + '/request/online/list',
+				dataType:'json',
+				success:function(data, status, response){
+					if(data.status){
+						cb(data.data);
+					}
+				}
+			});
+	};
+
 	var loadOpenidLastMessage = function(openid){
+		loadOnline(function(onlinedata){
 			$.ajax({
 				url : SERVICE_DOMAIN + '/request/message/show',
 				data:{
@@ -76,11 +89,16 @@
 						if(latestId > id){
 							$(this).html('[已回复]');
 						}else{
-							$(this).html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">接入</button></span>');
+							if(onlinedata[openid]){
+								$(this).html('<span class="btn btn_disabled btn_input"><button >已接入</button></span>');
+							}else{
+								$(this).html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">接入</button></span>');
+							}
 						}	
 					});
 				}
 			});
+		});
 	};
 
 

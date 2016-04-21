@@ -483,3 +483,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 	}
 
 }
+
+func handleOnlineList(w http.ResponseWriter) {
+	responseJson(w, true, "", defaultOL.userMapping)
+}

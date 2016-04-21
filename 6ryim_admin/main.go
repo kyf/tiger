@@ -238,6 +238,7 @@ func main() {
 	m.Post("/request/message/new/number", getNewMessageNum)
 	m.Get("/call/center/message/detail", handleListDetail)
 	m.Post("/upload", handleUpload)
+	m.Get("/request/online/list", handleOnlineList)
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
