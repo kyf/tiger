@@ -67,6 +67,19 @@ func (ol *Online) bind(opid, openid string, msgs []Message) bool {
 	return true
 }
 
+func (ol *Online) release(opid string) {
+	ol.poolLocker.Lock()
+	defer ol.poolLocker.Unlock()
+
+	if clients, ok := ol.olPool[opid]; ok {
+		for _, client := range clients {
+			delete(ol.userMapping, client.openid)
+		}
+	}
+
+	delete(ol.olPool, opid)
+}
+
 func (ol *Online) unbind(opid, openid string) {
 	ol.poolLocker.Lock()
 	defer ol.poolLocker.Unlock()
@@ -75,6 +88,7 @@ func (ol *Online) unbind(opid, openid string) {
 		for index, client := range clients {
 			if strings.EqualFold(openid, client.openid) {
 				currentIndex = index
+				delete(ol.userMapping, client.openid)
 				break
 			}
 		}
