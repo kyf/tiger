@@ -33,6 +33,12 @@
 						'</p>',
 					'</div>'
 			],
+		'leftaudio':[
+					'<div ng-click="playVoice(message)" class="voice" style="width: 47px;">',
+			        	'<i class="web_wechat_voice_gray"></i>',
+						'<span class="duration ng-binding">1''<i class="web_wechat_noread ng-hide"></i></span>',
+					'</div>'
+			]
 	};
 
 
@@ -241,6 +247,9 @@
 							case MSG_TYPE_IMAGE:
 								in_tpl = text_tpl['leftpicture'];
 								break;
+							case MSG_TYPE_AUDIO:
+								in_tpl = text_tpl['leftaudio'];
+								break;
 						}
 						var main_content = in_tpl.join('').replaceTpl(d);
 						$('.ChatContainer').before(chatlefttpl.replaceTpl({main_content:main_content}));
@@ -275,6 +284,9 @@
 								break;
 							case MSG_TYPE_IMAGE:
 								in_tpl = text_tpl['leftpicture'];
+								break;
+							case MSG_TYPE_AUDIO:
+								in_tpl = text_tpl['leftaudio'];
 								break;
 						}
 
