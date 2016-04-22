@@ -34,26 +34,87 @@
 					'</div>'
 			],
 		'leftaudio':[
-					'<div ng-click="playVoice(message)" class="voice" style="width: 47px;">',
-			        	'<i class="web_wechat_voice_gray"></i>',
-						'<span class="duration ng-binding">1''<i class="web_wechat_noread ng-hide"></i></span>',
+					'<div class="voice" jqcontent="{content}" style="width: 47px;">',
+			        	'<i class="voice_icon web_wechat_voice_gray"></i>',
+						'<span class="duration ng-binding"><i class="web_wechat_noread ng-hide"></i></span>',
 					'</div>'
 			]
+	};
+
+	var CurrentVoice = null, CurrentContent = null;
+
+	$(document.body).on('click', '.voice', function(){
+		var amr = $(this).attr('jqcontent');
+		if(CurrentVoice){
+			CurrentVoice.stop();
+			if(amr == CurrentContent)return;
+		}
+		CurrentContent = amr;
+		var icon = $(this).find('.voice_icon');
+		icon.removeClass('web_wechat_voice_gray');
+		icon.addClass('web_wechat_voice_gray_playing');
+		playRemoteVoice(amr, function(){
+			icon.removeClass('web_wechat_voice_gray_playing');
+			icon.addClass('web_wechat_voice_gray');
+			CurrentVoice = null;
+			CurrentContent = null;
+		});
+	});
+
+	var playRemoteVoice = function (_file, cb) {
+		if (!_file || "" == _file || (-1 == _file.indexOf(".amr"))) {
+			return false;
+		}
+		var playVoice = function (url, cb) {
+			var oReq = new XMLHttpRequest();
+			oReq.onload = function (e) {
+				var arraybuffer = oReq.response;
+				var _array = new Uint8Array(arraybuffer);
+				var samples = AMR.decode(_array);
+				if (!samples) {
+					alert('Failed to decode!');
+					return;
+				}
+				else {
+					var ctx = new AudioContext();
+					var src = ctx.createBufferSource();
+					src.onended = function(){
+						cb();
+					};
+					var buffer = ctx.createBuffer(1, samples.length, 8000);
+					if (buffer.copyToChannel) {
+						buffer.copyToChannel(samples, 0, 0);
+					} else {
+						var channelBuffer = buffer.getChannelData(0);
+						channelBuffer.set(samples);
+					}
+
+					src.buffer = buffer;
+					src.connect(ctx.destination);
+					src.start();
+					CurrentVoice = src;
+				}
+			}
+			oReq.open("GET", url, true);
+			oReq.responseType = "arraybuffer";
+			oReq.send();
+		};
+		playVoice(_file, cb);
 	};
 
 
 	var chattpl = [
 		'<div  class="ng-scope chat_list_item">',
-            '<div message-directive="" class="clearfix">',
-              '<div  style="overflow: hidden;" on="message.MsgType" ng-switch="">',
-                '<div  class="message ng-scope me" ng-switch-default="">',
-                  //'<p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>',
-                  '<img src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">',
-                  '<div class="content">',
-                    '<div class="bubble js_message_bubble ng-scope bubble_primary right">',
-                      '<div  class="bubble_cont ng-scope">',
-					  	'{main_content}',
-                      '</div>',
+		'<div message-directive="" class="clearfix">',
+		'<div  style="overflow: hidden;" on="message.MsgType" ng-switch="">',
+		'<div  class="message ng-scope me" ng-switch-default="">',
+		//'<p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>',
+		'<img src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">',
+		'<div class="content">',
+		'<div class="bubble js_message_bubble ng-scope bubble_primary right">',
+		'<div  class="bubble_cont ng-scope">',
+		'{main_content}',
+		'</div>',
                     '</div>',
                   '</div>',
                 '</div>',
