@@ -401,5 +401,9 @@
 		$('#myform').submit();
 	});
 
+	$('.web_wechat_face').click(function(){
+		$('#mmpop_emoji_panel').toggle();
+	});
+
 
 })(jQuery, window)
