@@ -178,6 +178,9 @@ func main() {
 	})
 
 	m.Get("/logout", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
+		if admin_user, ok := sess.Get("admin_user").(string); ok && !strings.EqualFold("", admin_user) {
+			defaultOL.release(admin_user)
+		}
 		sess.Delete("admin_user")
 		ren.Redirect("/login")
 	})
