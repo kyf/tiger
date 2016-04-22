@@ -44,7 +44,7 @@ func (this *Mongo) Connect() error {
 	session.SetPoolLimit(mongodbPoolSize)
 	this.session = session
 	this.db = session.DB(this.dbname)
-	admdb = session.DB("admin")
+	admdb := session.DB("admin")
 	err = admdb.Login(this.user, this.pass)
 	return err
 }
