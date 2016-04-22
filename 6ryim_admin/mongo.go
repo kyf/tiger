@@ -16,11 +16,11 @@ type Mongo struct {
 }
 
 var (
-	mongodbServer   string = "127.0.0.1"
-	mongodbPort     string = "27017"
+	mongodbServer   string = "dds-2ze087e692f063041.mongodb.rds.aliyuncs.com"
+	mongodbPort     string = "3717"
 	mongodbName     string = "call_center"
-	mongodbUser     string = ""
-	mongodbPass     string = ""
+	mongodbUser     string = "root"
+	mongodbPass     string = "6renyou"
 	mongodbPoolSize int    = 300
 )
 
@@ -44,7 +44,8 @@ func (this *Mongo) Connect() error {
 	session.SetPoolLimit(mongodbPoolSize)
 	this.session = session
 	this.db = session.DB(this.dbname)
-	//err = this.db.Login(this.user, this.pass)
+	admdb = session.DB("admin")
+	err = admdb.Login(this.user, this.pass)
 	return err
 }
 
