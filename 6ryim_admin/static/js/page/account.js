@@ -56,7 +56,7 @@
 				'<td class="table_cell opr"><div class="opr_inner">',
 					//'<a href="javascript:;" class="js_kf_record" data-id="{id}" data-openid="{opid}">客服记录</a>',
 					'<a href="javascript:;" class="js_kf_edit" data-user="{user}" data-openid="{opid}" data-id="{id}">编辑</a>',
-					'<a href="javascript:;" class="js_kf_del" data-id="{id}">删除</a>',
+					'<a href="javascript:;" class="js_kf_del" data-user="{user}" data-id="{id}">删除</a>',
 				'</div></td>',
 			'</tr>'
 		];
@@ -78,6 +78,12 @@
 
 	$(document.body).on('click','.js_kf_del', function(){
 		if(confirm("确认删除？")){
+			var user = $(this).attr('data-user');
+			var CurrentOp = $('.account_inbox_switch').text().trim();
+			if(user == CurrentOp){
+				alert("不能删除当前用户");
+				return;
+			}
 			$.ajax({
 				url : '/admin/remove',
 				dataType:'json',

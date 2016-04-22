@@ -97,8 +97,8 @@
 					});
 					loadUser(userids, source);
 
-					if(data.total == 0){
-						listContainer.html('<div style="text-align:center;"> No Data </div>')
+					if(data.data.length == 0){
+						listContainer.html('<div style="text-align:center;color:#8d8d8d;"> 暂无接待的用户 </div>')
 						return;
 					}
 
