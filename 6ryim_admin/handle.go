@@ -20,6 +20,7 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 	openid := r.Form.Get("openid")
 	content := r.Form.Get("content")
 	msgType := r.Form.Get("msgType")
+	source := r.Form.Get("source")
 
 	if len(openid) == 0 {
 		responseJson(w, false, "openid is empty")
@@ -36,9 +37,19 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		return
 	}
 
+	if len(source) == 0 {
+		source = "1"
+	}
+
 	_msg_type, err := strconv.Atoi(msgType)
 	if err != nil {
 		responseJson(w, false, "msgType is invalid")
+		return
+	}
+
+	_source, err := strconv.Atoi(source)
+	if err != nil {
+		responseJson(w, false, "source is invalid")
 		return
 	}
 
@@ -54,7 +65,7 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		}
 	}
 
-	msg := Message{Fromtype: MSG_FROM_TYPE_USER, Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type)}
+	msg := Message{Fromtype: MSG_FROM_TYPE_USER, Openid: openid, Created: time.Now().Unix(), Content: content, MsgType: MessageType(_msg_type), Source: _source}
 
 	mgo := NewMongoClient()
 	err = mgo.Connect()

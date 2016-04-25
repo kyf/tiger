@@ -17,6 +17,7 @@ type Message struct {
 	MsgType  MessageType   `json:"msgType" bson:"msgtype"`
 	Opid     string        `json:"opid" bson:"opid"`
 	Fromtype int           `json:"fromtype" bson:"fromtype"`
+	Source   int           `json:"source" bson:"source"`
 }
 
 const (
@@ -28,6 +29,10 @@ const (
 
 	MSG_FROM_TYPE_USER int = 1
 	MSG_FROM_TYPE_OP   int = 2
+
+	MSG_SOURCE_WX      int = 1
+	MSG_SOURCE_IOS     int = 2
+	MSG_SOURCE_ANDROID int = 3
 
 	CC_MESSAGE_TABLE = "cc_message"
 )
@@ -42,6 +47,9 @@ func listMessage(openid string, mgo *Mongo) ([]Message, error) {
 }
 
 func storeMessage(msg Message, mgo *Mongo) error {
+	if msg.Source == 0 {
+		msg.Source = MSG_SOURCE_WX
+	}
 	data := bson.M{
 		"_id":      bson.NewObjectId(),
 		"openid":   msg.Openid,
@@ -50,6 +58,7 @@ func storeMessage(msg Message, mgo *Mongo) error {
 		"msgtype":  msg.MsgType,
 		"opid":     msg.Opid,
 		"fromtype": msg.Fromtype,
+		"source":   msg.Source,
 	}
 	err := mgo.Add(CC_MESSAGE_TABLE, data)
 	if err != nil {
