@@ -48,7 +48,7 @@ func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.
 	var admin_user string = ""
 	admin_user, _ = sess.Get("admin_user").(string)
 
-	authlist := []string{"/login", "/checklogin"}
+	authlist := []string{"/login", "/checklogin", "/request/receive"}
 	extlist := []string{"css", "js", "jpg", "gif", "png"}
 	ext := path.Ext(r.RequestURI)
 	if !StringSliceContains(r.URL.Path, authlist) && !StringSliceContains(ext, extlist) && strings.EqualFold("", admin_user) {

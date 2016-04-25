@@ -17,6 +17,7 @@ import (
 )
 
 func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
+
 	openid := r.Form.Get("openid")
 	content := r.Form.Get("content")
 	msgType := r.Form.Get("msgType")
