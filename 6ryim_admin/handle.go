@@ -53,15 +53,17 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		return
 	}
 
-	switch MessageType(_msg_type) {
-	case MSG_TYPE_IMAGE:
-		fallthrough
-	case MSG_TYPE_AUDIO:
-		content, err = fetchWxMedia(content)
-		if err != nil {
-			logger.Printf("fetchWxMedia err:%v", err)
-			responseJson(w, false, "media_id is invalid")
-			return
+	if _source == 1 {
+		switch MessageType(_msg_type) {
+		case MSG_TYPE_IMAGE:
+			fallthrough
+		case MSG_TYPE_AUDIO:
+			content, err = fetchWxMedia(content)
+			if err != nil {
+				logger.Printf("fetchWxMedia err:%v", err)
+				responseJson(w, false, "media_id is invalid")
+				return
+			}
 		}
 	}
 
