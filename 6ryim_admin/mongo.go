@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"gopkg.in/mgo.v2"
 )
 
@@ -16,11 +18,11 @@ type Mongo struct {
 }
 
 var (
-	mongodbServer   string = "dds-2ze087e692f063041.mongodb.rds.aliyuncs.com"
-	mongodbPort     string = "3717"
+	mongodbServer   string = os.Getenv("MONGODB_HOST") //"dds-2ze087e692f063041.mongodb.rds.aliyuncs.com"
+	mongodbPort     string = os.Getenv("MONGODB_PORT")
 	mongodbName     string = "call_center"
-	mongodbUser     string = "root"
-	mongodbPass     string = "6renyou"
+	mongodbUser     string = os.Getenv("MONGODB_USER")
+	mongodbPass     string = os.Getenv("MONGODB_PWD")
 	mongodbPoolSize int    = 300
 )
 
