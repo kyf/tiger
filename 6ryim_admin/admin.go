@@ -34,6 +34,19 @@ func (adm *Admin) add() error {
 	return nil
 }
 
+func getAdminByName(name string, mgo *Mongo) (*Admin, error) {
+	data := bson.M{
+		"user": name,
+	}
+
+	adm := new(Admin)
+	err := mgo.Find(ADMIN_TABLE, data).Limit(1).One(adm)
+	if err != nil {
+		return nil, err
+	}
+	return adm, nil
+}
+
 func (adm *Admin) checkUniq() (bool, error) {
 	data := bson.M{
 		"user": adm.UserName,

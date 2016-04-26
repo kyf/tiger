@@ -254,6 +254,17 @@ func main() {
 		ren.HTML(200, "account", data)
 	})
 
+	m.Get("/call/center/my/book", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "book", data)
+	})
+
 	m.Get("/call/center/message", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
 		left, _ := fetchLeft()
@@ -287,8 +298,28 @@ func main() {
 		ren.HTML(200, "mycc", data)
 	})
 
-	m.Get("/chat", func(r *http.Request, ren render.Render, sess sessions.Session) {
-		ren.HTML(200, "chat", nil)
+	m.Get("/chat", func(logger *log.Logger, r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		mgo := NewMongoClient()
+		err := mgo.Connect()
+		if err != nil {
+			logger.Printf("mgo.Connect err:%v", err)
+			ren.JSON(200, "failure")
+			return
+		}
+		defer mgo.Close()
+
+		adm, err := getAdminByName(admin_user, mgo)
+		if err != nil {
+			logger.Printf("getAdminByName err:%v", err)
+			ren.JSON(200, "failure")
+			return
+		}
+
+		data := struct {
+			Opid template.HTML
+		}{template.HTML(string(adm.Opid))}
+		ren.HTML(200, "chat", data)
 	})
 
 	m.Get("/call/center/my/sendwx", func(r *http.Request, ren render.Render, sess sessions.Session) {

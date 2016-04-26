@@ -406,4 +406,20 @@
 	});
 
 
+	$(document.body).on('contextmenu', '.chat_item', function(e){
+		var openid = $(this).attr('openid');
+		$('#contextMenu').css({top:e.clientY, left:e.clientX}).show();
+		$('#contextMenu').find('.bookitem').attr('data-openid', openid);
+		return false;
+	});
+
+	$(document.body).on('click', function(e){
+		$('#contextMenu').hide();
+	});
+
+	$(document.body).on('click', '.bookitem', function(){
+		var openid = $(this).attr('data-openid');
+		window.open('/call/center/my/book?openid=' + openid + "&opid=" + OPID);
+	});
+
 })(jQuery, window)

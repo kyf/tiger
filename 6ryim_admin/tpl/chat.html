@@ -11,69 +11,84 @@
 </head>
 <body class="ng-scope ng-isolate-scope loaded" style="background:transparent;">
 <div class="main">
-  <div class="main_inner">
-    <div class="panel">
-      <div class="nav_view ng-scope" style="visibility: visible; width: auto;top:0px;">
-        <div class="scroll-wrapper chat_list scrollbar-dynamic" style="position: relative;">
-          <div id="J_NavChatScrollBody" class="chat_list scrollbar-dynamic scroll-content scroll-scrolly_visible" style="height: 600px;;overflow:auto;">
-            <div class="ng-scope">
-              <div class="top-placeholder ng-scope" style="height: 0px;"></div>
-                            
-              <div class="bottom-placeholder ng-scope UserContainer"  style="height: 0px;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="height:100%;" ui-view="contentView" class="ng-scope">
-      <div class="box chat ng-scope"  id="chatArea">
-        <div class="box_hd">
-          <div id="chatRoomMembersWrap"></div>
-          <div class="title_wrap">
-            <div  class="title poi"> <a  class="title_name ng-binding"></a> <i   class="web_wechat_down_icon ng-hide"></i> </div>
-          </div>
-        </div>
-        <div class="scroll-wrapper box_bd chat_bd scrollbar-dynamic" style="position: absolute;">
-          <div class="box_bd chat_bd scrollbar-dynamic scroll-content MainChatContainer" style="height: 386px;">
-            <div data-pre-calc="true" data-buffer-height="300" data-height-calc="heightCalc"  class="ng-scope">
-              <div class="top-placeholder ng-scope"  style="height: 20px;"></div>
-              
-              <div class="bottom-placeholder ng-scope ChatContainer"  style="height: 20px;"></div>
-            </div>
-            <div style="visibility:hidden;position:absolute;width:100%;top:333px;height:0;padding:019px;box-sizing:border-box;margin-left:-19px;overflow:hidden;" id="prerender"></div>
-          </div>
-        </div>
-        <div   class="box_ft ng-scope">
-          <div id="tool_bar" class="toolbar"> 
-			  <a title="表情" href="javascript:;"  class="web_wechat_face" style="display:none;"></a> 
-			  <a title="图片和文件" href="javascript:;"  class="web_wechat_pic js_fileupload ng-isolate-scope webuploader-container">
-				  <div class="webuploader-pick"></div>
-				  <div id="rt_rt_1agbsgph2fhp4m1ru71rb116lg1" style="position: absolute; top: 0px; left: 0px; width: 30px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
-					  <form id="myform" action="/upload" method="post" enctype="multipart/form-data" target="pictarget" >
-						  <input type="file" style="cursor:pointer;" name="file" class="webuploader-element-invisible">
-						  <label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label>
-					  </form>
-				  </div>
-			  </a> 
+	<div class="main_inner">
+
+		<!--contextmenu start-->
+		<div class="dropdown contextMenu open ng-isolate-scope" id="contextMenu" context-menu-directive="" style="display:none;">
+			<ul class="dropdown_menu">
+				<li class="ng-scope">
+				<a href="javascript:;" tabindex="-1" id="" class="ng-binding ng-scope bookitem">代客下单</a>
+				</li>
+			</ul>
+		</div>
+		<!--contextmenu end-->
 
 
-		  </div>
-		  <div class="content ng-isolate-scope">
-			  <!--<pre contenteditable="true" class="flex edit_area ng-isolate-scope ng-valid ng-dirty" mm-paste="" contenteditable-directive="" id="editArea"></pre>-->
-			  <textarea id="editArea" style="width:100%;height:90px;margin-left:8px;background:transparent;border:0px;font-size:14px;"></textarea>
-            <span id="caretPosHelper" class="caret_pos_helper"></span></div>
-          <div class="action"> <span class="desc ng-scope" >按下Ctrl+Enter发送</span> <a  href="javascript:;" class="btn btn_send">发送</a> </div>
-        </div>
-      </div>
-    </div>
-  </div>
+		<div class="panel">
+			<div class="nav_view ng-scope" style="visibility: visible; width: auto;top:0px;">
+				<div class="scroll-wrapper chat_list scrollbar-dynamic" style="position: relative;">
+					<div id="J_NavChatScrollBody" class="chat_list scrollbar-dynamic scroll-content scroll-scrolly_visible" style="height: 600px;;overflow:auto;">
+						<div class="ng-scope">
+							<div class="top-placeholder ng-scope" style="height: 0px;"></div>
+
+							<div class="bottom-placeholder ng-scope UserContainer"  style="height: 0px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="height:100%;" ui-view="contentView" class="ng-scope">
+			<div class="box chat ng-scope"  id="chatArea">
+				<div class="box_hd">
+					<div id="chatRoomMembersWrap"></div>
+					<div class="title_wrap">
+						<div  class="title poi"> <a  class="title_name ng-binding"></a> <i   class="web_wechat_down_icon ng-hide"></i> </div>
+					</div>
+				</div>
+				<div class="scroll-wrapper box_bd chat_bd scrollbar-dynamic" style="position: absolute;">
+					<div class="box_bd chat_bd scrollbar-dynamic scroll-content MainChatContainer" style="height: 386px;">
+						<div data-pre-calc="true" data-buffer-height="300" data-height-calc="heightCalc"  class="ng-scope">
+							<div class="top-placeholder ng-scope"  style="height: 20px;"></div>
+
+							<div class="bottom-placeholder ng-scope ChatContainer"  style="height: 20px;"></div>
+						</div>
+						<div style="visibility:hidden;position:absolute;width:100%;top:333px;height:0;padding:019px;box-sizing:border-box;margin-left:-19px;overflow:hidden;" id="prerender"></div>
+					</div>
+				</div>
+				<div   class="box_ft ng-scope">
+					<div id="tool_bar" class="toolbar"> 
+						<a title="表情" href="javascript:;"  class="web_wechat_face" style="display:none;"></a> 
+						<a title="图片和文件" href="javascript:;"  class="web_wechat_pic js_fileupload ng-isolate-scope webuploader-container">
+							<div class="webuploader-pick"></div>
+							<div id="rt_rt_1agbsgph2fhp4m1ru71rb116lg1" style="position: absolute; top: 0px; left: 0px; width: 30px; height: 30px; overflow: hidden; bottom: auto; right: auto;">
+								<form id="myform" action="/upload" method="post" enctype="multipart/form-data" target="pictarget" >
+									<input type="file" style="cursor:pointer;" name="file" class="webuploader-element-invisible">
+									<label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255) none repeat scroll 0% 0%;"></label>
+								</form>
+							</div>
+						</a> 
+
+
+					</div>
+					<div class="content ng-isolate-scope">
+						<!--<pre contenteditable="true" class="flex edit_area ng-isolate-scope ng-valid ng-dirty" mm-paste="" contenteditable-directive="" id="editArea"></pre>-->
+						<textarea id="editArea" style="width:100%;height:90px;margin-left:8px;background:transparent;border:0px;font-size:14px;"></textarea>
+						<span id="caretPosHelper" class="caret_pos_helper"></span></div>
+					<div class="action"> <span class="desc ng-scope" >按下Ctrl+Enter发送</span> <a  href="javascript:;" class="btn btn_send">发送</a> </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-  <div style="border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"> </div>
+	<div style="border: medium none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"> </div>
 </div>
 <iframe name="pictarget" style="display:none" ></iframe>
 </body>
 </html>
+<script type="text/javascript">
+var OPID = {{.Opid}};
+</script>
 <script type="text/javascript" src="http://admin.6renyou.com/statics/js/Jquery/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="/js/page/util.js"></script>
 <script type="text/javascript" src="/js/page/amrnb.js"></script>
