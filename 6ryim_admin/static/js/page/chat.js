@@ -503,6 +503,7 @@
 				dataType:'json',
 				success:function(data){
 					if(data.status){
+						if(!data.data)data.data = [];
 						ReplyPanel.find('.ReplyContainer').html('');
 						$.each(data.data, function(index, d){
 							if(index > 0){
