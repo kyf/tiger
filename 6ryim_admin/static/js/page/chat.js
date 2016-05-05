@@ -435,6 +435,9 @@
 
 	$(document.body).on('click', function(e){
 		$('#contextMenu').hide();
+		if(e.target != $('.web_wechat_reply').get(0)){
+			ReplyPanel.hide();
+		}
 	});
 
 	$(document.body).on('click', '.bookitem', function(){
@@ -470,6 +473,61 @@
 				}
 			}
 		});
+	});
+
+	var ReplyPanel = null;
+
+	(function(){
+		if(ReplyPanel == null){
+			var reply_tpl = [
+				'<div style="width:310px;position:absolute;right:20px;top:70px;background:white;border-radius:3px;border:1px solid #cfcfcf;">',
+					'<div style="padding:5px 0px 0px 0px;background:#f2f2f2;">',
+						'<div style="background:white;font-size:14px;width:90px;margin-left:15px;line-height:30px;height:30px;text-align:center;:">快捷回复</div>',
+					'</div>',
+					'<div class="ReplyContainer" style="padding:0px 8px;height:313px;overflow:auto;"><div style="text-align:center;line-height:80px;">loading...</div></div>',
+				'</div>'
+			];	
+
+			reply_tpl = reply_tpl.join('');
+			ReplyPanel = $(reply_tpl);
+			$(document.body).append(ReplyPanel);
+			var item_tpl = [
+				'<div style="{border};" class="reply_item">',
+					'{content}',
+				'</div>'
+			];
+			item_tpl = item_tpl.join('');
+			$.ajax({
+				url:'/request/fastreply/list',
+				type:'POST',
+				dataType:'json',
+				success:function(data){
+					if(data.status){
+						ReplyPanel.find('.ReplyContainer').html('');
+						$.each(data.data, function(index, d){
+							if(index > 0){
+								d.border = 'border-top:1px solid #f2f2f2;';
+							}
+							ReplyPanel.find('.ReplyContainer').append(item_tpl.replaceTpl(d));
+						});
+					}else{
+						ReplyPanel.find('.ReplyContainer').find('div').html(data.msg);
+					}
+				}
+			});
+		}
+	
+		ReplyPanel.hide();
+	})();
+
+	$('.web_wechat_reply').click(function(){
+		ReplyPanel.toggle();
+	});
+
+	$(document.body).on('click', '.reply_item', function(){
+		var val = $('#editArea').val();
+		$('#editArea').val(val + $(this).text());
+		ReplyPanel.hide();
 	});
 
 })(jQuery, window)

@@ -289,6 +289,31 @@ func main() {
 		responseJson(w, true, "")
 	})
 	m.Get("/request/online/list", handleOnlineList)
+	m.Post("/request/fastreply/add", handleFRadd)
+	m.Post("/request/fastreply/update", handleFRupdate)
+	m.Post("/request/fastreply/list", handleFRlist)
+	m.Post("/request/fastreply/remove", handleFRremove)
+	m.Get("/call/center/handled", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "handled", data)
+	})
+
+	m.Get("/call/center/fastreply", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "fastreply", data)
+	})
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
