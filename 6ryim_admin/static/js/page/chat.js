@@ -111,6 +111,7 @@
 						//'<p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>',
 						'<img src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">',
 						'<div class="content">',
+							'<h4 class="nickname ng-binding ng-scope" style="width:auto;margin-right:10px;font-size:14px;font-weight:normal;">{opid}</h4>',
 							'<div class="bubble js_message_bubble ng-scope bubble_primary right">',
 								'<div  class="bubble_cont ng-scope">',
 									'{main_content}',
@@ -132,7 +133,7 @@
 		'<div class="clearfix">',
 			'<div style="overflow: hidden;" on="message.MsgType" ng-switch="">',
 				'<div class="message ng-scope you" ng-switch-default="">',
-					'<img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" class="avatar">',
+					'<img src="{headurl}" class="avatar">',
 					'<div class="content">',
 						'<div class="bubble js_message_bubble ng-scope bubble_default left">',
 							'<div class="bubble_cont ng-scope">',
@@ -151,10 +152,10 @@
 
 
 	var usertpl = [
-			'<div class="ng-scope useritem">',
+			'<div class="ng-scope useritem useritem_{openid}">',
                 '<div class="chat_item slide-left ng-scope {active}" openid="{openid}" openid_name="{username}">',
                   '<div class="avatar"> ',
-					  '<img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" class="img"> ',
+					  '<img src="{headurl}" class="img"> ',
 					  '<i style="{number_display}" class="unread_number {openid}_unread_number icon web_wechat_reddot_middle ng-binding ng-scope">{number}</i>',
 				  '</div>',
                   '<div class="info">',
@@ -166,7 +167,7 @@
 	];
 	usertpl = usertpl.join('');
 
-	var addUserItem = function(username, lastmsg, active, number, openid, msgtype){
+	var addUserItem = function(username, lastmsg, active, number, openid, msgtype, headurl){
 		switch(parseInt(msgtype)){
 			case MSG_TYPE_IMAGE:
 				lastmsg = "[图片]";
@@ -181,17 +182,25 @@
 			lastmsg : lastmsg,
 			active : active ? "active" : '',
 			number : number,
+			headurl : headurl == '' ? 'http://admin.6renyou.com/statics/socketchat/img/default-user.jpg' : headurl,
 			number_display:number > 0 ? 'display:' : 'display:none'
 		};
 		$('.UserContainer').before(usertpl.replaceTpl(data));	
 	};
 
 	var CurrentOpenid = '';
+	var CurrentHeadurl = 'http://admin.6renyou.com/statics/socketchat/img/default-user.jpg';
 
 	var addChatItem = function(content, media_id, msg_type){
+		var user = "";
 		if(!content){
 			content = $('#editArea').val();
 			$('#editArea').val('');
+			user = USER;
+			if(CurrentOpenid == ''){
+				alert('当前没有用户');
+				return;
+			}
 		}
 		if(content.trim().length == 0)return;
 		if(!msg_type){
@@ -206,7 +215,7 @@
 				main_content = text_tpl["rightpicture"].join('').replaceTpl({content:content});
 				break;
 		}
-		var item = $(chattpl.replaceTpl({main_content:main_content}));
+		var item = $(chattpl.replaceTpl({main_content:main_content, opid:user}));
 		$('.ChatContainer').before(item);
 		$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 		$(item).find('.ico_loading').show();
@@ -268,11 +277,12 @@
 					data.data = data.data.sort(sort_user);
 					if(CurrentOpenid == ''){
 						CurrentOpenid = data.data[0].openid;
+						CurrentHeadurl = data.data[0].headurl;
 						$('.title_name').text(data.data[0].openid_name);
 						loadHistory();
 					}
 					$.each(data.data, function(i, d){
-						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid, d.msgType);
+						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid, d.msgType, d.headurl);
 						if(CurrentOpenid == d.openid && d.number > 0){
 							getUnread();
 						}
@@ -320,7 +330,7 @@
 								break;
 						}
 						var main_content = in_tpl.join('').replaceTpl(d);
-						$('.ChatContainer').before(chatlefttpl.replaceTpl({main_content:main_content}));
+						$('.ChatContainer').before(chatlefttpl.replaceTpl({main_content:main_content, headurl:CurrentHeadurl}));
 						$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 					});
 
@@ -371,7 +381,7 @@
 							}
 						}
 						var main_content = in_tpl.join('').replaceTpl(d);
-						$('.ChatContainer').before(tpl.replaceTpl({main_content:main_content}));
+						$('.ChatContainer').before(tpl.replaceTpl({main_content:main_content, opid:d.opid, headurl:CurrentHeadurl}));
 						$('.MainChatContainer').scrollTop($('.MainChatContainer').get(0).scrollHeight);
 					});
 
@@ -391,7 +401,9 @@
 
 		var openid = $(this).attr('openid');
 		var openid_name = $(this).attr('openid_name');
+		var headurl = $(this).find('img').attr('src');
 		CurrentOpenid = openid;
+		CurrentHeadurl = headurl;
 		$('.title_name').text(openid_name);
 		loadHistory();
 	});
@@ -430,6 +442,16 @@
 		window.open('/call/center/my/book?openid=' + openid + "&opid=" + OPID);
 	});
 
+	var clearScreen = function(openid){
+		if(openid == CurrentOpenid){
+			$('.chat_list_item').remove();
+			CurrentOpenid = '';
+			$('.title_name').text('');
+		}
+		$('.useritem_' + openid).remove();
+	};
+
+
 	$(document.body).on('click', '.closeitem', function(){
 		var openid = $(this).attr('data-openid');
 		
@@ -442,7 +464,7 @@
 			type:'POST',
 			success:function(data){
 				if(data.status){
-					loadMyUser();	
+					clearScreen(openid);	
 				}else{
 					alert(data.msg);
 				}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -138,4 +139,19 @@ func StringSliceContains(it string, its []string) bool {
 	}
 
 	return false
+}
+
+func getAccessToken() (string, error) {
+	res, err := http.Get("http://m.6renyou.com/weixin_service/getAccessToken?account_type=1")
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }

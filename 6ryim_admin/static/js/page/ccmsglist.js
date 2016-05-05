@@ -13,7 +13,7 @@
 					'<table style="width:100%;text-align:center;">',
 						'<tr>',
 							'<td style="width:70px;">',
-								'<a href="/call/center/message/detail?openid={openid}" target="_blank"><img src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" /></a>',
+								'<a href="/call/center/message/detail?openid={openid}" target="_blank"><img class="{from}_avatar" src="http://admin.6renyou.com/statics/socketchat/img/default-user.jpg" style="width:40px;height:40px;" /></a>',
 							'</td>',
 							'<td style="text-align:left;">',
 								'<div><a href="/call/center/message/detail?openid={openid}" target="_blank" class="{from}_label">{from_name}</a></div>',
@@ -130,10 +130,9 @@
 		if(userids.length == 0 || source.length == 0)return;
 		if(userids.length != source.length)return;
 		$.ajax({
-			url:"/user/get",
+			url:"/wx/user/get",
 			data:{
-				openids:userids.join(","),
-				source:source.join(",")
+				openids:userids.join(",")
 			},
 			type:'POST',
 			dataType:'json',
@@ -145,7 +144,8 @@
 				data = data.data;
 				if(data.length > 0){
 					$.each(data, function(i, d){
-						$('.' + d.userid + "_label").text(d.realname + '(' + d.mobile + ')');
+						$('.' + d.openid + "_label").text(d.nickname);
+						$('.' + d.openid + "_avatar").attr('src', d.headimgurl);
 					})
 				}
 			}

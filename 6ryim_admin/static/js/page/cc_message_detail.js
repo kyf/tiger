@@ -18,7 +18,7 @@
 					'<table style="width:100%;text-align:center;">',
 						'<tr>',
 							'<td style="width:70px;">',
-								'<img src="{from_icon}" />',
+								'<img src="{from_icon}" style="width:40px;height:40px;" class="{from}_avatar" />',
 							'</td>',
 							'<td style="text-align:left;">',
 								'<div class="{from}_label">{from_name}</div>',
@@ -63,10 +63,9 @@
 		if(!userids || !source)return;
 		if(userids.length == 0 || source.length == 0)return;
 		$.ajax({
-			url:"/user/get",
+			url:"/wx/user/get",
 			data:{
-				openids:userids.join(","),
-				source:source.join(",")
+				openids:userids.join(",")
 			},
 			type:'POST',
 			dataType:'json',
@@ -78,10 +77,11 @@
 				
 				if(data.length > 0){
 					$.each(data, function(i, d){
-						$('.' + d.userid + "_label").text(d.realname + '(' + d.mobile + ')');
+						$('.' + d.openid + "_label").text(d.nickname);
 						if(d.userid == ORDER_ID){
-							$('#order_label').text(d.realname + '(' + d.mobile + ')');	
+							$('#order_label').text(d.nickname);	
 						}
+						$('.' + d.openid + "_avatar").attr('src', d.headimgurl);
 					})
 				}
 			}
@@ -132,13 +132,15 @@
 						}
 
 						
+						d.from_name = d.from;
 						if(d.fromtype == 2){
 							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/six-service.jpg";
+							d.from = '';
+							d.from_name = d.opid;
 						}else{
 							d.from_icon = "http://admin.6renyou.com/statics/socketchat/img/default-user.jpg";
 						}
 
-						d.from_name = d.from;
 						d.to_name = 'unknwon';
 						d.createtime = ts2time(d.ts);
 

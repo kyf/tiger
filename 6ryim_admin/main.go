@@ -15,6 +15,8 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+
+	"bitbucket.org/kyf456/wx_service/user"
 )
 
 const (
@@ -36,7 +38,8 @@ var (
 	LogPath string = "/var/log/6ryim_admin/6ryim_admin.log"
 	Port    int
 
-	um *UserManager
+	um   *UserManager
+	wxum *user.UserManager
 )
 
 func init() {
@@ -80,6 +83,7 @@ func main() {
 	m.Use(auth)
 
 	um = NewUserManager()
+	wxum = user.New(mylogger)
 
 	m.Get("/message", func(logger *log.Logger, r *http.Request, sess sessions.Session, ren render.Render) {
 		admin_user, _ := sess.Get("admin_user").(string)
@@ -135,6 +139,38 @@ func main() {
 			template.HTML(string(top)),
 		}
 		ren.HTML(200, "message_detail", data)
+	})
+
+	m.Post("/wx/user/get", func(r *http.Request, ren render.Render, logger *log.Logger) {
+		openids := r.Form.Get("openids")
+
+		result := struct {
+			m6ryResponse
+			Data interface{} `json:"data"`
+		}{}
+
+		if len(openids) == 0 {
+			result.Status = -1
+			result.Info = "params is invalid!"
+			ren.JSON(200, result)
+			return
+		}
+
+		_openids := strings.Split(openids, ",")
+
+		accessToken, err := getAccessToken()
+		if err != nil {
+			result.Status = -1
+			result.Info = fmt.Sprintf("err:%v", err)
+			logger.Printf("getAccessToken err:%v", err)
+			ren.JSON(200, result)
+			return
+		}
+		data := wxum.Get(_openids, accessToken)
+
+		result.Status = 0
+		result.Data = data
+		ren.JSON(200, result)
 	})
 
 	m.Post("/user/get", func(r *http.Request, ren render.Render, logger *log.Logger) {
@@ -329,7 +365,8 @@ func main() {
 
 		data := struct {
 			Opid template.HTML
-		}{template.HTML(string(adm.Opid))}
+			User template.HTML
+		}{template.HTML(string(adm.Opid)), template.HTML(admin_user)}
 		ren.HTML(200, "chat", data)
 	})
 

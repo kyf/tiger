@@ -182,6 +182,10 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 	var data []map[string]interface{} = make([]map[string]interface{}, 0, 5)
 	defaultOL.poolLocker.Lock()
 	defer defaultOL.poolLocker.Unlock()
+	accessToken, err := getAccessToken()
+	if err != nil {
+		logger.Printf("getAccessToken err:%v", err)
+	}
 	if clients, ok := defaultOL.olPool[opid]; ok {
 		for index, client := range clients {
 			defaultOL.olPool[opid][index].refresh()
@@ -193,22 +197,22 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 			ts := client.lastMsg.Created
 			msgType := strconv.Itoa(int(client.lastMsg.MsgType))
 			openid_name := openid
+			headurl := ""
 			isUpdate := false
 			number := len(client.unRead)
 			if len(client.unRead) > 0 {
 				isUpdate = true
 			}
 
-			user, err := um.Get([]string{openid}, []string{"weixin"})
-			if err != nil {
-				logger.Printf("usermanager.Get err:%v", err)
-			} else {
+			if !strings.EqualFold("", accessToken) {
+				user := wxum.Get([]string{openid}, accessToken)
 				if len(user) > 0 {
-					openid_name = user[0].RealName
+					openid_name = user[0].NickName
+					headurl = user[0].HeadImgURL
 				}
 			}
 
-			data = append(data, map[string]interface{}{"number": number, "isUpdate": isUpdate, "msg": msg, "times": times, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name})
+			data = append(data, map[string]interface{}{"number": number, "isUpdate": isUpdate, "msg": msg, "times": times, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name, "headurl": headurl})
 
 		}
 	}
