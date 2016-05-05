@@ -22,6 +22,7 @@
 							'<td style="width:100px;">{msgtype_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
 							'<td style="width:150px;color:red" class="{openid}_reply" jqid="{id}"></td>',
+							'<td style="width:150px;color:red" class="{openid}_handle" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
 				'</li>'
@@ -90,9 +91,9 @@
 							$(this).html('[已回复]');
 						}else{
 							if(onlinedata[openid]){
-								$(this).html('<span class="btn btn_disabled btn_input"><button >已接入</button></span>');
+								$('.' + openid + '_handle').html('<span class="btn btn_disabled btn_input"><button >已接入</button></span>');
 							}else{
-								$(this).html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">接入</button></span>');
+								$('.' + openid + '_handle').html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">重新接入</button></span>');
 							}
 						}	
 					});
