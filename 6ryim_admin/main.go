@@ -241,6 +241,17 @@ func main() {
 	m.Post("/request/message/new/number", getNewMessageNum)
 	m.Get("/call/center/message/detail", handleListDetail)
 	m.Post("/upload", handleUpload)
+	m.Post("/unbind", func(r *http.Request, w http.ResponseWriter, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		openid := r.Form.Get("openid")
+
+		if strings.EqualFold("", openid) {
+			responseJson(w, false, "openid is empty")
+			return
+		}
+		defaultOL.unbind(admin_user, openid)
+		responseJson(w, true, "")
+	})
 	m.Get("/request/online/list", handleOnlineList)
 
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {

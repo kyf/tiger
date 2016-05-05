@@ -213,7 +213,12 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 		}
 	}
 
-	responseJson(w, true, "", data)
+	iswait := len(defaultWL.waitPool)
+	result := map[string]interface{}{
+		"wait": iswait,
+		"data": data,
+	}
+	responseJson(w, true, "", result)
 
 }
 

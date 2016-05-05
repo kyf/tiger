@@ -105,20 +105,21 @@
 
 	var chattpl = [
 		'<div  class="ng-scope chat_list_item">',
-		'<div message-directive="" class="clearfix">',
-		'<div  style="overflow: hidden;" on="message.MsgType" ng-switch="">',
-		'<div  class="message ng-scope me" ng-switch-default="">',
-		//'<p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>',
-		'<img src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">',
-		'<div class="content">',
-		'<div class="bubble js_message_bubble ng-scope bubble_primary right">',
-		'<div  class="bubble_cont ng-scope">',
-		'{main_content}',
-		'</div>',
-                    '</div>',
-                  '</div>',
-                '</div>',
-              '</div>',
+			'<div message-directive="" class="clearfix">',
+				'<div  style="overflow: hidden;" on="message.MsgType" ng-switch="">',
+					'<div  class="message ng-scope me" ng-switch-default="">',
+						//'<p class="message_system ng-scope" ><span class="content ng-binding">10:57</span></p>',
+						'<img src="http://admin.6renyou.com/statics/socketchat/img/six-service.jpg" class="avatar">',
+						'<div class="content">',
+							'<div class="bubble js_message_bubble ng-scope bubble_primary right">',
+								'<div  class="bubble_cont ng-scope">',
+									'{main_content}',
+								'</div>',
+                    		'</div>',
+                  		'</div>',
+                	'</div>',
+					//'<div style="float:right;font-size:14px;margin-top:-16px;margin-bottom:16px;">中国人的什么</div>',
+              	'</div>',
             '</div>',
        '</div>'
 	];
@@ -256,6 +257,12 @@
 			type:'POST',
 			success:function(data){
 				if(data.status){
+					var wait = data.data.wait;
+					data = data.data;
+					if(wait > 0){
+						window.parent.$('#newMsgTip').show();
+						window.parent.$('#newWaitNum').text(wait);
+					}
 					if(data.data.length == 0)return;
 					$('.useritem').remove();
 					data.data = data.data.sort(sort_user);
@@ -410,6 +417,7 @@
 		var openid = $(this).attr('openid');
 		$('#contextMenu').css({top:e.clientY, left:e.clientX}).show();
 		$('#contextMenu').find('.bookitem').attr('data-openid', openid);
+		$('#contextMenu').find('.closeitem').attr('data-openid', openid);
 		return false;
 	});
 
@@ -420,6 +428,26 @@
 	$(document.body).on('click', '.bookitem', function(){
 		var openid = $(this).attr('data-openid');
 		window.open('/call/center/my/book?openid=' + openid + "&opid=" + OPID);
+	});
+
+	$(document.body).on('click', '.closeitem', function(){
+		var openid = $(this).attr('data-openid');
+		
+		$.ajax({
+			url:"/unbind",
+			data:{
+				openid:openid
+			},
+			dataType:'json',
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					loadMyUser();	
+				}else{
+					alert(data.msg);
+				}
+			}
+		});
 	});
 
 })(jQuery, window)
