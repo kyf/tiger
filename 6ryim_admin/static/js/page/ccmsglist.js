@@ -89,13 +89,12 @@
 						var id = $(this).attr('jqid');
 						if(latestId > id){
 							$(this).html('[已回复]');
-						}else{
+						}
 							if(onlinedata[openid]){
 								$('.' + openid + '_handle').html('<span class="btn btn_disabled btn_input"><button >已接入</button></span>');
 							}else{
 								$('.' + openid + '_handle').html('<span class="btn btn_primary btn_input"><button class="js_fetch" jqopenid="' + openid + '">重新接入</button></span>');
 							}
-						}	
 					});
 				}
 			});
