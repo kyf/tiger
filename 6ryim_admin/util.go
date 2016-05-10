@@ -155,3 +155,35 @@ func getAccessToken() (string, error) {
 
 	return string(body), nil
 }
+
+func postWeb(openid, message, msgType string) error {
+	data := make(url.Values)
+	data.Set("content", message)
+	data.Set("openid", openid)
+	data.Set("msgType", msgType)
+	res, err := http.PostForm("http://localhost:6067/receive", data)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
+	response := new(struct {
+		Status  bool   `json:"status"`
+		Message string `json:"msg"`
+	})
+
+	err = json.Unmarshal(body, response)
+	if err != nil {
+		return err
+	}
+
+	if !response.Status {
+		return errors.New(response.Message)
+	}
+
+	return nil
+}

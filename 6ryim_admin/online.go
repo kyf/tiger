@@ -4,6 +4,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Client struct {
@@ -52,6 +54,22 @@ func (ol *Online) findOpByUser(openid string) string {
 	}
 }
 
+func getLastByOpenid(openid string) (*Message, error) {
+	mgo := NewMongoClient()
+	err := mgo.Connect()
+	if err != nil {
+		return nil, err
+	}
+	defer mgo.Close()
+
+	var result Message
+	err = mgo.Find(CC_MESSAGE_TABLE, bson.M{"openid": openid, "fromtype": 1}).Sort("-_id").One(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 func (ol *Online) bind(opid, openid string, msgs []Message) bool {
 	ol.poolLocker.Lock()
 	defer ol.poolLocker.Unlock()
@@ -62,6 +80,11 @@ func (ol *Online) bind(opid, openid string, msgs []Message) bool {
 	lastMsg := new(Message)
 	if len(msgs) > 0 {
 		lastMsg = &(msgs[len(msgs)-1])
+	} else {
+		_lastMsg, _ := getLastByOpenid(openid)
+		if _lastMsg != nil {
+			lastMsg = _lastMsg
+		}
 	}
 	ol.olPool[opid] = append(ol.olPool[opid], Client{openid: openid, lastTS: time.Now(), lastMsg: lastMsg, unRead: msgs})
 	return true

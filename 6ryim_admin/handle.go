@@ -198,6 +198,7 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 			msgType := strconv.Itoa(int(client.lastMsg.MsgType))
 			openid_name := openid
 			headurl := ""
+			source := client.lastMsg.Source
 			isUpdate := false
 			number := len(client.unRead)
 			if len(client.unRead) > 0 {
@@ -212,7 +213,7 @@ func handleRequestCC(w http.ResponseWriter, r *http.Request, sess sessions.Sessi
 				}
 			}
 
-			data = append(data, map[string]interface{}{"number": number, "isUpdate": isUpdate, "msg": msg, "times": times, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name, "headurl": headurl})
+			data = append(data, map[string]interface{}{"number": number, "isUpdate": isUpdate, "msg": msg, "times": times, "ts": ts, "openid": openid, "msgType": msgType, "openid_name": openid_name, "headurl": headurl, "source": source})
 
 		}
 	}
@@ -230,6 +231,14 @@ func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, l
 	media_id, openid, message, msgType := r.Form.Get("media_id"), r.Form.Get("openid"), r.Form.Get("message"), r.Form.Get("msg_type")
 	opid, _ := sess.Get("admin_user").(string)
 
+	source := r.Form.Get("source")
+
+	_source, err := strconv.Atoi(source)
+	if err != nil {
+		responseJson(w, false, fmt.Sprintf("source [%v] is invalid!", source))
+		return
+	}
+
 	_msgType, err := strconv.Atoi(msgType)
 	if err != nil {
 		responseJson(w, false, fmt.Sprintf("msgtype [%v] is invalid!", msgType))
@@ -238,13 +247,19 @@ func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, l
 
 	var posterr error = nil
 
-	switch MessageType(_msgType) {
-	case MSG_TYPE_TEXT:
-		_, posterr = postwx.PostText(openid, message)
-	case MSG_TYPE_IMAGE:
-		_, posterr = postwx.PostImage(openid, media_id)
-	default:
-		posterr = errors.New("Do not support wx message type!")
+	if _source == MSG_SOURCE_WX {
+		switch MessageType(_msgType) {
+		case MSG_TYPE_TEXT:
+			_, posterr = postwx.PostText(openid, message)
+		case MSG_TYPE_IMAGE:
+			_, posterr = postwx.PostImage(openid, media_id)
+		default:
+			posterr = errors.New("Do not support wx message type!")
+		}
+	}
+
+	if _source == MSG_SOURCE_PC {
+		posterr = postWeb(openid, message, msgType)
 	}
 
 	if posterr != nil {
@@ -253,6 +268,7 @@ func handleSend(sess sessions.Session, w http.ResponseWriter, r *http.Request, l
 		return
 	} else {
 		msg := Message{Fromtype: MSG_FROM_TYPE_OP, Openid: openid, Created: time.Now().Unix(), Content: message, MsgType: MessageType(_msgType), Opid: opid}
+		msg.Source = _source
 
 		mgo := NewMongoClient()
 		err = mgo.Connect()

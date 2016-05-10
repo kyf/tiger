@@ -40,7 +40,7 @@ const (
 
 func listMessage(openid string, mgo *Mongo) ([]Message, error) {
 	var result []Message
-	err := mgo.Find(CC_MESSAGE_TABLE, bson.M{"openid": openid}).Sort("-_id").Limit(20).All(&result)
+	err := mgo.Find(CC_MESSAGE_TABLE, bson.M{"openid": openid}).Sort("-_id").Limit(100).All(&result)
 	if err != nil {
 		return nil, err
 	}

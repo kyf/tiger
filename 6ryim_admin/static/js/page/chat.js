@@ -153,7 +153,7 @@
 
 	var usertpl = [
 			'<div class="ng-scope useritem useritem_{openid}">',
-                '<div class="chat_item slide-left ng-scope {active}" openid="{openid}" openid_name="{username}">',
+                '<div class="chat_item slide-left ng-scope {active}" source="{source}" openid="{openid}" openid_name="{username}">',
                   '<div class="avatar"> ',
 					  '<img src="{headurl}" class="img"> ',
 					  '<i style="{number_display}" class="unread_number {openid}_unread_number icon web_wechat_reddot_middle ng-binding ng-scope">{number}</i>',
@@ -167,7 +167,7 @@
 	];
 	usertpl = usertpl.join('');
 
-	var addUserItem = function(username, lastmsg, active, number, openid, msgtype, headurl){
+	var addUserItem = function(username, lastmsg, active, number, openid, msgtype, headurl, source){
 		switch(parseInt(msgtype)){
 			case MSG_TYPE_IMAGE:
 				lastmsg = "[图片]";
@@ -182,6 +182,7 @@
 			lastmsg : lastmsg,
 			active : active ? "active" : '',
 			number : number,
+			source:source,
 			headurl : headurl == '' ? 'http://admin.6renyou.com/statics/socketchat/img/default-user.jpg' : headurl,
 			number_display:number > 0 ? 'display:' : 'display:none'
 		};
@@ -189,6 +190,7 @@
 	};
 
 	var CurrentOpenid = '';
+	var CurrentSource = '';
 	var CurrentHeadurl = 'http://admin.6renyou.com/statics/socketchat/img/default-user.jpg';
 
 	var addChatItem = function(content, media_id, msg_type){
@@ -226,6 +228,7 @@
 				openid:CurrentOpenid,
 				msg_type:msg_type,
 				message:content,
+				source:CurrentSource,
 				media_id:media_id
 			},
 			dataType:'json',
@@ -277,12 +280,15 @@
 					data.data = data.data.sort(sort_user);
 					if(CurrentOpenid == ''){
 						CurrentOpenid = data.data[0].openid;
-						CurrentHeadurl = data.data[0].headurl;
+						CurrentSource = data.data[0].source;
+						if(data.data[0].headurl != ''){
+							CurrentHeadurl = data.data[0].headurl;
+						}
 						$('.title_name').text(data.data[0].openid_name);
 						loadHistory();
 					}
 					$.each(data.data, function(i, d){
-						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid, d.msgType, d.headurl);
+						addUserItem(d.openid_name, d.msg, CurrentOpenid == d.openid ? true : false, d.number, d.openid, d.msgType, d.headurl, d.source);
 						if(CurrentOpenid == d.openid && d.number > 0){
 							getUnread();
 						}
@@ -400,9 +406,11 @@
 		$(this).find('.unread_number').hide();
 
 		var openid = $(this).attr('openid');
+		var source = $(this).attr('source');
 		var openid_name = $(this).attr('openid_name');
 		var headurl = $(this).find('img').attr('src');
 		CurrentOpenid = openid;
+		CurrentSource = source;
 		CurrentHeadurl = headurl;
 		$('.title_name').text(openid_name);
 		loadHistory();
@@ -449,6 +457,7 @@
 		if(openid == CurrentOpenid){
 			$('.chat_list_item').remove();
 			CurrentOpenid = '';
+			CurrentSource = '';
 			$('.title_name').text('');
 		}
 		$('.useritem_' + openid).remove();

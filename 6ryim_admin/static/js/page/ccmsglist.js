@@ -19,9 +19,10 @@
 								'<div><a href="/call/center/message/detail?openid={openid}" target="_blank" class="{from}_label">{from_name}</a></div>',
 								'<div>{content}</div>',
 							'</td>',
-							'<td style="width:100px;">{msgtype_name}</td>',
+							'<td style="width:80px;">{msgtype_name}</td>',
+							'<td style="width:80px;">{source_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
-							'<td style="width:150px;color:red" class="{openid}_reply" jqid="{id}"></td>',
+							'<td style="width:100px;color:red" class="{openid}_reply" jqid="{id}"></td>',
 							'<td style="width:150px;color:red" class="{openid}_handle" jqid="{id}"></td>',
 						'</tr>',
 					'</table>',
@@ -192,6 +193,23 @@
 								d.msgtype_name = '语音';
 								break;
 							default:
+						}
+
+						switch(d.source){
+							case MSG_SOURCE_WX:
+								d.source_name = "微信";
+								break;
+							case MSG_SOURCE_IOS:
+								d.source_name = "IOS";
+								break;
+							case MSG_SOURCE_Android:
+								d.source_name = "Android";
+								break;
+							case MSG_SOURCE_PC:
+								d.source_name = "PC";
+								break;
+							default:
+								d.source_name = "未知";
 						}
 
 						d.from = d.openid;

@@ -38,3 +38,8 @@ function ts2time(timestamp){
 var MSG_TYPE_TEXT = 1, 
 	MSG_TYPE_IMAGE= 2,
 	MSG_TYPE_AUDIO = 3;
+
+var MSG_SOURCE_WX = 1;
+var MSG_SOURCE_IOS = 2;
+var MSG_SOURCE_Android = 3;
+var MSG_SOURCE_PC = 4;

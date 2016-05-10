@@ -25,6 +25,7 @@
 								'<div>{message}</div>',
 							'</td>',
 							'<td style="width:100px;">{msgtype_name}</td>',
+							'<td style="width:100px;">{source_name}</td>',
 							'<td style="width:150px;">{createtime}</td>',
 						'</tr>',
 					'</table>',
@@ -78,7 +79,7 @@
 				if(data.length > 0){
 					$.each(data, function(i, d){
 						$('.' + d.openid + "_label").text(d.nickname);
-						if(d.userid == ORDER_ID){
+						if(d.openid == ORDER_ID){
 							$('#order_label').text(d.nickname);	
 						}
 						$('.' + d.openid + "_avatar").attr('src', d.headimgurl);
@@ -130,6 +131,24 @@
 								break;
 							default:
 						}
+
+						switch(d.source){
+							case MSG_SOURCE_WX:
+								d.source_name = "微信";
+								break;
+							case MSG_SOURCE_IOS:
+								d.source_name = "IOS";
+								break;
+							case MSG_SOURCE_Android:
+								d.source_name = "Android";
+								break;
+							case MSG_SOURCE_PC:
+								d.source_name = "PC";
+								break;
+							default:
+								d.source_name = "未知";
+						}
+
 
 						
 						d.from_name = d.from;
