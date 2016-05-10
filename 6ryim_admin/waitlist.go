@@ -33,6 +33,7 @@ const (
 	MSG_SOURCE_WX      int = 1
 	MSG_SOURCE_IOS     int = 2
 	MSG_SOURCE_ANDROID int = 3
+	MSG_SOURCE_PC      int = 4
 
 	CC_MESSAGE_TABLE = "cc_message"
 )
