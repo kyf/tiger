@@ -54,6 +54,15 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		return
 	}
 
+	content_byte, err := filterHTML(content)
+	if err != nil {
+		logger.Printf("filterHTML err:%v", err)
+		responseJson(w, false, "content is invalid")
+		return
+	}
+
+	content = string(content_byte)
+
 	if _source == 1 {
 		switch MessageType(_msg_type) {
 		case MSG_TYPE_IMAGE:

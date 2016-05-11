@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -186,4 +187,14 @@ func postWeb(openid, message, msgType string) error {
 	}
 
 	return nil
+}
+
+func filterHTML(content string) ([]byte, error) {
+	reg, err := regexp.Compile("<[^>]+>")
+	if err != nil {
+		return nil, err
+	}
+
+	result := reg.ReplaceAll([]byte(content), []byte(""))
+	return result, nil
 }
