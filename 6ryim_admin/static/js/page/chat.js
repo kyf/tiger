@@ -326,6 +326,7 @@
 						var in_tpl;
 						switch(d.msgType){
 							case MSG_TYPE_TEXT:
+								d.content = ToggleFace(d.content);
 								in_tpl = text_tpl['leftplain'];
 								break;
 							case MSG_TYPE_IMAGE:
@@ -364,6 +365,7 @@
 						var tpl = chatlefttpl, in_tpl;
 						switch(d.msgType){
 							case MSG_TYPE_TEXT:
+								d.content = ToggleFace(d.content);
 								in_tpl = text_tpl['leftplain'];
 								break;
 							case MSG_TYPE_IMAGE:
@@ -379,6 +381,7 @@
 
 							switch(d.msgType){
 								case MSG_TYPE_TEXT:
+									d.content = ToggleFace(d.content);
 									in_tpl = text_tpl['rightplain'];
 									break;
 								case MSG_TYPE_IMAGE:
@@ -452,6 +455,7 @@
 			ReplyPanel.hide();
 		}
 
+		//if(e.target != $('.web_wechat_face').get(0) && !$(e.target).hasClass('face')){
 		if(e.target != $('.web_wechat_face').get(0)){
 			$('#mmpop_emoji_panel').hide();
 		}
