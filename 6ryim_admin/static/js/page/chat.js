@@ -211,7 +211,7 @@
 		var main_content = "";
 		switch(msg_type){
 			case MSG_TYPE_TEXT:
-				main_content = text_tpl["rightplain"].join('').replaceTpl({content:content});
+				main_content = text_tpl["rightplain"].join('').replaceTpl({content:ToggleFace(content)});
 				break;
 			case MSG_TYPE_IMAGE:
 				main_content = text_tpl["rightpicture"].join('').replaceTpl({content:content});
@@ -432,6 +432,11 @@
 		$('#mmpop_emoji_panel').toggle();
 	});
 
+	$('.qq_face').find('.face').click(function(){
+		var val = $('#editArea').val();	
+		$('#editArea').val(val + '[' + this.title + ']');
+	});
+
 
 	$(document.body).on('contextmenu', '.chat_item', function(e){
 		var openid = $(this).attr('openid');
@@ -445,6 +450,10 @@
 		$('#contextMenu').hide();
 		if(e.target != $('.web_wechat_reply').get(0)){
 			ReplyPanel.hide();
+		}
+
+		if(e.target != $('.web_wechat_face').get(0)){
+			$('#mmpop_emoji_panel').hide();
 		}
 	});
 
