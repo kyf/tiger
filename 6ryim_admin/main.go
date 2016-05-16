@@ -315,6 +315,17 @@ func main() {
 		ren.HTML(200, "fastreply", data)
 	})
 
+	m.Get("/call/center/autoreply", func(r *http.Request, ren render.Render, sess sessions.Session) {
+		admin_user, _ := sess.Get("admin_user").(string)
+		left, _ := fetchLeft()
+		top, _ := fetchTop(admin_user)
+		data := struct {
+			Left template.HTML
+			Top  template.HTML
+		}{template.HTML(string(left)), template.HTML(string(top))}
+		ren.HTML(200, "autoreply", data)
+	})
+
 	m.Get("/call/center/account", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
 		left, _ := fetchLeft()
