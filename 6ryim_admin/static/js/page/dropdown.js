@@ -1,15 +1,22 @@
 (function($, window){
 	$.fn.dropdown = function(config){
 
-		this.init = function(data){
+		this.init = function(data, current){
 			var tpl = [];
 			$.each(data, function(index, it){
 				if(index == 0){
-					tpl.push('<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="' + index + '" data-value="'+it.value+'" ><label class="jsBtLabel">'+it.text+'</label><i class="arrow"></i></a>');
+					if(current){
+						tpl.push('<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="' + index + '" data-value="'+current.value+'" ><label class="jsBtLabel">'+current.text+'</label><i class="arrow"></i></a>');
+					}else{
+						tpl.push('<a class="btn dropdown_switch jsDropdownBt" href="javascript:;" data-index="' + index + '" data-value="'+it.value+'" ><label class="jsBtLabel">'+it.text+'</label><i class="arrow"></i></a>');
+					}
 					tpl.push('<div class="dropdown_data_container jsDropdownList" style="display: none;">');
 					tpl.push('<ul class="dropdown_data_list">');
+					tpl.push('<li  class="dropdown_data_item" >');
+					tpl.push('<a data-name="'+it.text+'" data-index="'+index+'" data-value="'+it.value+'" class="jsDropdownItem" href="javascript:;" onclick="return false;">'+it.text+'</a>');
+					tpl.push('</li>');
 				}else{
-					tpl.push('<li  class="dropdown_data_item >');
+					tpl.push('<li  class="dropdown_data_item" >');
 					tpl.push('<a data-name="'+it.text+'" data-index="'+index+'" data-value="'+it.value+'" class="jsDropdownItem" href="javascript:;" onclick="return false;">'+it.text+'</a>');
 					tpl.push('</li>');
 				}
@@ -22,7 +29,7 @@
 
 
 		if(config && config.data){
-			this.init(config.data);
+			this.init(config.data, config.current);
 		}
 
 		var triggerBt = this.find('.jsDropdownBt'),

@@ -293,6 +293,12 @@ func main() {
 	m.Post("/request/fastreply/update", handleFRupdate)
 	m.Post("/request/fastreply/list", handleFRlist)
 	m.Post("/request/fastreply/remove", handleFRremove)
+
+	m.Post("/request/autoreply/timeitem/list", handleARlist)
+	m.Post("/request/autoreply/timeitem/remove", handleARremove)
+	m.Post("/request/autoreply/timeitem/update", handleARupdate)
+	m.Post("/request/autoreply/timeitem/add", handleARadd)
+
 	m.Get("/call/center/handled", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
 		left, _ := fetchLeft()

@@ -1,17 +1,50 @@
 (function($, window){
 	var ListContainer = $('#js_list');
 	var listtpl = [
-			'<div>',
-				'<table>',
+			'<div class="TimeItem">',
+				'<table style="width:100%;">',
 					'<tr>',
-						'<td class="table_cell info">',
+						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
 							'<div class="info_inner">',
-								'<div class="setting_time dropdown_wrp dropdown_menu"></div>',
-								'<div class="setting_time dropdown_wrp dropdown_menu"></div>',
+								'<div class="setting_time dropdown_wrp dropdown_menu" style="width:auto;"></div>',
 							'</div>',
 						'</td>',
-						'<td class="table_cell opr" style="width:120px;text-align:center;"><div class="opr_inner">',
-							'<a href="javascript:;" class="js_kf_edit" data-id="{id}">保存<input type="hidden" class="edit_value" value="{content}" /></a>',
+						'<td class="info" style="width:18px;">',
+							'时',
+						'</td>',
+						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
+							'<div class="info_inner">',
+								'<div class="setting_time dropdown_wrp dropdown_menu" style="width:auto;"></div>',
+							'</div>',
+						'</td>',
+						'<td class="info" style="width:18px;">',
+							'分',
+						'</td>',
+						'<td class="info" style="width:20px;">',
+							'->',
+						'</td>',
+						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
+							'<div class="info_inner">',
+								'<div class="setting_time dropdown_wrp dropdown_menu" style="width:auto;"></div>',
+							'</div>',
+						'</td>',
+						'<td class="info" style="width:18px;">',
+							'时',
+						'</td>',
+						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
+							'<div class="info_inner">',
+								'<div class="setting_time dropdown_wrp dropdown_menu" style="width:auto;"></div>',
+							'</div>',
+						'</td>',
+						'<td class="info" style="width:18px;">',
+							'分',
+						'</td>',
+
+						'<td class="table_cell info" style="padding:10px 0px;text-align:center;">',
+							'<textarea style="width:90%;height:90px;" class="replyContent">{content}</textarea>',
+						'</td>',
+						'<td class="table_cell opr" style="width:120px;text-align:center;padding:10px 0px;"><div class="opr_inner">',
+							'<a href="javascript:;" class="js_kf_edit" data-id="{id}">保存</a>',
 							'<a href="javascript:;" class="js_kf_del" data-id="{id}">删除</a>',
 						'</div></td>',
 					'</tr>',
@@ -42,39 +75,63 @@
 		return result;
 	};
 
-	var SettingTimes = [];
 
-	var addTimeItem = function(current){
+	var addTimeItem = function(currents, currentdata){
+		if(!currents)currents = [];
+		if(!currentdata)currentdata = {};
 		var data = getTimeData();
-		var item = $(listtpl);
+		var item = $(listtpl.replaceTpl(currentdata));
 		ListContainer.append(item);
 		var its = item.find('.setting_time');
 		its.each(function(index, it){
 			var st = $(it);
-			st = st.dropdown({data:index == 0 ? data.hours : data.minutes, current:current});
-			SettingTimes.push(st);
+			st = st.dropdown({data:index % 2 == 0 ? data.hours : data.minutes, current:currents[index]});
 		});
 	};
 
 
 	var emptytpl = [
-			'<div>',
+			'<div class="NoReplyTip">',
 				'<div style="height:75px;line-height:75px;">还没有设置时间段自动回复</div>',
 			'</div>'
 		];
 
 	$(document.body).on('click','.js_kf_edit', function(){
-		var lastdata = {
+		var par = $(this).parents('.TimeItem');
+		var data = {
 			id:$(this).attr('data-id'),
-			content:$(this).find('.edit_value').val()
+			content:par.find('.replyContent').val(),
+			fromhour:par.find('.dropdown_switch').eq(0).attr('data-value'),
+			fromminute:par.find('.dropdown_switch').eq(1).attr('data-value'),
+			tohour:par.find('.dropdown_switch').eq(2).attr('data-value'),
+			tominute:par.find('.dropdown_switch').eq(3).attr('data-value')
 		};
-		Addfn('文字回复', 'update', lastdata);
+
+		var url = "/request/autoreply/timeitem/add";
+		if(data.id != ''){
+			url = "/request/autoreply/timeitem/update";
+		}
+
+		$.ajax({
+			url:url,
+			data:data,
+			type:'POST',
+			dataType:'json',
+			success:function(data){
+				if(data.status){
+					
+				}else{
+					alert(data.msg);
+				}	
+			}
+		});
 	});
 
 	$(document.body).on('click','.js_kf_del', function(){
+		var _this = $(this);
 		if(confirm("确认删除？")){
 			$.ajax({
-				url : '/request/fastreply/remove',
+				url : '/request/autoreply/timeitem/remove',
 				dataType:'json',
 				data:{
 					id:$(this).attr('data-id')	
@@ -82,19 +139,22 @@
 				type:'POST',
 				success:function(data){
 					if(data.status){
-						loadAccount();
 					}else{
-						alert(data.msg);
+						//alert(data.msg);
 					}
 				}
 			});
+			_this.parents('.TimeItem').remove();
+			if($('.TimeItem').size() == 0){
+				$('#js_list').html(emptytpl.join(''));
+			}
 		}	
 	});
 
 
-	var loadAccount = function(){
+	var loadAutoReply = function(){
 		$.ajax({
-			url : '/request/fastreply/list',
+			url : '/request/autoreply/timeitem/list',
 			dataType:'json',
 			type:'POST',
 			success:function(data){
@@ -104,11 +164,15 @@
 					if(data.length == 0){
 						$('#js_list').html(emptytpl.join(''));
 					}else{
-						var tmp = [];
 						$.each(data, function(i, d){
-							tmp.push(listtpl.join('').replaceTpl(d));		
+							var ops = [
+								{text:d.fromhour, value:d.fromhour}, 
+								{text:d.fromminute, value:d.fromminute}, 
+								{text:d.tohour, value:d.tohour},
+								{text:d.tominute, value:d.tominute}, 
+							];
+							addTimeItem(ops, d);
 						});
-						$('#js_list').html(tmp.join(''))
 					}
 				}else{
 					alert(data.msg);
@@ -117,55 +181,11 @@
 		});
 	};
 
-	//loadAccount();
+	loadAutoReply();
 
 	$('.js_kf_add').click(function(){
+		$('.NoReplyTip').remove();
 		addTimeItem({});
 	});
-	var Addfn = function(title, action, lastdata){
-		var config = {
-			'Title' : title,
-			'Button' : '确定',
-			'Content' : formtpl.join('').replaceTpl(lastdata ? lastdata : {})
-		};
-		var dialog = $(Template.dialog.join('').replaceTpl(config));
-		dialog.find('.pop_closed').click(function(){
-			dialog.hide();
-		});
-		dialog.find('.submitbt').click(function(){
-			dialog.find('.frm_msg').hide();
-
-			var content = dialog.find('.content').val().trim();	
-
-			if(content == ""){
-				alert('回复内容为空');
-				return;
-			}
-
-			var data = {
-					content:content
-				};
-
-			if(lastdata){
-				data.id = lastdata.id;
-			}
-
-			$.ajax({
-				url : '/request/fastreply/' + action,
-				data : data,
-				dataType:'json',
-				type:'POST',
-				success:function(data){
-					if(data.status){
-						dialog.hide();
-						loadAccount();
-					}else{
-						alert(data.msg);
-					}					
-				}
-			});
-		});
-		dialog.appendTo(document.body);
-	};
 
 })(jQuery,window)
