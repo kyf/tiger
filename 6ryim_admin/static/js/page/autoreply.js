@@ -96,6 +96,25 @@
 			'</div>'
 		];
 
+	var tiptpl = [
+			'<div style="position:fixed;top:200px;left:200px;width:200px;height:50px;background:#44b549;border-radius:5px;text-align:center;display:none;">',
+				'<span style="font-weight:bold;line-height:50px;"></span>',
+			'</div>'
+		];
+	var tip = $(tiptpl.join(''));
+	$(document.body).append(tip);
+	
+	var showTip = function(msg, status){
+		var width = $(document.body).width();
+		tip.css('color', status ? 'white' : 'red');
+		tip.css('left', (width - 200) / 2);
+		tip.find('span').text(msg);
+		tip.fadeIn(600, function(){
+			tip.fadeOut(1000);
+		});
+	};
+
+
 	$(document.body).on('click','.js_kf_edit', function(){
 		var par = $(this).parents('.TimeItem');
 		var data = {
@@ -119,9 +138,9 @@
 			dataType:'json',
 			success:function(data){
 				if(data.status){
-					
+					showTip('保存成功', true);					
 				}else{
-					alert(data.msg);
+					showTip(data.msg, false);
 				}	
 			}
 		});

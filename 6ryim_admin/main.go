@@ -289,6 +289,8 @@ func main() {
 		responseJson(w, true, "")
 	})
 	m.Get("/request/online/list", handleOnlineList)
+	m.Get("/request/cacheautoreply", handleCacheAutoReply)
+
 	m.Post("/request/fastreply/add", handleFRadd)
 	m.Post("/request/fastreply/update", handleFRupdate)
 	m.Post("/request/fastreply/list", handleFRlist)
@@ -423,6 +425,8 @@ func main() {
 
 		ren.HTML(200, "sendwx", data)
 	})
+
+	handleCacheAutoReply(mylogger)
 
 	var exit chan error
 	go func() {

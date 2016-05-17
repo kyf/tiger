@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/kyf/postwx"
@@ -187,6 +189,45 @@ func postWeb(openid, message, msgType string) error {
 	}
 
 	return nil
+}
+
+type CacheAutoReplyStruct struct {
+	locker sync.RWMutex
+	ar     []AutoReply
+}
+
+var (
+	CacheAutoReply = &CacheAutoReplyStruct{ar: make([]AutoReply, 0)}
+)
+
+func (car *CacheAutoReplyStruct) update(mgo *Mongo, logger *log.Logger) {
+	car.locker.RLock()
+	defer car.locker.RUnlock()
+
+	ar, err := AutoReplyList(mgo)
+	if err != nil {
+		logger.Printf("AutoReplyList err:%v", err)
+		return
+	}
+	car.ar = ar
+}
+
+func (car *CacheAutoReplyStruct) list() []AutoReply {
+	return car.ar
+}
+
+func autoReply(openid string, logger *log.Logger) {
+	ar := CacheAutoReply.list()
+	now := time.Now()
+	year, month, day, location, st := now.Year(), now.Month(), now.Day(), now.Location(), now.Unix()
+
+	for _, it := range ar {
+		from := time.Date(year, month, day, it.FromHour, it.FromMinute, 0, 0, location)
+		to := time.Date(year, month, day, it.ToHour, it.ToMinute, 0, 0, location)
+		if st >= from.Unix() && st <= to.Unix() {
+			postWeb(openid, it.Content, fmt.Sprintf("%v", MSG_TYPE_TEXT))
+		}
+	}
 }
 
 func filterHTML(content string) ([]byte, error) {

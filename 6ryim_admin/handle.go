@@ -97,7 +97,21 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		defaultWL.Add(msg)
 	}
 
+	go autoReply(openid, logger)
+
 	responseJson(w, true, "success")
+}
+
+func handleCacheAutoReply(logger *log.Logger) {
+	mgo := NewMongoClient()
+	err := mgo.Connect()
+	if err != nil {
+		logger.Printf("mgo.Connect err:%v", err)
+		return
+	}
+	defer mgo.Close()
+
+	CacheAutoReply.update(mgo, logger)
 }
 
 func handleListMessage(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
