@@ -216,7 +216,7 @@ func (car *CacheAutoReplyStruct) list() []AutoReply {
 	return car.ar
 }
 
-func autoReply(openid string, source int, logger *log.Logger, mgo *Mongo) {
+func autoReply(openid string, source int, logger *log.Logger) {
 	ar := CacheAutoReply.list()
 	now := time.Now()
 	year, month, day, location, st := now.Year(), now.Month(), now.Day(), now.Location(), now.Unix()
@@ -238,9 +238,16 @@ func autoReply(openid string, source int, logger *log.Logger, mgo *Mongo) {
 			} else {
 				msg := Message{Fromtype: MSG_FROM_TYPE_OP, Openid: openid, Created: time.Now().Unix(), Content: it.Content, MsgType: MSG_TYPE_TEXT, Opid: SYSTEM}
 				msg.Source = source
-				err := storeMessage(msg, mgo)
+				mgo := NewMongoClient()
+				err := mgo.Connect()
 				if err != nil {
-					logger.Printf("storeMessage err:%v", err)
+					logger.Printf("mgo.Connect err:%v", err)
+				} else {
+					defer mgo.Close()
+					err = storeMessage(msg, mgo)
+					if err != nil {
+						logger.Printf("storeMessage err:%v", err)
+					}
 				}
 
 			}
