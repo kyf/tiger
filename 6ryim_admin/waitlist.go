@@ -36,6 +36,8 @@ const (
 	MSG_SOURCE_PC      int = 4
 
 	CC_MESSAGE_TABLE = "cc_message"
+
+	SYSTEM = "system"
 )
 
 func listMessage(openid string, mgo *Mongo) ([]Message, error) {

@@ -115,6 +115,12 @@
 	};
 
 
+	var updateCacheAutoReply = function(){
+		$.ajax({
+			url:"/request/cacheautoreply"
+		});
+	};
+
 	$(document.body).on('click','.js_kf_edit', function(){
 		var par = $(this).parents('.TimeItem');
 		var data = {
@@ -139,6 +145,7 @@
 			success:function(data){
 				if(data.status){
 					showTip('保存成功', true);					
+					updateCacheAutoReply();
 				}else{
 					showTip(data.msg, false);
 				}	
@@ -158,6 +165,7 @@
 				type:'POST',
 				success:function(data){
 					if(data.status){
+						updateCacheAutoReply();
 					}else{
 						//alert(data.msg);
 					}

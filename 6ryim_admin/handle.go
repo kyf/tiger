@@ -97,7 +97,7 @@ func handleReceive(r *http.Request, w http.ResponseWriter, logger *log.Logger) {
 		defaultWL.Add(msg)
 	}
 
-	go autoReply(openid, _source, logger)
+	go autoReply(openid, _source, logger, mgo)
 
 	responseJson(w, true, "success")
 }
