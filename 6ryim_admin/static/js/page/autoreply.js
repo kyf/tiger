@@ -215,13 +215,14 @@
 		addTimeItem({});
 	});
 
-	var loadFirtAutoReply = function(){
+	var loadFirstAutoReply = function(){
 			$.ajax({
 			url:'/request/autoreply/first/load',
 			dataType:'json',
 			success:function(data){
 				if(data.status){
-			
+					data = data.data[0];
+					$('#FirtAutoReply').val(data.content);
 				}else{
 					showTip(data.msg, false);
 				}
@@ -250,6 +251,7 @@
 			success:function(data){
 				if(data.status){
 					showTip('保存成功', true);
+					updateCacheAutoReply();
 				}else{
 					showTip(data.msg, false);
 				}

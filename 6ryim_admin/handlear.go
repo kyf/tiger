@@ -238,9 +238,48 @@ func handleARremove(r *http.Request, logger *log.Logger, sess sessions.Session, 
 }
 
 func handleARFirstLoad(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
+	mgo := NewMongoClient()
+	err := mgo.Connect()
+	if err != nil {
+		logger.Printf("mgo.Connect err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
 
+	defer mgo.Close()
+
+	list, err := FirstAutoReplyList(mgo)
+	if err != nil {
+		logger.Printf("FirstAutoReplyList err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+	responseJson(w, true, "", list)
 }
 
 func handleARFirstSave(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
+	content := r.Form.Get("content")
 
+	if strings.EqualFold("", content) {
+		responseJson(w, false, "content is empty")
+		return
+	}
+
+	mgo := NewMongoClient()
+	err := mgo.Connect()
+	if err != nil {
+		logger.Printf("mgo.Connect err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+
+	defer mgo.Close()
+
+	err = AddFirstAutoReply(mgo, content)
+	if err != nil {
+		logger.Printf("AddFirstAutoReply err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+	responseJson(w, true, "")
 }

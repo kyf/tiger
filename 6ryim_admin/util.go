@@ -194,6 +194,7 @@ func postWeb(openid, message, msgType string) error {
 type CacheAutoReplyStruct struct {
 	locker sync.RWMutex
 	ar     []AutoReply
+	far    []FirstAutoReply
 }
 
 var (
@@ -209,15 +210,27 @@ func (car *CacheAutoReplyStruct) update(mgo *Mongo, logger *log.Logger) {
 		logger.Printf("AutoReplyList err:%v", err)
 		return
 	}
+
+	far, err := FirstAutoReplyList(mgo)
+	if err != nil {
+		logger.Printf("FirstAutoReplyList err:%v", err)
+		return
+	}
+
 	car.ar = ar
+	car.far = far
 }
 
-func (car *CacheAutoReplyStruct) list() []AutoReply {
+func (car *CacheAutoReplyStruct) arlist() []AutoReply {
 	return car.ar
 }
 
+func (car *CacheAutoReplyStruct) farlist() []FirstAutoReply {
+	return car.far
+}
+
 func autoReply(openid string, source int, logger *log.Logger) {
-	ar := CacheAutoReply.list()
+	ar := CacheAutoReply.arlist()
 	now := time.Now()
 	year, month, day, location, st := now.Year(), now.Month(), now.Day(), now.Location(), now.Unix()
 
@@ -253,6 +266,34 @@ func autoReply(openid string, source int, logger *log.Logger) {
 			}
 		}
 	}
+}
+
+func welcome(openid string) error {
+	far := CacheAutoReply.farlist()
+	if far == nil || len(far) == 0 {
+		return nil
+	}
+	posterr := postWeb(openid, far[0].Content, fmt.Sprintf("%v", MSG_TYPE_TEXT))
+	if posterr != nil {
+		return posterr
+	} else {
+		msg := Message{Fromtype: MSG_FROM_TYPE_OP, Openid: openid, Created: time.Now().Unix(), Content: far[0].Content, MsgType: MSG_TYPE_TEXT, Opid: SYSTEM}
+		msg.Source = MSG_SOURCE_PC
+		mgo := NewMongoClient()
+		err := mgo.Connect()
+		if err != nil {
+			return err
+		} else {
+			defer mgo.Close()
+			err = storeMessage(msg, mgo)
+			if err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
 }
 
 func filterHTML(content string) ([]byte, error) {

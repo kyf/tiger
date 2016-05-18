@@ -114,6 +114,22 @@ func handleCacheAutoReply(logger *log.Logger) {
 	CacheAutoReply.update(mgo, logger)
 }
 
+func handleWelcome(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
+	openid := r.Form.Get("openid")
+
+	if strings.EqualFold("", openid) {
+		responseJson(w, false, "openid is empty")
+		return
+	}
+	err := welcome(openid)
+	if err != nil {
+		logger.Printf("welcome err:%v", err)
+		responseJson(w, false, SERVER_INVALID)
+		return
+	}
+	responseJson(w, true, "")
+}
+
 func handleListMessage(w http.ResponseWriter, r *http.Request, logger *log.Logger) {
 	openid := r.Form.Get("openid")
 

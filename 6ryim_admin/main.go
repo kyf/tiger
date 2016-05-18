@@ -51,7 +51,7 @@ func auth(r *http.Request, ren render.Render, logger *log.Logger, sess sessions.
 	var admin_user string = ""
 	admin_user, _ = sess.Get("admin_user").(string)
 
-	authlist := []string{"/login", "/checklogin", "/request/receive", "/request/message/show"}
+	authlist := []string{"/login", "/checklogin", "/request/receive", "/request/message/show", "/request/welcome"}
 	extlist := []string{"css", "js", "jpg", "gif", "png"}
 	ext := path.Ext(r.RequestURI)
 	if !StringSliceContains(r.URL.Path, authlist) && !StringSliceContains(ext, extlist) && strings.EqualFold("", admin_user) {
@@ -301,7 +301,8 @@ func main() {
 	m.Post("/request/autoreply/timeitem/update", handleARupdate)
 	m.Post("/request/autoreply/timeitem/add", handleARadd)
 
-	m.Post("/request/autoreply/first/load", handleARFirstLoad)
+	m.Get("/request/welcome", handleWelcome)
+	m.Get("/request/autoreply/first/load", handleARFirstLoad)
 	m.Post("/request/autoreply/first/save", handleARFirstSave)
 
 	m.Get("/call/center/handled", func(r *http.Request, ren render.Render, sess sessions.Session) {
