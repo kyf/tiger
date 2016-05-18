@@ -221,6 +221,7 @@
 			dataType:'json',
 			success:function(data){
 				if(data.status){
+					if(data.data == null)return;
 					data = data.data[0];
 					$('#FirtAutoReply').val(data.content);
 				}else{
