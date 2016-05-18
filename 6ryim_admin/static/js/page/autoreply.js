@@ -215,4 +215,46 @@
 		addTimeItem({});
 	});
 
+	var loadFirtAutoReply = function(){
+			$.ajax({
+			url:'/request/autoreply/first/load',
+			dataType:'json',
+			success:function(data){
+				if(data.status){
+			
+				}else{
+					showTip(data.msg, false);
+				}
+			}
+		});
+
+	};
+
+	loadFirstAutoReply();
+
+	$('.js_save_bt_first').click(function(){
+		var content	= $('#FirtAutoReply').val().trim();
+		if(content == ''){
+			showTip('回复内容不能为空!', false);
+			$('#FirtAutoReply').focus();
+			return;
+		}
+
+		$.ajax({
+			url:'/request/autoreply/first/save',
+			data:{
+				content:content
+			},
+			dataType:'json',
+			type:'POST',
+			success:function(data){
+				if(data.status){
+					showTip('保存成功', true);
+				}else{
+					showTip(data.msg, false);
+				}
+			}
+		});
+	});
+
 })(jQuery,window)

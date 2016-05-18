@@ -236,3 +236,11 @@ func handleARremove(r *http.Request, logger *log.Logger, sess sessions.Session, 
 	responseJson(w, true, "")
 
 }
+
+func handleARFirstLoad(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
+
+}
+
+func handleARFirstSave(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
+
+}

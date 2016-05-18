@@ -301,6 +301,9 @@ func main() {
 	m.Post("/request/autoreply/timeitem/update", handleARupdate)
 	m.Post("/request/autoreply/timeitem/add", handleARadd)
 
+	m.Post("/request/autoreply/first/load", handleARFirstLoad)
+	m.Post("/request/autoreply/first/save", handleARFirstSave)
+
 	m.Get("/call/center/handled", func(r *http.Request, ren render.Render, sess sessions.Session) {
 		admin_user, _ := sess.Get("admin_user").(string)
 		left, _ := fetchLeft()
