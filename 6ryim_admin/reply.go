@@ -53,6 +53,7 @@ func (fr *FastReply) Remove(mgo *Mongo) error {
 type AutoReply struct {
 	Id         bson.ObjectId `json:"id" bson:"_id"`
 	Content    string        `json:"content" bson:"content"`
+	Source     int           `json:"source" bson:"source"`
 	FromHour   int           `json:"fromhour" bson:"fromhour"`
 	FromMinute int           `json:"fromminute" bson:"fromminute"`
 	ToHour     int           `json:"tohour" bson:"tohour"`
@@ -69,6 +70,7 @@ func (ar *AutoReply) Update(mgo *Mongo) error {
 	}
 	data := bson.M{
 		"content":    ar.Content,
+		"source":     ar.Source,
 		"fromhour":   ar.FromHour,
 		"fromminute": ar.FromMinute,
 		"tohour":     ar.ToHour,

@@ -11,6 +11,7 @@ import (
 )
 
 func handleARadd(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
+	source := r.Form.Get("source")
 	content := r.Form.Get("content")
 	fromHour := r.Form.Get("fromhour")
 	fromMinute := r.Form.Get("fromminute")
@@ -42,6 +43,11 @@ func handleARadd(r *http.Request, logger *log.Logger, sess sessions.Session, w h
 		return
 	}
 
+	if strings.EqualFold("", source) {
+		responseJson(w, false, "source is empty!")
+		return
+	}
+
 	_fromHour, err := strconv.Atoi(fromHour)
 	if err != nil {
 		responseJson(w, false, "fromhour is invalid!")
@@ -66,6 +72,12 @@ func handleARadd(r *http.Request, logger *log.Logger, sess sessions.Session, w h
 		return
 	}
 
+	_source, err := strconv.Atoi(source)
+	if err != nil {
+		responseJson(w, false, "source is invalid!")
+		return
+	}
+
 	mgo := NewMongoClient()
 	err = mgo.Connect()
 	if err != nil {
@@ -78,6 +90,7 @@ func handleARadd(r *http.Request, logger *log.Logger, sess sessions.Session, w h
 	ar := &AutoReply{
 		Id:         bson.NewObjectId(),
 		Content:    content,
+		Source:     _source,
 		FromHour:   _fromHour,
 		FromMinute: _fromMinute,
 		ToHour:     _toHour,
@@ -96,6 +109,7 @@ func handleARadd(r *http.Request, logger *log.Logger, sess sessions.Session, w h
 
 func handleARupdate(r *http.Request, logger *log.Logger, sess sessions.Session, w http.ResponseWriter) {
 	content := r.Form.Get("content")
+	source := r.Form.Get("source")
 	id := r.Form.Get("id")
 	fromHour := r.Form.Get("fromhour")
 	fromMinute := r.Form.Get("fromminute")
@@ -132,6 +146,11 @@ func handleARupdate(r *http.Request, logger *log.Logger, sess sessions.Session, 
 		return
 	}
 
+	if strings.EqualFold("", source) {
+		responseJson(w, false, "source is empty!")
+		return
+	}
+
 	_fromHour, err := strconv.Atoi(fromHour)
 	if err != nil {
 		responseJson(w, false, "fromhour is invalid!")
@@ -156,6 +175,12 @@ func handleARupdate(r *http.Request, logger *log.Logger, sess sessions.Session, 
 		return
 	}
 
+	_source, err := strconv.Atoi(source)
+	if err != nil {
+		responseJson(w, false, "source is invalid!")
+		return
+	}
+
 	mgo := NewMongoClient()
 	err = mgo.Connect()
 	if err != nil {
@@ -168,6 +193,7 @@ func handleARupdate(r *http.Request, logger *log.Logger, sess sessions.Session, 
 	ar := &AutoReply{
 		Id:         bson.ObjectIdHex(id),
 		Content:    content,
+		Source:     _source,
 		FromHour:   _fromHour,
 		FromMinute: _fromMinute,
 		ToHour:     _toHour,

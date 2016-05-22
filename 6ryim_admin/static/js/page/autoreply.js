@@ -6,6 +6,11 @@
 					'<tr>',
 						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
 							'<div class="info_inner">',
+								'<div class="setting_source dropdown_wrp dropdown_menu" style="width:auto;"></div>',
+							'</div>',
+						'</td>',
+						'<td class="table_cell info" style="width:80px;padding:0px;text-align:center;">',
+							'<div class="info_inner">',
 								'<div class="setting_time dropdown_wrp dropdown_menu" style="width:auto;"></div>',
 							'</div>',
 						'</td>',
@@ -76,7 +81,7 @@
 	};
 
 
-	var addTimeItem = function(currents, currentdata){
+	var addTimeItem = function(currents, currentdata, currentSource){
 		if(!currents)currents = [];
 		if(!currentdata)currentdata = {};
 		var data = getTimeData();
@@ -87,7 +92,26 @@
 			var st = $(it);
 			st = st.dropdown({data:index % 2 == 0 ? data.hours : data.minutes, current:currents[index]});
 		});
+
+		data = [{
+				text:'全部',
+				value:'0'
+			},{
+				text:'微信',
+				value:'1'
+			},{
+				text:'PC',
+				value:'4'
+			}];
+		var its = item.find('.setting_source');
+		its.each(function(index, it){
+			var st = $(it);
+			st = st.dropdown({data:data, current:currentSource});
+		});
+
+
 	};
+
 
 
 	var emptytpl = [
@@ -125,11 +149,12 @@
 		var par = $(this).parents('.TimeItem');
 		var data = {
 			id:$(this).attr('data-id'),
+			source:par.find('.dropdown_switch').eq(0).attr('data-value'),
 			content:par.find('.replyContent').val(),
-			fromhour:par.find('.dropdown_switch').eq(0).attr('data-value'),
-			fromminute:par.find('.dropdown_switch').eq(1).attr('data-value'),
-			tohour:par.find('.dropdown_switch').eq(2).attr('data-value'),
-			tominute:par.find('.dropdown_switch').eq(3).attr('data-value')
+			fromhour:par.find('.dropdown_switch').eq(1).attr('data-value'),
+			fromminute:par.find('.dropdown_switch').eq(2).attr('data-value'),
+			tohour:par.find('.dropdown_switch').eq(3).attr('data-value'),
+			tominute:par.find('.dropdown_switch').eq(4).attr('data-value')
 		};
 
 		var url = "/request/autoreply/timeitem/add";
@@ -198,7 +223,7 @@
 								{text:d.tohour, value:d.tohour},
 								{text:d.tominute, value:d.tominute}, 
 							];
-							addTimeItem(ops, d);
+							addTimeItem(ops, d, {text:toggleSource(d.source), value:d.source});
 						});
 					}
 				}else{
@@ -210,9 +235,12 @@
 
 	loadAutoReply();
 
+	
+
+
 	$('.js_kf_add').click(function(){
 		$('.NoReplyTip').remove();
-		addTimeItem({});
+		addTimeItem();
 	});
 
 	var loadFirstAutoReply = function(){

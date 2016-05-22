@@ -43,3 +43,20 @@ var MSG_SOURCE_WX = 1;
 var MSG_SOURCE_IOS = 2;
 var MSG_SOURCE_Android = 3;
 var MSG_SOURCE_PC = 4;
+
+function toggleSource(source){
+	var result = "全部";
+	switch(parseInt(source, 10)){
+		case MSG_SOURCE_WX:
+			result = "微信";
+			break;
+		case MSG_SOURCE_PC:
+			result = "PC";
+			break;
+		default:
+			result = "全部";
+			break;
+	}
+
+	return result;
+}

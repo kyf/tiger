@@ -235,6 +235,10 @@ func autoReply(openid string, source int, logger *log.Logger) {
 	year, month, day, location, st := now.Year(), now.Month(), now.Day(), now.Location(), now.Unix()
 
 	for _, it := range ar {
+		if it.Source > 0 && it.Source != source {
+			continue
+		}
+
 		from := time.Date(year, month, day, it.FromHour, it.FromMinute, 0, 0, location)
 		to := time.Date(year, month, day, it.ToHour, it.ToMinute, 0, 0, location)
 		if st >= from.Unix() && st <= to.Unix() {
