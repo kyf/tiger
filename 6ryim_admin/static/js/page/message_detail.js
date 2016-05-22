@@ -152,6 +152,9 @@
 							case '3':
 								d.source_name = 'Android';
 								break;
+							case '4':
+								d.source_name = 'DCloud';
+								break;
 							default:
 						}
 
