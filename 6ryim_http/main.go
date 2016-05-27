@@ -90,7 +90,9 @@ func main() {
 	uri = fmt.Sprintf(":%s", C.port)
 	var exit chan error
 	go func() {
-		exit <- endless.ListenAndServe(uri, m)
+		s := endless.NewServer(uri, m)
+		s.SetKeepAlivesEnabled(false)
+		exit <- s.ListenAndServe()
 	}()
 
 	err = <-exit
