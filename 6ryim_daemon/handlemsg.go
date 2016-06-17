@@ -82,6 +82,7 @@ func fetchWxMedia(fpath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return "", err

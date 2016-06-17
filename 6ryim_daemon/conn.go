@@ -102,10 +102,11 @@ func storeMessage(msg Message) error {
 	}
 	data := make(url.Values)
 	data.Set("msg", string(m))
-	_, err = http.PostForm(fmt.Sprintf("%sstore", HTTP_SERVICE_URL), data)
+	res, err := http.PostForm(fmt.Sprintf("%sstore", HTTP_SERVICE_URL), data)
 	if err != nil {
 		return err
 	}
+	res.Body.Close()
 	return nil
 }
 

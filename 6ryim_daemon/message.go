@@ -160,6 +160,7 @@ func (m *Message) sendUserIOS() error {
 	if err != nil {
 		return err
 	}
+	res.Body.Close()
 	var device map[string]string
 	err = json.Unmarshal(body, &device)
 	if err != nil {
@@ -190,6 +191,7 @@ func (m *Message) sendUserIOS() error {
 	if err != nil {
 		return err
 	}
+	defer res.Body.Close()
 	body, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
@@ -221,6 +223,7 @@ func (m *Message) sendUserAndroid() error {
 	if err != nil {
 		return err
 	}
+	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err

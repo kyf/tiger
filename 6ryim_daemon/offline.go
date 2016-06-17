@@ -22,7 +22,7 @@ func storeOffline(msg Message) error {
 	if err != nil {
 		return err
 	}
-
+	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
@@ -52,6 +52,7 @@ func fetchOffline(to string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -89,6 +90,7 @@ func countOffline(to string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -126,6 +128,7 @@ func getDevicetokenByToken(token string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
