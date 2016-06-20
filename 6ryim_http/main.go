@@ -10,6 +10,7 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/go-martini/martini"
+	"github.com/kyf/6ryim/util"
 )
 
 const (
@@ -65,7 +66,8 @@ func serveHTTP(context martini.Context, w http.ResponseWriter, r *http.Request) 
 func main() {
 	flag.Parse()
 
-	fp, err := os.OpenFile(LOG_PATH, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	//fp, err := os.OpenFile(LOG_PATH, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	fp, err := util.NewWriter(LOG_PATH)
 	if err != nil {
 		fmt.Printf("OpenFile failure, err is %v", err)
 		os.Exit(1)
