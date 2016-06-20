@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	LAYOUT = "2006-01-02_15_04_05"
+	LAYOUT = "2006-01-02"
 )
 
 func getTodayLogName(prefix string) string {
