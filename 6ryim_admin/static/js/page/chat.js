@@ -443,8 +443,10 @@
 
 	$(document.body).on('contextmenu', '.chat_item', function(e){
 		var openid = $(this).attr('openid');
+		var source = $(this).attr('source');
 		$('#contextMenu').css({top:e.clientY, left:e.clientX}).show();
 		$('#contextMenu').find('.bookitem').attr('data-openid', openid);
+		$('#contextMenu').find('.bookitem').attr('data-source', source);
 		$('#contextMenu').find('.closeitem').attr('data-openid', openid);
 		return false;
 	});
@@ -463,6 +465,11 @@
 
 	$(document.body).on('click', '.bookitem', function(){
 		var openid = $(this).attr('data-openid');
+		var source = $(this).attr('data-source');
+		if(source == MSG_SOURCE_PC){
+			alert('匿名用户目前不支持代客下单');
+			return;
+		}
 		window.open('/call/center/my/book?openid=' + openid + "&opid=" + OPID);
 	});
 
