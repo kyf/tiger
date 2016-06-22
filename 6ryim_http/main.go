@@ -18,13 +18,17 @@ const (
 	LOG_PATH   string = "/var/log/6ryim_http/6ryim_http.log"
 
 	WS_SERVICE_URL string = "http://127.0.0.1:8060/"
+
+	CERT_FILE string = "../certs/6ry.crt"
+	KEY_FILE  string = "../certs/6ry.key"
 )
 
 var (
 	configFile *string
 	port       *string
 
-	uri string
+	uri    string
+	ssluri string
 )
 
 func init() {
@@ -90,11 +94,18 @@ func main() {
 		m.Post(p, h)
 	}
 	uri = fmt.Sprintf(":%s", C.port)
+	ssluri = fmt.Sprintf(":%s", C.sslport)
 	var exit chan error
 	go func() {
 		s := endless.NewServer(uri, m)
 		s.SetKeepAlivesEnabled(false)
 		exit <- s.ListenAndServe()
+	}()
+
+	go func() {
+		s := endless.NewServer(ssluri, m)
+		s.SetKeepAlivesEnabled(false)
+		exit <- s.ListenAndServeTLS(CERT_FILE, KEY_FILE)
 	}()
 
 	err = <-exit

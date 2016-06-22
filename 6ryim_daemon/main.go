@@ -12,6 +12,9 @@ import (
 )
 
 const (
+	CERT_FILE string = "../certs/6ry.crt"
+	KEY_FILE  string = "../certs/6ry.key"
+
 	LOG_PATH   string = "/var/log/6ryim_daemon/6ryim_daemon.log"
 	LOG_PREFIX string = "[6ryim_daemon]"
 
@@ -47,11 +50,13 @@ const (
 )
 
 var (
-	Addr string
+	Addr    string
+	SslAddr string
 )
 
 func init() {
 	flag.StringVar(&Addr, "port", "8060", "websocket daemon listen port")
+	flag.StringVar(&SslAddr, "sslport", "44433", "websocket daemon listen port")
 }
 
 func main() {
@@ -75,6 +80,10 @@ func main() {
 	var exit chan error = make(chan error)
 	go func() {
 		exit <- endless.ListenAndServe(fmt.Sprintf(":%s", Addr), m)
+	}()
+
+	go func() {
+		exit <- endless.ListenAndServeTLS(fmt.Sprintf(":%s", SslAddr), CERT_FILE, KEY_FILE, m)
 	}()
 
 	e := <-exit
