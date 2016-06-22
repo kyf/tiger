@@ -35,7 +35,7 @@ func initConfig(fileName string) (Config, error) {
 		return conf, err
 	}
 	conf.port = c.MustValue("default", "port", "8989")
-	conf.sslport = c.MustValue("default", "sslport", "4443")
+	conf.sslport = c.MustValue("default", "sslport", "44432")
 	conf.maxImageSize = c.MustInt64("default", "max_image_size", 1024*1024*2)
 
 	conf.redisServer = c.MustValue("redis", "redis_server", "")
