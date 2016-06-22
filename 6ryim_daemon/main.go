@@ -56,7 +56,7 @@ var (
 
 func init() {
 	flag.StringVar(&Addr, "port", "8060", "websocket daemon listen port")
-	flag.StringVar(&SslAddr, "sslport", "44433", "websocket daemon listen port")
+	flag.StringVar(&SslAddr, "sslport", "4433", "websocket daemon listen port")
 }
 
 func main() {
