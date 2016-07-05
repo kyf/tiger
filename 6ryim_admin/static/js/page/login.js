@@ -12,7 +12,7 @@
 			type:'POST',
 			success:function(data, status, response){
 				if(data == "success"){
-					window.location.href = '/message';
+					window.location.href = '/call/center/message';
 				}else{
 					alert('用户名或密码错误!');
 				}	
